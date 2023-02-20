@@ -8,6 +8,8 @@
 	font-weight: bold;
     background-color: palette.$primary-colour;
 	color: white;
+	text-align: center;
+	width: 180px;
 
     &:hover {
         background-color: palette.$secondary-colour;
@@ -15,7 +17,12 @@
 }
 
 .Secondary {
-	background-color: white;
+	background-color: palette.$light-colour;
 	color: palette.$text-colour;
     border: 1px solid palette.$dark-colour;
+
+	&:hover {
+		background-color: palette.$dark-colour;
+		color: white;
+	}
 }

@@ -6,4 +6,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+
+	&__Text {
+		margin-right: 1rem;
+	}
 }

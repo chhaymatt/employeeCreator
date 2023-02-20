@@ -7,7 +7,7 @@ const EmployeeList = () => {
 		<div className={styles.EmployeeList}>
 			<Header title={`Employees' list`} />
 			<section className={styles.Section}>
-				<p>
+				<p className={styles.Section__Text}>
 					Please click on 'Edit' to find more details of each
 					employee.
 				</p>
