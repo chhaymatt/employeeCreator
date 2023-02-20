@@ -2,7 +2,27 @@ import Button from "../../components/Button/Button";
 import EmployeeCard from "../../components/EmployeeCard/EmployeeCard";
 import Header from "../../components/Header/Header";
 import styles from "./EmployeeList.module.scss";
+import { createEmployees } from "../../services/factories/Employees";
+
+export type EmployeeType = {
+	id: string;
+	firstName: string;
+	middleName: string | null;
+	lastName: string;
+	email: string;
+	mobile: string;
+	address: string;
+	contractType: string;
+	startDate: string;
+	finishDate: string;
+	isOngoing: boolean;
+	workType: string;
+	hoursPerWeek: number;
+};
+
 const EmployeeList = () => {
+	const employees = createEmployees(5);
+	console.log(employees);
 	return (
 		<div className={styles.EmployeeList}>
 			<Header title={`Employees' list`} />
@@ -13,30 +33,9 @@ const EmployeeList = () => {
 				</p>
 				<Button label={`Add employee`} />
 			</section>
-			<EmployeeCard
-				firstName={"Matthew"}
-				lastName={"Chhay"}
-				contractType={"Permanent"}
-				duration={5}
-				durationUnit={"yr"}
-				email={"chhaymatt@gmail.com"}
-			/>
-			<EmployeeCard
-				firstName={"Matthew"}
-				lastName={"Chhay"}
-				contractType={"Permanent"}
-				duration={5}
-				durationUnit={"yr"}
-				email={"chhaymatt@gmail.com"}
-			/>
-			<EmployeeCard
-				firstName={"Matthew"}
-				lastName={"Chhay"}
-				contractType={"Permanent"}
-				duration={5}
-				durationUnit={"yr"}
-				email={"chhaymatt@gmail.com"}
-			/>
+			{employees.map((employee, index) => (
+				<EmployeeCard key={index} employee={employee} />
+			))}
 		</div>
 	);
 };
