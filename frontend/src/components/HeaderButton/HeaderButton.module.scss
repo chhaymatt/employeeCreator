@@ -1,0 +1,14 @@
+.HeaderButton {
+	all: unset;
+	cursor: pointer;
+	padding: 2rem 0rem;
+
+	&__Text {
+		margin-left: 0.5rem;
+		text-decoration: underline;
+	}
+
+	&:hover {
+		font-weight: bold;
+	}
+}

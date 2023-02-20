@@ -1,0 +1,21 @@
+@use "../../styles/palette";
+
+.Button {
+	all: unset;
+	cursor: pointer;
+	padding: 0.5rem 2rem;
+	border-radius: 0.5rem;
+	font-weight: bold;
+    background-color: palette.$primary-colour;
+	color: white;
+
+    &:hover {
+        background-color: palette.$secondary-colour;
+    }
+}
+
+.Secondary {
+	background-color: white;
+	color: palette.$text-colour;
+    border: 1px solid palette.$dark-colour;
+}

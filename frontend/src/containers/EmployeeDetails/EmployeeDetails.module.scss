@@ -1,0 +1,48 @@
+@use "../../styles/palette";
+.EmployeeDetails {
+	width: 100%;
+}
+
+.Fieldset {
+	display: flex;
+	flex-direction: column;
+	border: none;
+
+	legend {
+		font-weight: bold;
+		font-size: 1.5rem;
+		margin-top: 2rem;
+		margin-bottom: 1rem;
+	}
+
+	input {
+		padding: 1rem;
+		font-size: 1rem;
+		margin-bottom: 1rem;
+		border-radius: 0.5rem;
+		border: 1px solid;
+	}
+
+	label {
+		font-weight: bold;
+		margin-bottom: 0.5rem;
+	}
+}
+.RadioInput {
+	display: flex;
+	align-items: center;
+
+	label {
+		font-weight: 400;
+	}
+}
+.RadioButton {
+	height: 2rem;
+	width: 2rem;
+	margin-right: 1rem;
+}
+
+.Tip {
+	font-weight: 400;
+	color: palette.$dark-colour;
+}

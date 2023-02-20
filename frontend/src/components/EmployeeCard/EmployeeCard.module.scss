@@ -1,0 +1,27 @@
+@use "../../styles/palette";
+
+.EmployeeCard {
+	display: flex;
+	justify-content: space-between;
+	padding: 1rem 0rem;
+}
+
+.Details {
+	display: flex;
+	flex-direction: column;
+}
+
+.Interact {
+	button {
+		all: unset;
+		padding: 1rem;
+		font-weight: bold;
+		color: palette.$primary-colour;
+
+		&:hover {
+            cursor: pointer;
+			text-decoration: underline;
+		}
+	}
+
+}
