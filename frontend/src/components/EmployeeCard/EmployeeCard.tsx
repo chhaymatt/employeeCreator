@@ -1,4 +1,5 @@
 import { EmployeeType } from "../../containers/EmployeeList/EmployeeList";
+import InlineButtons from "../InlineButtons/InlineButtons";
 import styles from "./EmployeeCard.module.scss";
 
 type EmployeeCardProps = {
@@ -31,11 +32,7 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
 				</p>
 				<p>{employee.email}</p>
 			</section>
-			<section className={styles.Interact}>
-				<button>Edit</button>
-				<span>|</span>
-				<button>Remove</button>
-			</section>
+			<InlineButtons />
 		</div>
 	);
 };

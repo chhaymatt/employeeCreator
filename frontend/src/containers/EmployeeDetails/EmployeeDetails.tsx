@@ -63,6 +63,7 @@ const EmployeeDetails = () => {
 					<input
 						className={styles.InputText}
 						type="tel"
+						inputMode="numeric"
 						name="mobile"
 						id="mobile"
 						placeholder="0412345678"
@@ -134,6 +135,7 @@ const EmployeeDetails = () => {
 							<input
 								className={styles.InputText}
 								type="number"
+								inputMode="numeric"
 								name="startDateDay"
 								id="startDateDay"
 								placeholder="20"
@@ -175,6 +177,7 @@ const EmployeeDetails = () => {
 							<input
 								className={styles.InputText}
 								type="number"
+								inputMode="numeric"
 								name="startDateYear"
 								id="startDateYear"
 								placeholder={`${new Date().getFullYear()}`}
@@ -198,6 +201,7 @@ const EmployeeDetails = () => {
 							<input
 								className={styles.InputText}
 								type="number"
+								inputMode="numeric"
 								name="finishDateDay"
 								id="finishDateDay"
 								placeholder="23"
@@ -239,6 +243,7 @@ const EmployeeDetails = () => {
 							<input
 								className={styles.InputText}
 								type="number"
+								inputMode="numeric"
 								name="startDateYear"
 								id="finishDateYear"
 								placeholder={`${new Date().getFullYear()}`}
@@ -304,6 +309,7 @@ const EmployeeDetails = () => {
 					<input
 						className={styles.InputText}
 						type="number"
+						inputMode="numeric"
 						name="hoursPerWeek"
 						id="hoursPerWeek"
 						placeholder="38"
@@ -312,7 +318,7 @@ const EmployeeDetails = () => {
 						required
 					/>
 				</fieldset>
-				<div className={styles.Buttons}>
+				<div className={styles.FormButtons}>
 					<Button label={`Save`} />
 					<Button secondary label={`Cancel`} />
 				</div>

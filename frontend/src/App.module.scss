@@ -1,4 +1,6 @@
 @use "./styles/palette";
+@use "./styles/mixin";
+
 .App {
 	display: flex;
 	flex-direction: column;
@@ -8,5 +10,25 @@
 }
 
 .Container {
-	width: 50%;
+	width: 60%;
+
+	@include mixin.phone {
+		width: 90%;
+	}
+
+	@include mixin.tablet {
+		width: 85%;
+	}
+
+	@include mixin.tablet-landscape {
+		width: 80%;
+	}
+
+	@include mixin.laptop {
+		width: 75%;
+	}
+
+	@include mixin.monitor {
+		width: 70%;
+	}
 }

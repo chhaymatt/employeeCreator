@@ -1,0 +1,20 @@
+@use "../../styles/palette";
+@use "../../styles/mixin";
+
+.InlineButtons {
+	&__button {
+		all: unset;
+		padding: 1rem;
+		font-weight: bold;
+		color: palette.$primary-colour;
+
+		&:hover {
+			cursor: pointer;
+			text-decoration: underline;
+		}
+	}
+
+	&__divider {
+		color: palette.$dark-colour;
+	}
+}

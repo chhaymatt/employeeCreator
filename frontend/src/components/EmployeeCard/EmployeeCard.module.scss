@@ -1,27 +1,18 @@
 @use "../../styles/palette";
+@use "../../styles/mixin";
 
 .EmployeeCard {
 	display: flex;
 	justify-content: space-between;
 	padding: 1rem 0rem;
+	border-bottom: 1px solid palette.$light-colour;
+	
+	@include mixin.phone {
+		flex-direction: column;
+	}
 }
 
 .Details {
 	display: flex;
 	flex-direction: column;
-}
-
-.Interact {
-	button {
-		all: unset;
-		padding: 1rem;
-		font-weight: bold;
-		color: palette.$primary-colour;
-
-		&:hover {
-            cursor: pointer;
-			text-decoration: underline;
-		}
-	}
-
 }
