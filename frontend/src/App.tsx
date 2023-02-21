@@ -12,6 +12,9 @@ const App = () => {
 				<div className={styles.Container}>
 					<Routes>
 						<Route
+							path="/employeeCreator/"
+							element={<EmployeeList />}></Route>
+						<Route
 							path="/employeeCreator/employees"
 							element={<EmployeeList />}></Route>
 						<Route

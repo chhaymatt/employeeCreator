@@ -23,7 +23,8 @@ export type EmployeeType = {
 
 const EmployeeList = () => {
 	const employees = createEmployees(5);
-	console.log(employees);
+	//const employees: EmployeeType[] = [];
+	
 	return (
 		<div className={styles.EmployeeList}>
 			<Header title={`Employees' list`} />
@@ -38,9 +39,10 @@ const EmployeeList = () => {
 					<Button label={`Add employee`} />
 				</Link>
 			</section>
-			{employees.map((employee, index) => (
-				<EmployeeCard key={index} employee={employee} />
-			))}
+			{employees &&
+				employees.map((employee, index) => (
+					<EmployeeCard key={index} employee={employee} />
+				))}
 		</div>
 	);
 };

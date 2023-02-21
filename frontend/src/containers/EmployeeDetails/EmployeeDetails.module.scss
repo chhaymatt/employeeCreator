@@ -1,4 +1,5 @@
 @use "../../styles/partials/palette";
+@use "../../styles/partials/mixin";
 
 .EmployeeDetails {
 	width: 100%;
@@ -36,6 +37,7 @@
 	border-radius: 0.5rem;
 	border: 1px solid;
 	cursor: pointer;
+	position: relative;
 }
 
 .DateInput {
@@ -108,7 +110,12 @@
 	margin-bottom: 5rem;
 	gap: 1rem;
 
+	@include mixin.phone {
+		flex-direction: column;
+	}
+
 	&__Link {
+		width: 100%;
 		text-decoration: none;
 	}
 }

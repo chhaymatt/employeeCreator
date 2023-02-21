@@ -71,7 +71,9 @@
 #### Back end
 
 1. Run `cd backend`
-2.
+2. Run `code .`
+3. Change `application.properties` e.g. db name and the username and password
+4. Create database in MySQL Workbench `create database "db name"`
 
 ### For publishing to GitHub Pages after initial setup
 
@@ -81,13 +83,10 @@
 ## Tools Used
 
 -   Vite - creating a starting React app.
--   React Router - for navigating to other products and pages.
+-   Vitest - for testing.
+-   React Router - for navigating to different pages.
 -   Prettier - to tidy up code in spacing and structure. [Get Prettier Extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 -   Favicon.io - generate a favicon. [Generate favicon](https://favicon.io/favicon-generator/)
--   Meta Tags - generate metadata. [Generate metadata](https://metatags.io/)
--   Coolors - generate colour palettes. [Generate colour palette](https://coolors.co/generate)
--   Grabient - generate gradient backgrounds. [Generate a gradient background](https://cssgradient.io/gradient-backgrounds/)
--   Google Fonts - a library of free fonts. [Get Google Fonts](https://fonts.google.com/)
 
 ## Project Status
 

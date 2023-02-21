@@ -321,7 +321,11 @@ const EmployeeDetails = () => {
 					/>
 				</fieldset>
 				<div className={styles.FormButtons}>
-					<Button label={`Save`} />
+					<Link
+						className={styles.FormButtons__Link}
+						to={"/employeeCreator/employees"}>
+						<Button label={`Save`} />
+					</Link>
 					<Link
 						className={styles.FormButtons__Link}
 						to={"/employeeCreator/employees"}>
