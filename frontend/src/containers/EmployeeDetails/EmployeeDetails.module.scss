@@ -1,4 +1,4 @@
-@use "../../styles/palette";
+@use "../../styles/partials/palette";
 
 .EmployeeDetails {
 	width: 100%;
@@ -107,4 +107,8 @@
 	justify-content: space-between;
 	margin-bottom: 5rem;
 	gap: 1rem;
+
+	&__Link {
+		text-decoration: none;
+	}
 }

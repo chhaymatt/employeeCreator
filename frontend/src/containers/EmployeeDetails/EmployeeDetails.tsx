@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import Header from "../../components/Header/Header";
 import styles from "./EmployeeDetails.module.scss";
+
 const EmployeeDetails = () => {
 	return (
 		<div className={styles.EmployeeDetails}>
@@ -320,7 +322,11 @@ const EmployeeDetails = () => {
 				</fieldset>
 				<div className={styles.FormButtons}>
 					<Button label={`Save`} />
-					<Button secondary label={`Cancel`} />
+					<Link
+						className={styles.FormButtons__Link}
+						to={"/employeeCreator/employees"}>
+						<Button secondary label={`Cancel`} />
+					</Link>
 				</div>
 			</form>
 		</div>

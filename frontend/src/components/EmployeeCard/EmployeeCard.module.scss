@@ -1,12 +1,12 @@
-@use "../../styles/palette";
-@use "../../styles/mixin";
+@use "../../styles/partials/palette";
+@use "../../styles/partials/mixin";
 
 .EmployeeCard {
 	display: flex;
 	justify-content: space-between;
 	padding: 1rem 0rem;
 	border-bottom: 1px solid palette.$light-colour;
-	
+
 	@include mixin.phone {
 		flex-direction: column;
 	}

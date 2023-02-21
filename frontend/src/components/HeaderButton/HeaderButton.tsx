@@ -5,7 +5,7 @@ type HeaderButtonProps = {
 const HeaderButton = ({ label }: HeaderButtonProps) => {
 	return (
 		<button className={styles.HeaderButton}>
-			<span>&lt;</span>
+			<span className={styles.HeaderButton__Symbol}>&lt;</span>
 			<span className={styles.HeaderButton__Text}>{label}</span>
 		</button>
 	);

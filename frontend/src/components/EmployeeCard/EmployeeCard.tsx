@@ -32,7 +32,7 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
 				</p>
 				<p>{employee.email}</p>
 			</section>
-			<InlineButtons />
+			<InlineButtons id={employee.id} />
 		</div>
 	);
 };

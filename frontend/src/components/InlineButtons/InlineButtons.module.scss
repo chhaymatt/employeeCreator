@@ -1,8 +1,8 @@
-@use "../../styles/palette";
-@use "../../styles/mixin";
+@use "../../styles/partials/palette";
+@use "../../styles/partials/mixin";
 
 .InlineButtons {
-	&__button {
+	&__Button {
 		all: unset;
 		padding: 1rem;
 		font-weight: bold;
@@ -14,7 +14,11 @@
 		}
 	}
 
-	&__divider {
+	&__Link {
+		text-decoration: none;
+	}
+
+	&__Divider {
 		color: palette.$dark-colour;
 	}
 }

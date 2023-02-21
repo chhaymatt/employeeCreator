@@ -1,5 +1,12 @@
+@use "../../styles/partials/palette";
+
 .Header {
-    margin: 1rem 0rem;
+	padding: 2rem 0rem;
+	
+}
+
+.Link {
+	text-decoration: none;
 }
 
 .Text {

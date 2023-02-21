@@ -3,6 +3,7 @@ import EmployeeCard from "../../components/EmployeeCard/EmployeeCard";
 import Header from "../../components/Header/Header";
 import styles from "./EmployeeList.module.scss";
 import { createEmployees } from "../../services/factories/Employees";
+import { Link } from "react-router-dom";
 
 export type EmployeeType = {
 	id: string;
@@ -31,7 +32,11 @@ const EmployeeList = () => {
 					Please click on 'Edit' to find more details of each
 					employee.
 				</p>
-				<Button label={`Add employee`} />
+				<Link
+					className={styles.Section__Link}
+					to={`/employeeCreator/employees/add-employee`}>
+					<Button label={`Add employee`} />
+				</Link>
 			</section>
 			{employees.map((employee, index) => (
 				<EmployeeCard key={index} employee={employee} />

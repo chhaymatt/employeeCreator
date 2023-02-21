@@ -1,14 +1,20 @@
+@use "../../styles/partials/palette";
+
 .HeaderButton {
 	all: unset;
 	cursor: pointer;
 	padding: 2rem 0rem;
+	color: palette.$primary-colour;
 
 	&__Text {
 		margin-left: 0.5rem;
-		text-decoration: underline;
+
+		&:hover {
+			text-decoration: underline;
+		}
 	}
 
-	&:hover {
-		font-weight: bold;
+	&__Symbol {
+		text-decoration: none;
 	}
 }

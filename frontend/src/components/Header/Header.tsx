@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import HeaderButton from "../HeaderButton/HeaderButton";
 import styles from "./Header.module.scss";
 type HeaderProps = {
@@ -8,7 +9,13 @@ type HeaderProps = {
 const Header = ({ title, headerButton }: HeaderProps) => {
 	return (
 		<div className={styles.Header}>
-			{headerButton && <HeaderButton label={headerButton} />}
+			{headerButton && (
+				<Link
+					className={styles.Link}
+					to="/employeeCreator/employees">
+					<HeaderButton label={headerButton} />
+				</Link>
+			)}
 			<h1 className={styles.Text}>{title}</h1>
 		</div>
 	);

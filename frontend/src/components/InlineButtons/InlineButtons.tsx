@@ -1,11 +1,16 @@
+import { Link } from "react-router-dom";
 import styles from "./InlineButtons.module.scss";
 
-const InlineButtons = () => {
+const InlineButtons = ({ id }: any) => {
 	return (
 		<section className={styles.InlineButtons}>
-			<button className={styles.InlineButtons__button}>Edit</button>
-			<span className={styles.InlineButtons__divider}>|</span>
-			<button className={styles.InlineButtons__button}>Remove</button>
+			<Link
+				className={styles.InlineButtons__Link}
+				to={`/employeeCreator/employees/${id}`}>
+				<button className={styles.InlineButtons__Button}>Edit</button>
+			</Link>
+			<span className={styles.InlineButtons__Divider}>|</span>
+			<button className={styles.InlineButtons__Button}>Remove</button>
 		</section>
 	);
 };
