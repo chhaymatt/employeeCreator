@@ -63,7 +63,11 @@ public class EmployeeService {
         employee.setIsOngoing(data.isOngoing);
         employee.setWorkType(data.workType);
         employee.setHoursPerWeek(data.hoursPerWeek);
-
         return this.repository.save(employee);
     }
+
+    public void delete(Employee employee) {
+        this.repository.delete(employee);
+    }
+
 }
