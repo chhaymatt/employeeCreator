@@ -1,3 +1,4 @@
+import { ContractTypesEnum } from "../../containers/EmployeeDetails/EmployeeDetails";
 import { EmployeeType } from "../../containers/EmployeeList/EmployeeList";
 import InlineButtons from "../InlineButtons/InlineButtons";
 import styles from "./EmployeeCard.module.scss";
@@ -27,7 +28,10 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
 					{employee.firstName} {employee.lastName}
 				</h3>
 				<p>
-					{`${employee.contractType} -
+					{`${
+						employee.contractType.charAt(0).toUpperCase() +
+						employee.contractType.slice(1).toLowerCase()
+					} -
 					${duration} ${duration > 1 ? `${durationUnit}s` : durationUnit}`}
 				</p>
 				<p>{employee.email}</p>

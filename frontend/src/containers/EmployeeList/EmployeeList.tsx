@@ -6,7 +6,7 @@ import { createEmployees } from "../../services/factories/Employees";
 import { Link } from "react-router-dom";
 
 export type EmployeeType = {
-	id: string;
+	id?: string;
 	firstName: string;
 	middleName: string | null;
 	lastName: string;
@@ -24,7 +24,7 @@ export type EmployeeType = {
 const EmployeeList = () => {
 	const employees = createEmployees(5);
 	//const employees: EmployeeType[] = [];
-	
+
 	return (
 		<div className={styles.EmployeeList}>
 			<Header title={`Employees' list`} />

@@ -107,6 +107,71 @@ Project is ongoing
 -   Treat any numbers with leading zeros as strings: https://stackoverflow.com/questions/27361565/why-is-json-invalid-if-an-integer-begins-with-a-leading-zero#:~:text=A%20leading%200%20indicates%20an,would%20not%20contain%20an%208.
 -   How to find what faker outputs are there: https://fakerjs.dev/api/
 -   How to create an array of n faker objects: https://stackoverflow.com/questions/42861732/generate-an-array-with-random-data-without-using-a-for-loop
+-   Check boxes and radio buttons goes like this:
+
+```html
+<label>
+	<input />
+</label>
+```
+
+originally I had it
+
+```tsx
+<div className="{styles.CheckboxInput}">
+	<span className="{styles.Checkbox}">
+		<input
+			className="{styles.CheckboxButton}"
+			type="checkbox"
+			name="isOngoing"
+			id="isOngoing"
+		/>
+		<label className="{styles.CheckboxLabel}" htmlFor="isOngoing">
+			On going
+		</label>
+	</span>
+</div>
+```
+
+```tsx
+<div className="{styles.RadioGroup}">
+	<label className="{styles.Label}" htmlFor="workType">
+		Is this on a full-time or part-time basis?
+	</label>
+	<div className="{styles.RadioInput}">
+		<input
+			className={styles.RadioButton}
+			type="radio"
+			defaultChecked
+			{...register("workType")}
+			value="Full-time"
+		/>
+		<label className="{styles.RadioLabel}" htmlFor="workType">
+			Full-time
+		</label>
+	</div>
+	<div className="{styles.RadioInput}">
+		<input
+			className={styles.RadioButton}
+			type="radio"
+			defaultChecked
+			{...register("workType")}
+			value="Part-time"
+		/>
+		<label className="{styles.RadioLabel}" htmlFor="workType">
+			Part-time
+		</label>
+	</div>
+</div>
+```
+
+tricky dates
+
+-   changed enum to include MONTH = Month
+-   find index of month from enum
+-   add leading zero if less than 10
+
+replace - with \_ for full_time and part_time
 
 # Backend decisions
 

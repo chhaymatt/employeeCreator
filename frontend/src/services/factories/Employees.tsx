@@ -18,11 +18,11 @@ const createEmployee = () => {
 		address: `${faker.address.streetAddress()}, ${
 			faker.address.cityName
 		} ${faker.address.zipCode("####")}`,
-		contractType: faker.helpers.arrayElement(["Permanent", "Contract"]),
+		contractType: faker.helpers.arrayElement(["PERMANENT", "CONTRACT"]),
 		startDate: startDateRaw.toISOString(),
 		finishDate: finishDateRaw.toISOString(),
 		isOngoing: faker.datatype.boolean(),
-		workType: faker.helpers.arrayElement(["Full-time", "Part-time"]),
+		workType: faker.helpers.arrayElement(["FULL_TIME", "PART_TIME"]),
 		hoursPerWeek: faker.datatype.number({
 			min: 0,
 			max: 40,
