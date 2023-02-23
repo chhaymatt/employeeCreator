@@ -22,3 +22,24 @@
 		align-items: start;
 	}
 }
+
+.Alert {
+	animation: fade 2s linear;
+	margin-top: 1rem;
+	padding: 1rem 2rem;
+	background-color: palette.$lighter-colour;
+
+	&__Error {
+		background-color: palette.$error-light;
+		color: red;
+	}
+}
+
+@keyframes fade {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}

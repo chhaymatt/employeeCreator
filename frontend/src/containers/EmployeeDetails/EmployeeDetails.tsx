@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import Header from "../../components/Header/Header";
+import { addEmployee } from "../../services/EmployeeAPI";
 import { EmployeeType } from "../EmployeeList/EmployeeList";
 import styles from "./EmployeeDetails.module.scss";
 
-export enum ContractTypesEnum {
+enum ContractTypesEnum {
 	PERMANENT = "Permanent",
 	CONTRACT = "Contract",
 }
@@ -48,11 +51,33 @@ type Inputs = {
 	hoursPerWeek: number;
 };
 
+const formatMonth = (monthLabel: MonthsEnum) => {
+	const monthIndex = Object.values(MonthsEnum).indexOf(monthLabel) + 1;
+	return monthIndex < 10 ? `0${monthIndex}` : monthIndex;
+};
+
+const formatDay = (day: number) => {
+	return day < 10 ? `0${day}` : day;
+};
+
 type EmployeeDetailsProps = {
 	employee?: EmployeeType;
 };
 
 const EmployeeDetails = ({ employee }: EmployeeDetailsProps) => {
+	const [message, setMessage] = useState("");
+	const navigate = useNavigate();
+
+	// Mutations
+	const mutation = useMutation(addEmployee, {
+		onSuccess: (response: EmployeeType) => {
+			setMessage(
+				`${response.firstName} ${response.lastName} was saved with id ${response.id}`
+			);
+			console.table(response);
+		},
+	});
+
 	const {
 		register,
 		handleSubmit,
@@ -60,18 +85,9 @@ const EmployeeDetails = ({ employee }: EmployeeDetailsProps) => {
 		formState: { errors },
 	} = useForm<Inputs>();
 
-	const formatMonth = (monthLabel: MonthsEnum) => {
-		const monthIndex = Object.values(MonthsEnum).indexOf(monthLabel) + 1;
-		return monthIndex < 10 ? `0${monthIndex}` : monthIndex;
-	};
-
-	const formatDay = (day: number) => {
-		return day < 10 ? `0${day}` : day;
-	};
-
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
-		console.log("Form Data");
-		console.table(data);
+		// console.log("Form Data");
+		// console.table(data);
 
 		const payload: EmployeeType = {
 			firstName: data.firstName,
@@ -91,8 +107,10 @@ const EmployeeDetails = ({ employee }: EmployeeDetailsProps) => {
 			workType: data.workType.toUpperCase().replace("-", "_"),
 			hoursPerWeek: +data.hoursPerWeek,
 		};
-		console.log("Payload");
-		console.table(payload);
+		// console.log("Payload");
+		// console.table(payload);
+		mutation.mutate(payload);
+		navigate("/employeeCreator/employees");
 	};
 
 	return (
@@ -583,6 +601,7 @@ const EmployeeDetails = ({ employee }: EmployeeDetailsProps) => {
 					</Link>
 				</div>
 			</form>
+			<div>{message}</div>
 		</div>
 	);
 };

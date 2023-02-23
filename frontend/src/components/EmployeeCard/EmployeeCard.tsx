@@ -1,4 +1,3 @@
-import { ContractTypesEnum } from "../../containers/EmployeeDetails/EmployeeDetails";
 import { EmployeeType } from "../../containers/EmployeeList/EmployeeList";
 import InlineButtons from "../InlineButtons/InlineButtons";
 import styles from "./EmployeeCard.module.scss";

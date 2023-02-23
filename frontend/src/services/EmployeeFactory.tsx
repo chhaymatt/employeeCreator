@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-const createEmployee = () => {
+export const createEmployee = () => {
 	const firstName = faker.name.firstName();
 	const lastName = faker.name.lastName();
 	const startDateRaw = faker.date.between(

@@ -57,7 +57,7 @@
 
 	&__Section {
 		width: 150px;
-		
+
 		@include mixin.phone {
 			width: 100%;
 		}
@@ -131,5 +131,5 @@
 
 .RedOutline {
 	border: 1px solid red;
-	background-color: rgb(255, 247, 247);
+	background-color: palette.$error-light;
 }
