@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -100,18 +101,22 @@ const EmployeeDetails = () => {
 	const addMutation = useMutation(addEmployee, {
 		onSuccess: (response: EmployeeType) => {
 			setMessage(
-				`Employee ${response.firstName} ${response.lastName} was saved with id ${response.id}`
+				`Successfully saved employee ${response.firstName} ${response.lastName} to Id ${response.id}`
 			);
-			console.log("Added employee!");
-			console.table(response);
+			// console.log("Added employee!");
+			// console.table(response);
 			reset();
+		},
+		onError: (error: AxiosError) => {
+			//console.log(error.message);
+			setMessage(error.message);
 		},
 	});
 
 	// const updateMutation = useMutation(updateEmployee, {
 	// 	onSuccess: (response: EmployeeType) => {
 	// 		setMessage(
-	// 			`Employee ${response.firstName} ${response.lastName} was updated on id ${response.id}`
+	// 			`Successfully  employee ${response.firstName} ${response.lastName} to Id ${response.id}`
 	// 		);
 	// 		console.log("Updated employee!");
 	// 		console.table(response);
@@ -182,7 +187,7 @@ const EmployeeDetails = () => {
 	return (
 		<div className={styles.EmployeeDetails}>
 			<Header title={`Employee details`} headerButton={`Back`} />
-			{employee && <div>Employee ID: {employee.id}</div>}
+			{employee && <div>Employee Id: {employee.id}</div>}
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<fieldset className={styles.Fieldset}>
 					<legend className={styles.Legend}>
@@ -668,7 +673,11 @@ const EmployeeDetails = () => {
 					</Link>
 				</div>
 			</form>
-			<div>{message}</div>
+			{message && (
+				<div className={`${styles.Message} ${styles.Message__Alert}`}>
+					{message}
+				</div>
+			)}
 		</div>
 	);
 };
