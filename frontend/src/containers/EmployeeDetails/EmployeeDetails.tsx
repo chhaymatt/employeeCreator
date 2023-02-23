@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import Header from "../../components/Header/Header";
-import { addEmployee } from "../../services/EmployeeAPI";
+import {
+	addEmployee,
+	getEmployee,
+	updateEmployee,
+} from "../../services/EmployeeAPI";
 import { EmployeeType } from "../EmployeeList/EmployeeList";
 import styles from "./EmployeeDetails.module.scss";
 
@@ -60,34 +64,92 @@ const formatDay = (day: number) => {
 	return day < 10 ? `0${day}` : day;
 };
 
-type EmployeeDetailsProps = {
-	employee?: EmployeeType;
-};
+// type EmployeeDetailsProps = {
+// 	employee?: EmployeeType;
+// };
+// { employee }: EmployeeDetailsProps
 
-const EmployeeDetails = ({ employee }: EmployeeDetailsProps) => {
+const EmployeeDetails = () => {
 	const [message, setMessage] = useState("");
-	const navigate = useNavigate();
+	const [employee, setEmployee] = useState<EmployeeType>();
+	const { id } = useParams();
 
-	// Mutations
-	const mutation = useMutation(addEmployee, {
-		onSuccess: (response: EmployeeType) => {
-			setMessage(
-				`${response.firstName} ${response.lastName} was saved with id ${response.id}`
-			);
-			console.table(response);
-		},
-	});
+	// Fetch employee if id exists
+	useEffect(() => {
+		if (id) {
+			getEmployee(+id)
+				.then((employee) => {
+					setEmployee(employee);
+					console.log("Loaded employee");
+					console.table(employee);
+					loadDetails(employee);
+				})
+				.catch((err) => console.log(err));
+		}
+	}, []);
 
 	const {
 		register,
 		handleSubmit,
 		watch,
+		reset,
 		formState: { errors },
 	} = useForm<Inputs>();
 
+	// Mutations
+	const addMutation = useMutation(addEmployee, {
+		onSuccess: (response: EmployeeType) => {
+			setMessage(
+				`Employee ${response.firstName} ${response.lastName} was saved with id ${response.id}`
+			);
+			console.log("Added employee!");
+			console.table(response);
+			reset();
+		},
+	});
+
+	// const updateMutation = useMutation(updateEmployee, {
+	// 	onSuccess: (response: EmployeeType) => {
+	// 		setMessage(
+	// 			`Employee ${response.firstName} ${response.lastName} was updated on id ${response.id}`
+	// 		);
+	// 		console.log("Updated employee!");
+	// 		console.table(response);
+	// 	},
+	// });
+
+	// If employee exists, run this
+	const loadDetails = (employee: EmployeeType) => {
+		const startDate = employee.startDate.split("-");
+		const finishDate = employee.finishDate.split("-");
+		reset({
+			firstName: employee.firstName,
+			middleName: employee.middleName,
+			lastName: employee.lastName,
+			email: employee.email,
+			mobile: employee.mobile,
+			address: employee.address,
+			contractType:
+				ContractTypesEnum[
+					employee.contractType as keyof typeof ContractTypesEnum
+				],
+			startDateDay: +startDate[2],
+			startDateMonth: MonthsEnum[startDate[1] as keyof typeof MonthsEnum],
+			startDateYear: +startDate[0],
+			finishDateDay: +finishDate[2],
+			finishDateMonth:
+				MonthsEnum[finishDate[1] as keyof typeof MonthsEnum],
+			finishDateYear: +finishDate[0],
+			isOngoing: employee.isOngoing,
+			workType:
+				WorkTypesEnum[employee.workType as keyof typeof WorkTypesEnum],
+			hoursPerWeek: employee.hoursPerWeek,
+		});
+	};
+
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
-		// console.log("Form Data");
-		// console.table(data);
+		//console.log("Form Data");
+		//console.table(data);
 
 		const payload: EmployeeType = {
 			firstName: data.firstName,
@@ -109,13 +171,18 @@ const EmployeeDetails = ({ employee }: EmployeeDetailsProps) => {
 		};
 		// console.log("Payload");
 		// console.table(payload);
-		mutation.mutate(payload);
-		navigate("/employeeCreator/employees");
+		if (!employee) {
+			addMutation.mutate(payload);
+		} else if (employee && employee.id) {
+			//updateMutation.mutate(employee.id, payload);
+			updateEmployee(employee.id, payload);
+		}
 	};
 
 	return (
 		<div className={styles.EmployeeDetails}>
 			<Header title={`Employee details`} headerButton={`Back`} />
+			{employee && <div>Employee ID: {employee.id}</div>}
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<fieldset className={styles.Fieldset}>
 					<legend className={styles.Legend}>
@@ -593,7 +660,7 @@ const EmployeeDetails = ({ employee }: EmployeeDetailsProps) => {
 						)}
 				</fieldset>
 				<div className={styles.FormButtons}>
-					<Button label={`Save`} />
+					<Button label={employee ? "Update" : "Save"} />
 					<Link
 						className={styles.FormButtons__Link}
 						to={"/employeeCreator/employees"}>

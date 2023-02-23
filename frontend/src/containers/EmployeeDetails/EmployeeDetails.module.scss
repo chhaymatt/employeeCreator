@@ -116,7 +116,7 @@
 .FormButtons {
 	display: flex;
 	justify-content: space-between;
-	margin-bottom: 5rem;
+	margin: 2rem 0rem;
 	gap: 1rem;
 
 	@include mixin.phone {

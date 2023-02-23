@@ -7,7 +7,7 @@ import { getEmployeeList } from "../../services/EmployeeAPI";
 import { useQuery } from "react-query";
 
 export type EmployeeType = {
-	id?: string;
+	id?: number;
 	firstName: string;
 	middleName: string | null;
 	lastName: string;
