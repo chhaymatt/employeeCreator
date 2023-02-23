@@ -32,7 +32,8 @@ public class EmployeeService {
 
         Employee newEmployee = new Employee(
                 data.firstName.trim(),
-                middleName, data.lastName.trim(),
+                middleName,
+                data.lastName.trim(),
                 data.email.trim(),
                 data.mobile.trim(),
                 data.address.trim(),
