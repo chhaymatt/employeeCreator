@@ -65,16 +65,13 @@ const formatDay = (day: number) => {
 	return day < 10 ? `0${day}` : day;
 };
 
-type EmployeeDetailsProps = {
-	employeeId: number;
-	setEmployeeId: number;
-	// employee?: EmployeeType;
-};
+// type EmployeeDetailsProps = {
+// 	employeeId: number;
+// 	setEmployeeId: number;
+// 	// employee?: EmployeeType;
+// };
 
-const EmployeeDetails = ({
-	employeeId,
-	setEmployeeId,
-}: EmployeeDetailsProps) => {
+const EmployeeDetails = () => {
 	const [message, setMessage] = useState("");
 	const [employee, setEmployee] = useState<EmployeeType>();
 	const { id } = useParams();
