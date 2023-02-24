@@ -177,7 +177,11 @@ Manual testing was conducted with Postman to see different payloads and HTTP met
 ### 24/02/2023
 
 -   Updated README
--   ***
+-   Add delete employee by Id using React Query and Axios with error handling appearing on the EmployeeCard
+-   Remove useEffect for fetching employee by Id
+-   Add updating employee by Id using React Query and Axios with confirmation and error handling
+
+---
 
 ## What did you struggle with?
 

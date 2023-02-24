@@ -116,7 +116,7 @@
 .FormButtons {
 	display: flex;
 	justify-content: space-between;
-	margin: 2rem 0rem;
+	margin: 1rem 0rem;
 	gap: 1rem;
 
 	@include mixin.phone {
@@ -136,9 +136,12 @@
 
 .Message {
 	animation: fade 2s linear;
-	margin-top: 1rem;
 	padding: 1rem 2rem;
-	background-color: palette.$lighter-colour;
+	background-color: palette.$message-ok;
+
+	&__Alert {
+		background-color: palette.$light-colour;
+	}
 
 	&__Error {
 		background-color: palette.$error-light;

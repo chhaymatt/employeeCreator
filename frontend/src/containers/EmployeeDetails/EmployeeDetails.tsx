@@ -66,35 +66,46 @@ const formatDay = (day: number) => {
 };
 
 // type EmployeeDetailsProps = {
-// 	employeeId: number;
-// 	setEmployeeId: number;
-// 	// employee?: EmployeeType;
+// 	employeeId?: number;
 // };
+//{ employeeId }: EmployeeDetailsProps
 
 const EmployeeDetails = () => {
-	const [message, setMessage] = useState("");
+	const [message, setMessage] = useState<String>();
+	const [error, setError] = useState<String>();
 	const [employee, setEmployee] = useState<EmployeeType>();
 	const { id } = useParams();
+	const queryClient = useQueryClient();
+	const employeeId = id ? +id : 0;
+	const query = useQuery(
+		["employee", employeeId],
+		() => getEmployee(employeeId),
+		{
+			onSuccess: (employee: EmployeeType) => {
+				setEmployee(employee);
+				loadDetails(employee);
+			},
+			onError: (error) => {
+				console.log(error);
+			},
+		}
+	);
 
-	// const query = useQuery(["employee", employeeId], () =>
-	// 	getEmployee(employeeId)
-	// );
-
-	// const employee: EmployeeType = query.data;
+	//console.log(query);
 
 	// Fetch employee if id exists
-	useEffect(() => {
-		if (id) {
-			getEmployee(+id)
-				.then((employee) => {
-					setEmployee(employee);
-					console.log("Loaded employee");
-					console.table(employee);
-					loadDetails(employee);
-				})
-				.catch((err) => console.log(err));
-		}
-	}, []);
+	// useEffect(() => {
+	// 	if (id) {
+	// 		getEmployee(+id)
+	// 			.then((employee) => {
+	// 				setEmployee(employee);
+	// 				console.log("Loaded employee");
+	// 				console.table(employee);
+	// 				loadDetails(employee);
+	// 			})
+	// 			.catch((err) => console.log(err));
+	// 	}
+	// }, []);
 
 	const {
 		register,
@@ -110,25 +121,26 @@ const EmployeeDetails = () => {
 			setMessage(
 				`Successfully saved employee ${response.firstName} ${response.lastName} to Id ${response.id}`
 			);
-			// console.log("Added employee!");
-			// console.table(response);
 			reset();
 		},
 		onError: (error: AxiosError) => {
-			//console.log(error.message);
-			setMessage(error.message);
+			setError(error.message);
 		},
 	});
 
-	// const updateMutation = useMutation(updateEmployee, {
-	// 	onSuccess: (response: EmployeeType) => {
-	// 		setMessage(
-	// 			`Successfully  employee ${response.firstName} ${response.lastName} to Id ${response.id}`
-	// 		);
-	// 		console.log("Updated employee!");
-	// 		console.table(response);
-	// 	},
-	// });
+	const updateMutation = useMutation(
+		(payload: EmployeeType) => updateEmployee(employeeId, payload),
+		{
+			onSuccess: (response: EmployeeType) => {
+				setMessage(
+					`Successfully updated employee ${response.firstName} ${response.lastName} on Id ${response.id}`
+				);
+			},
+			onError: (error: AxiosError) => {
+				setError(error.message);
+			},
+		}
+	);
 
 	// If employee exists, run this
 	const loadDetails = (employee: EmployeeType) => {
@@ -160,6 +172,8 @@ const EmployeeDetails = () => {
 	};
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
+		setError("");
+		setMessage("");
 		//console.log("Form Data");
 		//console.table(data);
 
@@ -186,8 +200,7 @@ const EmployeeDetails = () => {
 		if (!employee) {
 			addMutation.mutate(payload);
 		} else if (employee && employee.id) {
-			//updateMutation.mutate(employee.id, payload);
-			updateEmployee(employee.id, payload);
+			updateMutation.mutate(payload);
 		}
 	};
 
@@ -195,6 +208,11 @@ const EmployeeDetails = () => {
 		<div className={styles.EmployeeDetails}>
 			<Header title={`Employee details`} headerButton={`Back`} />
 			{employee && <div>Employee Id: {employee.id}</div>}
+			{query.isLoading && (
+				<div className={`${styles.Message} ${styles.Message__Alert}`}>
+					{`Loading employees ${employeeId}...`}
+				</div>
+			)}
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<fieldset className={styles.Fieldset}>
 					<legend className={styles.Legend}>
@@ -671,6 +689,18 @@ const EmployeeDetails = () => {
 							</span>
 						)}
 				</fieldset>
+				{message && (
+					<div
+						className={`${styles.Message} ${styles.Message__Alert}`}>
+						{message}
+					</div>
+				)}
+				{error && (
+					<div
+						className={`${styles.Message} ${styles.Message__Error}`}>
+						{error}
+					</div>
+				)}
 				<div className={styles.FormButtons}>
 					<Button label={employee ? "Update" : "Save"} />
 					<Link
@@ -680,11 +710,6 @@ const EmployeeDetails = () => {
 					</Link>
 				</div>
 			</form>
-			{message && (
-				<div className={`${styles.Message} ${styles.Message__Alert}`}>
-					{message}
-				</div>
-			)}
 		</div>
 	);
 };

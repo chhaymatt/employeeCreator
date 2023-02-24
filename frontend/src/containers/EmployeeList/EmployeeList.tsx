@@ -5,6 +5,7 @@ import styles from "./EmployeeList.module.scss";
 import { Link } from "react-router-dom";
 import { getEmployeeList } from "../../services/EmployeeAPI";
 import { useQuery } from "react-query";
+import { AxiosError } from "axios";
 
 export type EmployeeType = {
 	id?: number;
@@ -35,6 +36,7 @@ const EmployeeList = () => {
 
 	const query = useQuery("employees", getEmployeeList);
 	const employees: EmployeeType[] = query.data;
+	const error = query.error as AxiosError;
 
 	return (
 		<div className={styles.EmployeeList}>
@@ -55,7 +57,7 @@ const EmployeeList = () => {
 			)}
 			{query.isError && (
 				<div
-					className={`${styles.Alert} ${styles.Alert__Error}`}>{`Status ${query.status} - ${query.error}. Please try again later.`}</div>
+					className={`${styles.Alert} ${styles.Alert__Error}`}>{`${error.message}. Please try again later.`}</div>
 			)}
 			{employees && employees.length === 0 && (
 				<div className={`${styles.Alert}`}>

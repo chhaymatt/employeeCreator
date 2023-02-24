@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { EmployeeType } from "../../containers/EmployeeList/EmployeeList";
 import InlineButtons from "../InlineButtons/InlineButtons";
 import styles from "./EmployeeCard.module.scss";
@@ -5,7 +6,9 @@ import styles from "./EmployeeCard.module.scss";
 type EmployeeCardProps = {
 	employee: EmployeeType;
 };
+
 const EmployeeCard = ({ employee }: EmployeeCardProps) => {
+	const [error, setError] = useState("");
 	let duration, durationUnit;
 	const durationInMilliSeconds =
 		Date.parse(employee.finishDate) - Date.parse(employee.startDate);
@@ -26,6 +29,7 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
 				<h3>
 					{employee.firstName} {employee.lastName}
 				</h3>
+				<p>{`Employee Id: ${employee.id}`}</p>
 				<p>
 					{`${
 						employee.contractType.charAt(0).toUpperCase() +
@@ -35,7 +39,12 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
 				</p>
 				<p>{employee.email}</p>
 			</section>
-			<InlineButtons employee={employee} />
+			<InlineButtons employee={employee} setError={setError} />
+			{error && (
+				<div className={`${styles.Alert} ${styles.Alert__Error}`}>
+					{`${error}. Please try again later.`}
+				</div>
+			)}
 		</div>
 	);
 };

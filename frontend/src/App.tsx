@@ -10,8 +10,6 @@ import { createEmployee } from "./services/EmployeeFactory";
 const queryClient = new QueryClient();
 
 const App = () => {
-	const testEmployee = createEmployee();
-
 	return (
 		<QueryClientProvider client={queryClient}>
 			<div className={styles.App}>
