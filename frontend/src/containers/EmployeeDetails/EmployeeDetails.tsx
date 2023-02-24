@@ -1,8 +1,8 @@
 import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import Header from "../../components/Header/Header";
 import {
@@ -56,8 +56,8 @@ type Inputs = {
 	hoursPerWeek: number;
 };
 
-const formatMonth = (monthLabel: MonthsEnum) => {
-	const monthIndex = Object.values(MonthsEnum).indexOf(monthLabel) + 1;
+const formatMonth = (monthName: MonthsEnum) => {
+	const monthIndex = Object.values(MonthsEnum).indexOf(monthName) + 1;
 	return monthIndex < 10 ? `0${monthIndex}` : monthIndex;
 };
 
@@ -65,46 +65,37 @@ const formatDay = (day: number) => {
 	return day < 10 ? `0${day}` : day;
 };
 
-// type EmployeeDetailsProps = {
-// 	employeeId?: number;
-// };
-//{ employeeId }: EmployeeDetailsProps
+function getMonthFromValue(value: number): MonthsEnum | undefined {
+	const monthNames = Object.keys(MonthsEnum);
+	const index = value - 1;
+	if (index < 0 || index >= monthNames.length) {
+		return undefined;
+	}
+	const monthName = monthNames[index];
+	return MonthsEnum[monthName as keyof typeof MonthsEnum];
+}
 
 const EmployeeDetails = () => {
 	const [employee, setEmployee] = useState<EmployeeType>();
 	const { id } = useParams();
-	const queryClient = useQueryClient();
 	const employeeId = id ? +id : 0;
-	const query = useQuery(
-		["employee", employeeId],
-		() => getEmployee(employeeId),
-		{
-			onSuccess: (employee: EmployeeType) => {
-				setEmployee(employee);
-				loadDetails(employee);
-			},
-			onError: (error) => {
-				console.log(error);
-			},
-		}
-	);
+	const queryClient = useQueryClient();
 
-	//console.log(query);
-
-	// Fetch employee if id exists
-	// useEffect(() => {
-	// 	if (id) {
-	// 		getEmployee(+id)
-	// 			.then((employee) => {
-	// 				setEmployee(employee);
-	// 				console.log("Loaded employee");
-	// 				console.table(employee);
-	// 				loadDetails(employee);
-	// 			})
-	// 			.catch((err) => console.log(err));
-	// 	}
-	// }, []);
-
+	if (employeeId) {
+		const query = useQuery(
+			["employee", employeeId],
+			() => getEmployee(employeeId),
+			{
+				onSuccess: (employee: EmployeeType) => {
+					setEmployee(employee);
+					loadDetails(employee);
+				},
+				onError: (error) => {
+					// console.log(error);
+				},
+			}
+		);
+	}
 	const {
 		register,
 		handleSubmit,
@@ -129,6 +120,7 @@ const EmployeeDetails = () => {
 		{
 			onSuccess: (response: EmployeeType) => {
 				console.log(response);
+				queryClient.invalidateQueries("employee");
 			},
 			onError: (error: AxiosError) => {
 				console.log(error);
@@ -138,8 +130,9 @@ const EmployeeDetails = () => {
 
 	// If employee exists, run this
 	const loadDetails = (employee: EmployeeType) => {
-		const startDate = employee.startDate.split("-");
-		const finishDate = employee.finishDate.split("-");
+		const [startYear, startMonth, startDay] = employee.startDate.split("-");
+		const [finishYear, finishMonth, finishDay] =
+			employee.finishDate.split("-");
 		reset({
 			firstName: employee.firstName,
 			middleName: employee.middleName,
@@ -151,13 +144,12 @@ const EmployeeDetails = () => {
 				ContractTypesEnum[
 					employee.contractType as keyof typeof ContractTypesEnum
 				],
-			startDateDay: +startDate[2],
-			startDateMonth: MonthsEnum[startDate[1] as keyof typeof MonthsEnum],
-			startDateYear: +startDate[0],
-			finishDateDay: +finishDate[2],
-			finishDateMonth:
-				MonthsEnum[finishDate[1] as keyof typeof MonthsEnum],
-			finishDateYear: +finishDate[0],
+			startDateDay: +startDay,
+			startDateMonth: getMonthFromValue(+startMonth),
+			startDateYear: +startYear,
+			finishDateDay: +finishDay,
+			finishDateMonth: getMonthFromValue(+finishMonth),
+			finishDateYear: +finishYear,
 			isOngoing: employee.isOngoing,
 			workType:
 				WorkTypesEnum[employee.workType as keyof typeof WorkTypesEnum],
@@ -166,9 +158,6 @@ const EmployeeDetails = () => {
 	};
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
-		//console.log("Form Data");
-		//console.table(data);
-
 		const payload: EmployeeType = {
 			firstName: data.firstName,
 			middleName: data.middleName,
@@ -187,8 +176,7 @@ const EmployeeDetails = () => {
 			workType: data.workType.toUpperCase().replace("-", "_"),
 			hoursPerWeek: +data.hoursPerWeek,
 		};
-		// console.log("Payload");
-		// console.table(payload);
+
 		if (!employee) {
 			addMutation.mutate(payload);
 		} else if (employee && employee.id) {
@@ -710,12 +698,12 @@ const EmployeeDetails = () => {
 						{updateMutation.error.message}
 					</div>
 				)}
-				{updateMutation.isError && updateMutation.error.response && (
+				{/* {updateMutation.isError && updateMutation.error.response && (
 					<div
 						className={`${styles.Message} ${styles.Message__Error}`}>
 						{`${updateMutation.error.response.data.message}`}
 					</div>
-				)}
+				)} */}
 				<div className={styles.FormButtons}>
 					<Button label={employee ? "Update" : "Save"} />
 					<Link

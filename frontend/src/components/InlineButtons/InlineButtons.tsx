@@ -1,7 +1,6 @@
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
-import { EmployeeType } from "../../containers/EmployeeList/EmployeeList";
 import { deleteEmployee } from "../../services/EmployeeAPI";
 import styles from "./InlineButtons.module.scss";
 

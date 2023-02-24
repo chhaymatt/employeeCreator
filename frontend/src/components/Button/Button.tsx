@@ -4,6 +4,7 @@ type ButtonProps = {
 	label: string;
 	secondary?: boolean;
 };
+
 const Button = ({ label, secondary }: ButtonProps) => {
 	return (
 		<button className={`${styles.Button} ${secondary && styles.Secondary}`}>

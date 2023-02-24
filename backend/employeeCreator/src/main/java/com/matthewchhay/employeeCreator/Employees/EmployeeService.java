@@ -27,16 +27,16 @@ public class EmployeeService {
     public Employee add(EmployeeDTO data) {
         String middleName = null;
         if (data.middleName != null) {
-            middleName = data.middleName.trim();
+            middleName = capitaliseFirstLetter(data.middleName);
         }
 
         Employee newEmployee = new Employee(
-                data.firstName.trim(),
+                capitaliseFirstLetter(data.firstName),
                 middleName,
-                data.lastName.trim(),
+                capitaliseFirstLetter(data.lastName),
                 data.email.trim(),
                 data.mobile.trim(),
-                data.address.trim(),
+                capitaliseFirstLetter(data.address),
                 data.contractType,
                 data.startDate,
                 data.finishDate,
@@ -49,15 +49,15 @@ public class EmployeeService {
     public Employee update(Employee employee, EmployeeDTO data) {
         String middleName = null;
         if (data.middleName != null) {
-            middleName = data.middleName.trim();
+            middleName = capitaliseFirstLetter(data.middleName);
         }
 
-        employee.setFirstName(data.firstName.trim());
+        employee.setFirstName(capitaliseFirstLetter(data.firstName));
         employee.setMiddleName(middleName);
-        employee.setLastName(data.lastName.trim());
+        employee.setLastName(capitaliseFirstLetter(data.lastName));
         employee.setEmail(data.email.trim());
         employee.setMobile(data.mobile.trim());
-        employee.setAddress(data.address.trim());
+        employee.setAddress(capitaliseFirstLetter(data.address));
         employee.setContractType(data.contractType);
         employee.setStartDate(data.startDate);
         employee.setFinishDate(data.finishDate);
@@ -69,6 +69,14 @@ public class EmployeeService {
 
     public void delete(Employee employee) {
         this.repository.delete(employee);
+    }
+
+    private String capitaliseFirstLetter(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        str = str.trim();
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
 }

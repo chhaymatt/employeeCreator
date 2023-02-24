@@ -96,7 +96,7 @@ I added enums to fields that had radio buttons or a drop down menu, which includ
 
 I used Axios over the fetch() for its ease of use and to learn a new technology, this allowed me to save all Axios methods in the `src/services` folder.
 
-I used React Query to reduce the need for using React's useEffect hook and it comes with a useQuery/useMutation to appropriately handle the request `isLoading` or returns the `data` or an `error`.
+I used React Query to reduce the need for using React's useEffect hook and it comes with a useQuery/useMutation to appropriately handle the request `isLoading`, `isSuccess`, `isError` states with messages and returns the response `data` or an `error`.
 
 ### Backend
 
@@ -180,6 +180,10 @@ Manual testing was conducted with Postman to see different payloads and HTTP met
 -   Add delete employee by Id using React Query and Axios with error handling appearing on the EmployeeCard
 -   Remove useEffect for fetching employee by Id
 -   Add updating employee by Id using React Query and Axios with confirmation and error handling
+-   Add trim/capitalise first letter of firstName, middleName, lastName and address on the backend
+-   Remove useState messages and errors from EmployeeList and replace with `useMutation.isLoading` or `useMutation.isSuccess` or `useMutation.isError`
+-   Fix loading month dropdowns when fetching employee
+-   Loading employee details will only run if `employee/:id` is a number and not zero, this removed
 
 ---
 
@@ -216,6 +220,7 @@ Discovering `id` is an optional field in the EmployeeType because loading employ
 startDate contains three different fields for the FormInputs, `startDateDay`, `startDateMonth`, `startDateYear` and translating it back to `YYYY-MM-DD`
 Finding `MM` based on Enum index from value
 `MM` and `DD` requires a leading zero if number is less than 10 otherwise EmployeeDTO won't accept it
+Using Console.Table for Inputs and for the payload
 
 ### Struggle 4 - Axios errors
 
@@ -232,6 +237,8 @@ I was also successful with adding employee because it only takes in a payload
 But the other methods take in `employeeId` and a payload
 
 Currently loading an employee to the EmployeeDetails component uses the id from the URL and stores the employee in a useState and then fills the details in the form.
+
+Original Fetch
 
 ```tsx
 const { id } = useParams();
@@ -253,40 +260,6 @@ useEffect(() => {
 Examples I found online are like:
 
 ```jsx
-
-// App.jsx
-const [postId, setPostId] = useState(-1);
-
-// Posts.jsx (equivalent to EmployeeList)
-function Posts({ setPostId }) {
-	<a onClick={() => setPostId(post.id)}>{post.title} </a>
-}
-
-// Post.jsx (equivalent to EmployeeDetails)
-function Post({postId, setPostId}) {
-	const { status, data, error, isFetching } = useQuery(["post", postId], () => getPostById(postId)
-
-	// Return
-	// Reset postId
-	<a onClick={() => setPostId(-1)} href="#">Back </a>
-	// Post data
-	{!postId || status === "loading" ? (
-        "Loading..."
-      ) : status === "error" ? (
-        <span>Error: {error.message}</span>
-      ) : (
-        <>
-          <h1>{data.title}</h1>
-          <div>
-            <p>{data.body}</p>
-          </div>
-          <div>{isFetching ? "Background Updating..." : " "}</div>
-        </>
-      )}
-
-}
-
-
 //
 ```
 

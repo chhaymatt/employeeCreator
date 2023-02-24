@@ -1,7 +1,9 @@
 import styles from "./HeaderButton.module.scss";
+
 type HeaderButtonProps = {
 	label: string;
 };
+
 const HeaderButton = ({ label }: HeaderButtonProps) => {
 	return (
 		<button className={styles.HeaderButton}>
