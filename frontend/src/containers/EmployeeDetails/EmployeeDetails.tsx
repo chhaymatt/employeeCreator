@@ -65,15 +65,25 @@ const formatDay = (day: number) => {
 	return day < 10 ? `0${day}` : day;
 };
 
-// type EmployeeDetailsProps = {
-// 	employee?: EmployeeType;
-// };
-// { employee }: EmployeeDetailsProps
+type EmployeeDetailsProps = {
+	employeeId: number;
+	setEmployeeId: number;
+	// employee?: EmployeeType;
+};
 
-const EmployeeDetails = () => {
+const EmployeeDetails = ({
+	employeeId,
+	setEmployeeId,
+}: EmployeeDetailsProps) => {
 	const [message, setMessage] = useState("");
 	const [employee, setEmployee] = useState<EmployeeType>();
 	const { id } = useParams();
+
+	// const query = useQuery(["employee", employeeId], () =>
+	// 	getEmployee(employeeId)
+	// );
+
+	// const employee: EmployeeType = query.data;
 
 	// Fetch employee if id exists
 	useEffect(() => {

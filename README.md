@@ -1,113 +1,198 @@
-# employeeCreator <!-- omit in toc -->
+# Employee Creator <!-- omit in toc -->
 
-> Matthew Chhay's Employee Creator Website
-> [Open Live Preview]()
+<!-- {add test badges here, all projects you build from here on out will have tests, therefore you should have github workflow badges at the top of your repositories: [Github Workflow Badges](https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/adding-a-workflow-status-badge)} -->
 
-## Preview <!-- omit in toc -->
+## Demo / Screenshots
 
-![Preview of Matthew Chhay's employeeCreator's website]()
+### Demo
 
-## Table of Contents <!-- omit in toc -->
+This demo does not interact with the backend.
+[Open Demo](https://chhaymatt.github.io/employeeCreator/)
 
--   [Introduction](#introduction)
--   [Features](#features)
--   [Technologies Used](#technologies-used)
-    -   [Frontend](#frontend)
-    -   [Backend](#backend)
--   [Screenshots](#screenshots)
--   [MVP](#mvp)
--   [Setup](#setup)
-    -   [For viewing locally and further development](#for-viewing-locally-and-further-development)
-        -   [Front end](#front-end)
-        -   [Back end](#back-end)
-    -   [For publishing to GitHub Pages after initial setup](#for-publishing-to-github-pages-after-initial-setup)
--   [Tools Used](#tools-used)
--   [Project Status](#project-status)
--   [Room for Improvement](#room-for-improvement)
--   [Acknowledgments](#acknowledgments)
--   [Issues](#issues)
+### Screenshots
 
-## Introduction
+![List of employees](https://i.imgur.com/xvmdlzL.png)
+![Employee details](https://i.imgur.com/7i0JQ9F.png)
+![Employee details with inline validation](https://i.imgur.com/OYSI9lK.png)
+![Responsive design](https://i.imgur.com/yzJo1uN.png)
 
-## Features
+---
 
-## Technologies Used
+## Requirements / Purpose
 
-### Frontend
+### Requirements
 
--   React TypeScript with Vite
--   React Router
--   SCSS/CSS
+An employee tracking system where managers can view, add, edit and remove employee details. Front end uses React and the backend is a RESTful API of any choice.
+
+### Purpose
+
+To learn and apply new technology and demonstrate my competency as a full stack developer.
+
+### Stack
+
+#### Frontend
+
+-   React - framework
+-   SASS/SCSS - for more features than CSS
+-   TypeScript - for type safety and help with code autocomplete
+-   React Router Dom - navigate between different pages
+-   React Hook Form - store, validate form inputs
+-   React Axios - ease of use and increases readability compared to fetch()
+-   React Query - reduce the need to use the useEffect hook and provides helpful messages whenever a request isLoading, returns the data or any errors
+<!-- -   Vitest for testing components -->
 
 ### Backend
 
--   Java
--   Spring
+-   Java 17 and Spring Boot
+-   Spring Web
+-   Validation I/O
+-   Spring Starter Test
+-   Spring Data JPA
+-   MySQL Driver
+-   Spring Devtools
 
-## Screenshots
+### Tools Used
 
-![]()
-![]()
-![]()
+-   Vite - creating a starting React app
+-   VS Code - IDE
+-   Prettier - to tidy up code in spacing and structure
+-   Spring Initializr - create a starting Spring app
+-   Postman - manual testing endpoints
+-   Meta Tags - generate metadata for sharing front end on the web
+-   Favicon.io - generate a favicon
 
-## MVP
+---
 
--
--
--
+## Build Steps
 
-## Setup
+1. Copy repo by running `git clone git@github.com:chhaymatt/employeeCreator.git`
 
-### For viewing locally and further development
+### Front end
 
-1. Git clone this repo `git clone git@github.com:chhaymatt/employeeCreator.git`
+1. Go to the folder `cd employeeCreator/frontend` and open in your IDE
+2. Install packages `npm install`
+3. If necessary, change the `BASE_URL` inside `src/services/EmployeeAPI.ts`
+4. Run front end `npm run dev`
 
-#### Front end
+### Back end
 
-1. Run `cd frontend`
-2. Run `npm install`
-3. Run `npm run dev`
+1. Go to the folder `cd employeeCreator/backend/employeeCreator` and open in your IDE
+2. If necessary, change the properties (url, user and password) in `src/main/resources/application.properties`
+3. Open mySQL Workbench and run `CREATE DATABASE employeeCreator;`
+4. If the database already exists, run `DROP DATABASE employeeCreator;` and then rerun `CREATE DATABASE employeeCreator;`
+5. Run `./mvnw spring-boot:run`
 
-#### Back end
+---
 
-1. Run `cd backend`
-2. Run `code .`
-3. Change `application.properties` e.g. db name and the username and password
-4. Create database in MySQL Workbench `create database "db name"`
+## Design Goals / Approach
 
-### For publishing to GitHub Pages after initial setup
+### Frontend
 
-1. Run `cd frontend`
-2. Run `bash deploy.sh`
+I created several key components which include the EmployeeCard to be mapped in the EmployeeList and a form inside EmployeeDetails. After that, I created an array of employees with faker.js to simulate an employee details and check EmployeeCard was displaying the correct information. I styled the components using SASS/SCSS because it allowed me to adopt mixins for responsive design and partials for sharing global variables such as colour.
 
-## Tools Used
+Inside EmployeeDetails, I added HTML inputs and styled the different form inputs to be as similar to the provided wireframes. Then, I added React Hook Form to validate the form inputs, provide clear instructions to the user and store the inputs for processing.
 
--   Vite - creating a starting React app.
--   Vitest - for testing.
--   React Router - for navigating to different pages.
--   Prettier - to tidy up code in spacing and structure. [Get Prettier Extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
--   Favicon.io - generate a favicon. [Generate favicon](https://favicon.io/favicon-generator/)
+I added enums to fields that had radio buttons or a drop down menu, which include the Work Type and Contract Type and the Month. This was to map the different options and reduce duplicated code.
 
-## Project Status
+I used Axios over the fetch() for its ease of use and to learn a new technology, this allowed me to save all Axios methods in the `src/services` folder.
 
-Project is ongoing
+I used React Query to reduce the need for using React's useEffect hook and it comes with a useQuery/useMutation to appropriately handle the request `isLoading` or returns the `data` or an `error`.
 
-## Room for Improvement
+### Backend
 
--
+During my training program I was shown to use Eclipse for Java projects but I switched to VS Code because it provided me with a more productive development environment. What makes VS Code better for me was the ability to zooming in/out and support for extensions such as Prettier.
 
-## Acknowledgments
+I created an employee domain which consists of:
 
--
--
--
+-   Entity - stores the fields for a record
+-   Controller - takes in requests from the front end or through postman and returns the response or any errors, communicates to and from the service
+-   DTO - checks the types of the incoming payload, a single DTO to reduce repetition because creating or updating an employee take the same payload
+-   Service - performs methods based on the repository and data cleaning
+-   Repository - communicates between the service and the database
 
-## Issues
+Enums were created for the work types and contract types to ensure quality data in the database.
+Manual testing was conducted with Postman to see different payloads and HTTP methods return the right response and any errors.
 
--   Treat any numbers with leading zeros as strings: https://stackoverflow.com/questions/27361565/why-is-json-invalid-if-an-integer-begins-with-a-leading-zero#:~:text=A%20leading%200%20indicates%20an,would%20not%20contain%20an%208.
--   How to find what faker outputs are there: https://fakerjs.dev/api/
--   How to create an array of n faker objects: https://stackoverflow.com/questions/42861732/generate-an-array-with-random-data-without-using-a-for-loop
--   Check boxes and radio buttons goes like this:
+---
+
+## Features
+
+-   Fetch list of employees
+-   Fetch a specific employee and load employee details into the form
+-   Add an employee and validate user inputs and save to the database
+
+---
+
+## Known issues
+
+-   Non-descriptive errors from backend to display to the user front end (e.g. startDate is later than finishDate)
+-   Unable to delete employee from front end
+-   Unable to update employee from front end
+-   Unable to load employee details using React Query, workaround: useEffect
+
+---
+
+## Future Goals
+
+-   Create tests for front end and back end
+-   Implementing an API logging strategy
+
+---
+
+## Change logs
+
+### 20/02/2023 - Project setup
+
+-   Setup project
+-   Create key components such as `EmployeeCard`, `EmployeeList`, `EmployeeDetails`
+-   Create form inputs with HTML validation with `require`
+-   Create styling in SASS/SCSS to be similar to the wireframe
+
+### 21/02/2023 - Back end set up
+
+-   Update styling and improved responsiveness
+-   Create array of fake employees using faker.js
+-   Add react router dom to navigate between the two pages on the Add Employee button in EmployeeList and Back or Cancel buttons in EmployeeDetails
+-   Add favicon and meta tags
+-   Create backend Spring Boot project with Employee domain and `findOnEmployee`, `addEmployee`, and `updateEmployee` methods
+-   Manually test endpoints using Postman
+-   Add footer
+
+### 22/02/2023 - Form validation
+
+-   Add delete employee by Id to backend
+-   Add React Hook Form
+-   Add inline validation messages and accessibility by leveraging ARIA
+-   Add error styling whenever user enters invalid input (e.g. missing input or wrong pattern)
+
+### 23/02/2023
+
+-   Fix CORS issue appearing on front end by adding @CrossOrigin to the backend Controller
+-   Create Axios file `EmployeeAPI.ts` in services with methods `addEmployee`, `getEmployeeList`, `getEmployee`, `updateEmployee`, and `deleteEmployee`
+-   Fetch list of employees from API using Axios and React Query with appropriate error handling
+-   Manually test EmployeeList when the server is offline or when there are no employees
+-   Fetch employee by Id from API using Axios and useEffect when clicking 'Edit' and loading employee details into the React Hook Form with `reset()`
+-   Save new employee to API using Axios and React Query, useMutation and returned confirmation to the user at the bottom of the form
+
+### 24/02/2023
+
+-   Updated README
+-   ***
+
+## What did you struggle with?
+
+### Struggle 1 - Radio buttons and checkboxes labels could not be clicked
+
+I discovered this problem when I adopted React Hook Form and the labels broke. I thought the labels were connected the input with its `name` attribute in the input and `htmlFor` in the label attribute because they were working before adopting React Hook Form. To fix this, I realised I needed to surround the input with the label.
+
+Wrong way:
+
+```html
+<input name="isOngoing" id="isOngoing" />
+<label htmlFor="isOngoing"> On going </label>
+```
+
+The correct way:
 
 ```html
 <label>
@@ -115,65 +200,111 @@ Project is ongoing
 </label>
 ```
 
-originally I had it
+### Struggle 2 - Mapping radio buttons and drop down menus
+
+Treating enums like arrays to use .map
+Missing value from enum would map both the property word and property index (e.g. January-February AND 1 to 12)
+
+### Struggle 3 - Form Inputs from the front end are slightly different to the EmployeeDTO in the back end
+
+Radio buttons and dropdown menus changing back from value to the Enum property by UpperCase or replacing `-` to `_` otherwise backend will reject
+Discovering `id` is an optional field in the EmployeeType because loading employees requires id but creating an employee does not
+startDate contains three different fields for the FormInputs, `startDateDay`, `startDateMonth`, `startDateYear` and translating it back to `YYYY-MM-DD`
+Finding `MM` based on Enum index from value
+`MM` and `DD` requires a leading zero if number is less than 10 otherwise EmployeeDTO won't accept it
+
+### Struggle 4 - Axios errors
+
+Adding employee that returns an error has an unclear error message because it is buried within an optional response data.
+The unclear message is: `Request failed with status code 400`
+Do I create a new data type?
+
+### Struggle 5 - React Query Mutations
+
+I want to use React Query over useEffect/useState
+How do I useQuery or useMutations?
+I was successful with EmployeeList because it fetches all employees and doesn't take any parameters
+I was also successful with adding employee because it only takes in a payload
+But the other methods take in `employeeId` and a payload
+
+Currently loading an employee to the EmployeeDetails component uses the id from the URL and stores the employee in a useState and then fills the details in the form.
 
 ```tsx
-<div className="{styles.CheckboxInput}">
-	<span className="{styles.Checkbox}">
-		<input
-			className="{styles.CheckboxButton}"
-			type="checkbox"
-			name="isOngoing"
-			id="isOngoing"
-		/>
-		<label className="{styles.CheckboxLabel}" htmlFor="isOngoing">
-			On going
-		</label>
-	</span>
-</div>
+const { id } = useParams();
+
+useEffect(() => {
+	if (id) {
+		getEmployee(+id)
+			.then((employee) => {
+				setEmployee(employee);
+				console.log("Loaded employee");
+				console.table(employee);
+				loadDetails(employee);
+			})
+			.catch((err) => console.log(err));
+	}
+}, []);
 ```
 
-```tsx
-<div className="{styles.RadioGroup}">
-	<label className="{styles.Label}" htmlFor="workType">
-		Is this on a full-time or part-time basis?
-	</label>
-	<div className="{styles.RadioInput}">
-		<input
-			className={styles.RadioButton}
-			type="radio"
-			defaultChecked
-			{...register("workType")}
-			value="Full-time"
-		/>
-		<label className="{styles.RadioLabel}" htmlFor="workType">
-			Full-time
-		</label>
-	</div>
-	<div className="{styles.RadioInput}">
-		<input
-			className={styles.RadioButton}
-			type="radio"
-			defaultChecked
-			{...register("workType")}
-			value="Part-time"
-		/>
-		<label className="{styles.RadioLabel}" htmlFor="workType">
-			Part-time
-		</label>
-	</div>
-</div>
+Examples I found online are like:
+
+```jsx
+
+// App.jsx
+const [postId, setPostId] = useState(-1);
+
+// Posts.jsx (equivalent to EmployeeList)
+function Posts({ setPostId }) {
+	<a onClick={() => setPostId(post.id)}>{post.title} </a>
+}
+
+// Post.jsx (equivalent to EmployeeDetails)
+function Post({postId, setPostId}) {
+	const { status, data, error, isFetching } = useQuery(["post", postId], () => getPostById(postId)
+
+	// Return
+	// Reset postId
+	<a onClick={() => setPostId(-1)} href="#">Back </a>
+	// Post data
+	{!postId || status === "loading" ? (
+        "Loading..."
+      ) : status === "error" ? (
+        <span>Error: {error.message}</span>
+      ) : (
+        <>
+          <h1>{data.title}</h1>
+          <div>
+            <p>{data.body}</p>
+          </div>
+          <div>{isFetching ? "Background Updating..." : " "}</div>
+        </>
+      )}
+
+}
+
+
+//
 ```
 
-tricky dates
+Do I need to use useState?, I want to avoid prop drilling because the Edit button is buried in this:
+`App -> EmployeeList -> EmployeeCard -> InlineButtons -> Edit`
+Could I useContext instead?
 
--   changed enum to include MONTH = Month
--   find index of month from enum
--   add leading zero if less than 10
+---
 
-replace - with \_ for full_time and part_time
+<!-- ## Licensing Details
 
-# Backend decisions
+-   What type of license are you releasing this under?
 
--   Single DTO for creating and updating an employee, reduces repetition, no need to compare past values with new values
--   Enums for work types and contract types
+---
+
+## Further details, related projects, reimplementations
+
+-   Is this project a reimplementation for something you've done in the past? if so explain it and link it here.
+-   If it's an API, is there a client app that works with this project? link it -->
+
+## Resources that helped me along the way
+
+-   Treat any numbers with leading zeros as strings: https://stackoverflow.com/questions/27361565/why-is-json-invalid-if-an-integer-begins-with-a-leading-zero#:~:text=A%20leading%200%20indicates%20an,would%20not%20contain%20an%208.
+-   How to find what faker outputs are there: https://fakerjs.dev/api/
+-   How to create an array of n faker objects: https://stackoverflow.com/questions/42861732/generate-an-array-with-random-data-without-using-a-for-loop
