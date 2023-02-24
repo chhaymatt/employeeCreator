@@ -116,11 +116,11 @@ const EmployeeDetails = () => {
 	// Mutations
 	const addMutation = useMutation(addEmployee, {
 		onSuccess: (response: EmployeeType) => {
-			console.log(response)
+			console.log(response);
 			reset();
 		},
 		onError: (error: AxiosError) => {
-			console.log(error)
+			console.log(error);
 		},
 	});
 
@@ -128,7 +128,7 @@ const EmployeeDetails = () => {
 		(payload: EmployeeType) => updateEmployee(employeeId, payload),
 		{
 			onSuccess: (response: EmployeeType) => {
-				console.log(response)
+				console.log(response);
 			},
 			onError: (error: AxiosError) => {
 				console.log(error);
@@ -166,8 +166,6 @@ const EmployeeDetails = () => {
 	};
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
-		setError("");
-		setMessage("");
 		//console.log("Form Data");
 		//console.table(data);
 
