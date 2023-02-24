@@ -6,12 +6,11 @@ import { deleteEmployee } from "../../services/EmployeeAPI";
 import styles from "./InlineButtons.module.scss";
 
 type InlineButtonProps = {
-	employee: EmployeeType;
+	id: number;
 	setError: (error: string) => void;
 };
 
-const InlineButtons = ({ employee, setError }: InlineButtonProps) => {
-	const id = employee.id ? employee.id : 0;
+const InlineButtons = ({ id, setError }: InlineButtonProps) => {
 	const queryClient = useQueryClient();
 	const deleteMutation = useMutation((id: number) => deleteEmployee(id), {
 		onSuccess: (response: boolean) => {

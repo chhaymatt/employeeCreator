@@ -39,7 +39,7 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
 				</p>
 				<p>{employee.email}</p>
 			</section>
-			<InlineButtons employee={employee} setError={setError} />
+			<InlineButtons id={employee.id as number} setError={setError} />
 			{error && (
 				<div className={`${styles.Alert} ${styles.Alert__Error}`}>
 					{`${error}. Please try again later.`}

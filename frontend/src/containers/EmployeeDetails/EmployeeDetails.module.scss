@@ -137,10 +137,10 @@
 .Message {
 	animation: fade 2s linear;
 	padding: 1rem 2rem;
-	background-color: palette.$message-ok;
+	background-color: palette.$light-colour;
 
-	&__Alert {
-		background-color: palette.$light-colour;
+	&__Success {
+		background-color: palette.$message-success;
 	}
 
 	&__Error {

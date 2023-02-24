@@ -71,8 +71,6 @@ const formatDay = (day: number) => {
 //{ employeeId }: EmployeeDetailsProps
 
 const EmployeeDetails = () => {
-	const [message, setMessage] = useState<String>();
-	const [error, setError] = useState<String>();
 	const [employee, setEmployee] = useState<EmployeeType>();
 	const { id } = useParams();
 	const queryClient = useQueryClient();
@@ -118,13 +116,11 @@ const EmployeeDetails = () => {
 	// Mutations
 	const addMutation = useMutation(addEmployee, {
 		onSuccess: (response: EmployeeType) => {
-			setMessage(
-				`Successfully saved employee ${response.firstName} ${response.lastName} to Id ${response.id}`
-			);
+			console.log(response)
 			reset();
 		},
 		onError: (error: AxiosError) => {
-			setError(error.message);
+			console.log(error)
 		},
 	});
 
@@ -132,12 +128,10 @@ const EmployeeDetails = () => {
 		(payload: EmployeeType) => updateEmployee(employeeId, payload),
 		{
 			onSuccess: (response: EmployeeType) => {
-				setMessage(
-					`Successfully updated employee ${response.firstName} ${response.lastName} on Id ${response.id}`
-				);
+				console.log(response)
 			},
 			onError: (error: AxiosError) => {
-				setError(error.message);
+				console.log(error);
 			},
 		}
 	);
@@ -208,11 +202,6 @@ const EmployeeDetails = () => {
 		<div className={styles.EmployeeDetails}>
 			<Header title={`Employee details`} headerButton={`Back`} />
 			{employee && <div>Employee Id: {employee.id}</div>}
-			{query.isLoading && (
-				<div className={`${styles.Message} ${styles.Message__Alert}`}>
-					{`Loading employees ${employeeId}...`}
-				</div>
-			)}
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<fieldset className={styles.Fieldset}>
 					<legend className={styles.Legend}>
@@ -689,16 +678,44 @@ const EmployeeDetails = () => {
 							</span>
 						)}
 				</fieldset>
-				{message && (
-					<div
-						className={`${styles.Message} ${styles.Message__Alert}`}>
-						{message}
+				{addMutation.isLoading && (
+					<div className={`${styles.Message}`}>
+						Saving employee...
 					</div>
 				)}
-				{error && (
+				{addMutation.isSuccess && (
+					<div
+						className={`${styles.Message} ${styles.Message__Success}`}>
+						{`${addMutation.data.firstName} ${addMutation.data.lastName} was saved to Employee Id ${addMutation.data.id}`}
+					</div>
+				)}
+				{addMutation.isError && (
 					<div
 						className={`${styles.Message} ${styles.Message__Error}`}>
-						{error}
+						{addMutation.error.message}
+					</div>
+				)}
+				{updateMutation.isLoading && (
+					<div className={`${styles.Message}`}>
+						Updating employee...
+					</div>
+				)}
+				{updateMutation.isSuccess && (
+					<div
+						className={`${styles.Message} ${styles.Message__Success}`}>
+						{`Updated Employee Id ${updateMutation.data.id} - ${updateMutation.data.firstName} ${updateMutation.data.lastName}`}
+					</div>
+				)}
+				{updateMutation.isError && (
+					<div
+						className={`${styles.Message} ${styles.Message__Error}`}>
+						{updateMutation.error.message}
+					</div>
+				)}
+				{updateMutation.isError && updateMutation.error.response && (
+					<div
+						className={`${styles.Message} ${styles.Message__Error}`}>
+						{`${updateMutation.error.response.data.message}`}
 					</div>
 				)}
 				<div className={styles.FormButtons}>
