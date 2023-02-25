@@ -1,4 +1,5 @@
 import { AxiosError } from "axios";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link, useParams } from "react-router-dom";
@@ -85,6 +86,7 @@ const getMonthFromValue = (value: number) => {
 
 const EmployeeDetails = () => {
 	let query;
+	const [displayForm, setDisplayForm] = useState(true);
 	const { id } = useParams();
 	const employeeId = id ? +id : 0;
 	const queryClient = useQueryClient();
@@ -95,9 +97,12 @@ const EmployeeDetails = () => {
 			() => getEmployee(employeeId),
 			{
 				onSuccess: (employee: EmployeeType) => {
+					setDisplayForm(true);
 					loadDetails(employee);
 				},
-				onError: (error: AxiosError) => {},
+				onError: (error: AxiosError) => {
+					setDisplayForm(false);
+				},
 			}
 		);
 	}
@@ -125,6 +130,7 @@ const EmployeeDetails = () => {
 		handleSubmit,
 		watch,
 		reset,
+		unregister,
 		formState: { errors },
 	} = useForm<Inputs>();
 
@@ -189,536 +195,595 @@ const EmployeeDetails = () => {
 			{query?.isLoading && (
 				<Message type="loading">{`Loading employee Id ${employeeId}`}</Message>
 			)}
-			{query?.isSuccess && (
-				<Message>{`Employee Id ${query.data.id}`}</Message>
-			)}
-			{query?.isError && (
+			{query?.isSuccess && <div>{`Employee Id ${query.data.id}`}</div>}
+			{query?.isError && query.error.response ? (
 				<Message type="error">
-					{`Unable to load employee ${query.error.message}. Please try again later.`}
+					{`${(query.error.response.data as ErrorData).message}`}
 				</Message>
+			) : (
+				query?.isError && (
+					<Message type="error">
+						{`${query.error.message}. Please try again later.`}
+					</Message>
+				)
 			)}
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<fieldset className={styles.Fieldset}>
-					<legend className={styles.Legend}>
-						Personal information
-					</legend>
-					<label className={styles.Label} htmlFor="firstName">
-						First name
-					</label>
-					<input
-						className={`${styles.InputText} ${
-							errors.firstName ? styles.RedOutline : ""
-						}`}
-						type="text"
-						placeholder="Matthew"
-						aria-invalid={errors.firstName ? "true" : "false"}
-						{...register("firstName", {
-							required: true,
-						})}
-					/>
-					{errors.firstName &&
-						errors.firstName.type === "required" && (
+			{displayForm && (
+				<form onSubmit={handleSubmit(onSubmit)}>
+					<fieldset className={styles.Fieldset}>
+						<legend className={styles.Legend}>
+							Personal information
+						</legend>
+						<label className={styles.Label} htmlFor="firstName">
+							First name
+						</label>
+						<input
+							className={`${styles.InputText} ${
+								errors.firstName ? styles.RedOutline : ""
+							}`}
+							type="text"
+							placeholder="Matthew"
+							aria-invalid={errors.firstName ? "true" : "false"}
+							{...register("firstName", {
+								required: true,
+							})}
+						/>
+						{errors.firstName &&
+							errors.firstName.type === "required" && (
+								<span role="alert" className={styles.Alert}>
+									First name is required
+								</span>
+							)}
+						<label className={styles.Label} htmlFor="firstName">
+							Middle name (if applicable)
+						</label>
+						<input
+							className={styles.InputText}
+							type="text"
+							{...register("middleName")}
+						/>
+						<label className={styles.Label} htmlFor="lastName">
+							Last name
+						</label>
+						<input
+							className={`${styles.InputText} ${
+								errors.lastName ? styles.RedOutline : ""
+							}`}
+							type="text"
+							placeholder="Chhay"
+							aria-invalid={errors.lastName ? "true" : "false"}
+							{...register("lastName", {
+								required: true,
+							})}
+						/>
+						{errors.lastName &&
+							errors.lastName.type === "required" && (
+								<span role="alert" className={styles.Alert}>
+									Last name is required
+								</span>
+							)}
+					</fieldset>
+					<fieldset className={styles.Fieldset}>
+						<legend className={styles.Legend}>
+							Contact details
+						</legend>
+						<label className={styles.Label} htmlFor="email">
+							Email address
+						</label>
+						<input
+							className={`${styles.InputText} ${
+								errors.email ? styles.RedOutline : ""
+							}`}
+							type="email"
+							aria-invalid={errors.email ? "true" : "false"}
+							{...register("email", {
+								required: true,
+								pattern: /\S+@\S+\.\S+/,
+							})}
+							placeholder="chhaymatt@gmail.com"
+						/>
+						{errors.email && errors.email.type === "required" && (
 							<span role="alert" className={styles.Alert}>
-								First name is required
+								Email address is required
 							</span>
 						)}
-					<label className={styles.Label} htmlFor="firstName">
-						Middle name (if applicable)
-					</label>
-					<input
-						className={styles.InputText}
-						type="text"
-						{...register("middleName")}
-					/>
-					<label className={styles.Label} htmlFor="lastName">
-						Last name
-					</label>
-					<input
-						className={`${styles.InputText} ${
-							errors.lastName ? styles.RedOutline : ""
-						}`}
-						type="text"
-						placeholder="Chhay"
-						aria-invalid={errors.lastName ? "true" : "false"}
-						{...register("lastName", {
-							required: true,
-						})}
-					/>
-					{errors.lastName && errors.lastName.type === "required" && (
-						<span role="alert" className={styles.Alert}>
-							Last name is required
-						</span>
-					)}
-				</fieldset>
-				<fieldset className={styles.Fieldset}>
-					<legend className={styles.Legend}>Contact details</legend>
-					<label className={styles.Label} htmlFor="email">
-						Email address
-					</label>
-					<input
-						className={`${styles.InputText} ${
-							errors.email ? styles.RedOutline : ""
-						}`}
-						type="email"
-						aria-invalid={errors.email ? "true" : "false"}
-						{...register("email", {
-							required: true,
-							pattern: /\S+@\S+\.\S+/,
-						})}
-						placeholder="chhaymatt@gmail.com"
-					/>
-					{errors.email && errors.email.type === "required" && (
-						<span role="alert" className={styles.Alert}>
-							Email address is required
-						</span>
-					)}
-					{errors.email && errors.email.type === "pattern" && (
-						<span role="alert" className={styles.Alert}>
-							Email address must be valid
-						</span>
-					)}
-					<label className={styles.Label} htmlFor="mobile">
-						Mobile number
-						<p className={styles.Tip}>
-							Must be an Australian number
-						</p>
-					</label>
-					<input
-						className={`${styles.InputText} ${
-							errors.mobile ? styles.RedOutline : ""
-						}`}
-						type="tel"
-						inputMode="numeric"
-						placeholder="0412345678"
-						aria-invalid={errors.mobile ? "true" : "false"}
-						{...register("mobile", {
-							required: true,
-							minLength: 10,
-							maxLength: 10,
-							pattern: /^0(9|4)\d{8}$/,
-						})}
-					/>
-					{errors.mobile && errors.mobile.type === "required" && (
-						<span role="alert" className={styles.Alert}>
-							Mobile number is required
-						</span>
-					)}
-					{errors.mobile && errors.mobile.type === "minLength" && (
-						<span role="alert" className={styles.Alert}>
-							Mobile number must be 10 digits
-						</span>
-					)}
-					{errors.mobile && errors.mobile.type === "maxLength" && (
-						<span role="alert" className={styles.Alert}>
-							Mobile number must be 10 digits
-						</span>
-					)}
-
-					{errors.mobile && errors.mobile.type === "pattern" && (
-						<span role="alert" className={styles.Alert}>
-							Mobile number must start with 04 and only contain
-							digits
-						</span>
-					)}
-					<label className={styles.Label} htmlFor="address">
-						Residential address
-					</label>
-					<input
-						className={`${styles.InputText} ${
-							errors.address ? styles.RedOutline : ""
-						}`}
-						type="text"
-						placeholder="123 Example St, Sydney NSW 2000"
-						aria-invalid={errors.address ? "true" : "false"}
-						{...register("address", {
-							required: true,
-						})}
-					/>
-					{errors.address && errors.address.type === "required" && (
-						<span role="alert" className={styles.Alert}>
-							Residential address is required
-						</span>
-					)}
-				</fieldset>
-				<fieldset className={styles.Fieldset}>
-					<legend className={styles.Legend}>Employee status</legend>
-					<div className={styles.RadioGroup}>
-						<label className={styles.Label} htmlFor="contractType">
-							Contract Type
+						{errors.email && errors.email.type === "pattern" && (
+							<span role="alert" className={styles.Alert}>
+								Email address must be valid
+							</span>
+						)}
+						<label className={styles.Label} htmlFor="mobile">
+							Mobile number
+							<p className={styles.Tip}>
+								Must be an Australian number
+							</p>
 						</label>
-						{Object.values(ContractTypesEnum).map(
-							(contractType) => (
+						<input
+							className={`${styles.InputText} ${
+								errors.mobile ? styles.RedOutline : ""
+							}`}
+							type="tel"
+							inputMode="numeric"
+							placeholder="0412345678"
+							aria-invalid={errors.mobile ? "true" : "false"}
+							{...register("mobile", {
+								required: true,
+								minLength: 10,
+								maxLength: 10,
+								pattern: /^0(9|4)\d{8}$/,
+							})}
+						/>
+						{errors.mobile && errors.mobile.type === "required" && (
+							<span role="alert" className={styles.Alert}>
+								Mobile number is required
+							</span>
+						)}
+						{errors.mobile &&
+							errors.mobile.type === "minLength" && (
+								<span role="alert" className={styles.Alert}>
+									Mobile number must be 10 digits
+								</span>
+							)}
+						{errors.mobile &&
+							errors.mobile.type === "maxLength" && (
+								<span role="alert" className={styles.Alert}>
+									Mobile number must be 10 digits
+								</span>
+							)}
+
+						{errors.mobile && errors.mobile.type === "pattern" && (
+							<span role="alert" className={styles.Alert}>
+								Mobile number must start with 04 and only
+								contain digits
+							</span>
+						)}
+						<label className={styles.Label} htmlFor="address">
+							Residential address
+						</label>
+						<input
+							className={`${styles.InputText} ${
+								errors.address ? styles.RedOutline : ""
+							}`}
+							type="text"
+							placeholder="123 Example St, Sydney NSW 2000"
+							aria-invalid={errors.address ? "true" : "false"}
+							{...register("address", {
+								required: true,
+							})}
+						/>
+						{errors.address &&
+							errors.address.type === "required" && (
+								<span role="alert" className={styles.Alert}>
+									Residential address is required
+								</span>
+							)}
+					</fieldset>
+					<fieldset className={styles.Fieldset}>
+						<legend className={styles.Legend}>
+							Employee status
+						</legend>
+						<div className={styles.RadioGroup}>
+							<label
+								className={styles.Label}
+								htmlFor="contractType">
+								Contract Type
+							</label>
+							{Object.values(ContractTypesEnum).map(
+								(contractType) => (
+									<label
+										key={contractType}
+										className={styles.RadioLabel}>
+										<input
+											className={styles.RadioButton}
+											type="radio"
+											aria-invalid={
+												errors.contractType
+													? "true"
+													: "false"
+											}
+											{...register("contractType", {
+												required: true,
+											})}
+											value={contractType}
+										/>
+										{contractType}
+									</label>
+								)
+							)}
+							{errors.contractType &&
+								errors.contractType.type === "required" && (
+									<span role="alert" className={styles.Alert}>
+										Contract type is required
+									</span>
+								)}
+						</div>
+						<label className={styles.Label} htmlFor="startDate">
+							Start date
+						</label>
+						<div className={styles.DateInput}>
+							<div className={styles.DateInput__Section}>
 								<label
-									key={contractType}
+									className={styles.Label}
+									htmlFor="startDateDay">
+									Day
+								</label>
+								<input
+									className={`${styles.InputText} ${
+										errors.startDateDay
+											? styles.RedOutline
+											: ""
+									}`}
+									type="number"
+									inputMode="numeric"
+									placeholder="20"
+									aria-invalid={
+										errors.startDateDay ? "true" : "false"
+									}
+									{...register("startDateDay", {
+										required: true,
+										min: 1,
+										max: 31,
+									})}
+								/>
+								{errors.startDateDay &&
+									errors.startDateDay.type === "required" && (
+										<span
+											role="alert"
+											className={styles.Alert}>
+											Day is required
+										</span>
+									)}
+								{errors.startDateDay &&
+									errors.startDateDay.type === "min" && (
+										<span
+											role="alert"
+											className={styles.Alert}>
+											Day must be between 1 and 31
+											(inclusive)
+										</span>
+									)}
+								{errors.startDateDay &&
+									errors.startDateDay.type === "max" && (
+										<span
+											role="alert"
+											className={styles.Alert}>
+											Day must be between 1 and 31
+											(inclusive)
+										</span>
+									)}
+							</div>
+							<div className={styles.DateInput__Section}>
+								<label
+									className={styles.Label}
+									htmlFor="startDateMonth">
+									Month
+								</label>
+								<select
+									className={styles.Select}
+									{...register("startDateMonth")}>
+									{Object.values(MonthsEnum).map((month) => (
+										<option key={month} value={month}>
+											{month}
+										</option>
+									))}
+								</select>
+							</div>
+							<div className={styles.DateInput__Section}>
+								<label
+									className={styles.Label}
+									htmlFor="startDateYear">
+									Year
+								</label>
+								<input
+									className={`${styles.InputText} ${
+										errors.startDateYear
+											? styles.RedOutline
+											: ""
+									}`}
+									type="number"
+									inputMode="numeric"
+									placeholder={`${new Date().getFullYear()}`}
+									aria-invalid={
+										errors.startDateYear ? "true" : "false"
+									}
+									{...register("startDateYear", {
+										required: true,
+										min: 1950,
+										max: new Date().getFullYear() + 5,
+									})}
+								/>
+								{errors.startDateYear &&
+									errors.startDateYear.type ===
+										"required" && (
+										<span
+											role="alert"
+											className={styles.Alert}>
+											Year is required
+										</span>
+									)}
+								{errors.startDateYear &&
+									errors.startDateYear.type === "min" && (
+										<span
+											role="alert"
+											className={styles.Alert}>
+											{`Year must be between 1950 and
+										${new Date().getFullYear() + 5} 
+										(inclusive)`}
+										</span>
+									)}
+								{errors.startDateYear &&
+									errors.startDateYear.type === "max" && (
+										<span
+											role="alert"
+											className={styles.Alert}>
+											{`Year must be between 1950 and
+										${new Date().getFullYear() + 5} 
+										(inclusive)`}
+										</span>
+									)}
+							</div>
+						</div>
+						<label className={styles.Label} htmlFor="finishDate">
+							Finish date
+						</label>
+						<div className={styles.DateInput}>
+							<div className={styles.DateInput__Section}>
+								<label
+									className={styles.Label}
+									htmlFor="finishDateDay">
+									Day
+								</label>
+								<input
+									className={`${styles.InputText} ${
+										errors.finishDateDay
+											? styles.RedOutline
+											: ""
+									}`}
+									type="number"
+									inputMode="numeric"
+									placeholder="23"
+									aria-invalid={
+										errors.finishDateDay ? "true" : "false"
+									}
+									{...register("finishDateDay", {
+										required: true,
+										min: 1,
+										max: 31,
+									})}
+								/>
+								{errors.finishDateDay &&
+									errors.finishDateDay.type ===
+										"required" && (
+										<span
+											role="alert"
+											className={styles.Alert}>
+											Day is required
+										</span>
+									)}
+								{errors.finishDateDay &&
+									errors.finishDateDay.type === "min" && (
+										<span
+											role="alert"
+											className={styles.Alert}>
+											Day must be between 1 and 31
+											(inclusive)
+										</span>
+									)}
+								{errors.finishDateDay &&
+									errors.finishDateDay.type === "max" && (
+										<span
+											role="alert"
+											className={styles.Alert}>
+											Day must be between 1 and 31
+											(inclusive)
+										</span>
+									)}
+							</div>
+							<div className={styles.DateInput__Section}>
+								<label
+									className={styles.Label}
+									htmlFor="finishDateMonth">
+									Month
+								</label>
+								<select
+									className={styles.Select}
+									{...register("finishDateMonth")}>
+									{Object.values(MonthsEnum).map((month) => (
+										<option key={month} value={month}>
+											{month.valueOf()}
+										</option>
+									))}
+								</select>
+							</div>
+							<div className={styles.DateInput__Section}>
+								<label
+									className={styles.Label}
+									htmlFor="finishDateYear">
+									Year
+								</label>
+								<input
+									className={`${styles.InputText} ${
+										errors.finishDateYear
+											? styles.RedOutline
+											: ""
+									}`}
+									type="number"
+									inputMode="numeric"
+									placeholder={`${new Date().getFullYear()}`}
+									aria-invalid={
+										errors.finishDateYear ? "true" : "false"
+									}
+									{...register("finishDateYear", {
+										required: true,
+										min: 1950,
+										max: new Date().getFullYear() + 5,
+										maxLength: 4,
+									})}
+								/>
+								{errors.finishDateYear &&
+									errors.finishDateYear.type ===
+										"required" && (
+										<span
+											role="alert"
+											className={styles.Alert}>
+											Year is required
+										</span>
+									)}
+								{errors.finishDateYear &&
+									errors.finishDateYear.type === "min" && (
+										<span
+											role="alert"
+											className={styles.Alert}>
+											{`Year must be between 1950 and
+										${new Date().getFullYear() + 5} 
+										(inclusive)`}
+										</span>
+									)}
+								{errors.finishDateYear &&
+									errors.finishDateYear.type === "max" && (
+										<span
+											role="alert"
+											className={styles.Alert}>
+											{`Year must be between 1950 and
+										${new Date().getFullYear() + 5} 
+										(inclusive)`}
+										</span>
+									)}
+							</div>
+						</div>
+						<div className={styles.CheckboxInput}>
+							<span className={styles.Checkbox}>
+								<label className={styles.CheckboxLabel}>
+									<input
+										className={styles.CheckboxButton}
+										type="checkbox"
+										{...register("isOngoing")}
+									/>
+									On going
+								</label>
+							</span>
+						</div>
+						<div className={styles.RadioGroup}>
+							<label className={styles.Label} htmlFor="workType">
+								Is this on a full-time or part-time basis?
+							</label>
+							{Object.values(WorkTypesEnum).map((workType) => (
+								<label
+									key={workType}
 									className={styles.RadioLabel}>
 									<input
 										className={styles.RadioButton}
 										type="radio"
 										aria-invalid={
-											errors.contractType
-												? "true"
-												: "false"
+											errors.workType ? "true" : "false"
 										}
-										{...register("contractType", {
+										{...register("workType", {
 											required: true,
 										})}
-										value={contractType}
+										value={workType}
 									/>
-									{contractType}
+									{workType}
 								</label>
-							)
-						)}
-						{errors.contractType &&
-							errors.contractType.type === "required" && (
-								<span role="alert" className={styles.Alert}>
-									Contract type is required
-								</span>
-							)}
-					</div>
-					<label className={styles.Label} htmlFor="startDate">
-						Start date
-					</label>
-					<div className={styles.DateInput}>
-						<div className={styles.DateInput__Section}>
-							<label
-								className={styles.Label}
-								htmlFor="startDateDay">
-								Day
-							</label>
-							<input
-								className={`${styles.InputText} ${
-									errors.startDateDay ? styles.RedOutline : ""
-								}`}
-								type="number"
-								inputMode="numeric"
-								placeholder="20"
-								aria-invalid={
-									errors.startDateDay ? "true" : "false"
-								}
-								{...register("startDateDay", {
-									required: true,
-									min: 1,
-									max: 31,
-								})}
-							/>
-							{errors.startDateDay &&
-								errors.startDateDay.type === "required" && (
+							))}
+							{errors.workType &&
+								errors.workType.type === "required" && (
 									<span role="alert" className={styles.Alert}>
-										Day is required
-									</span>
-								)}
-							{errors.startDateDay &&
-								errors.startDateDay.type === "min" && (
-									<span role="alert" className={styles.Alert}>
-										Day must be between 1 and 31 (inclusive)
-									</span>
-								)}
-							{errors.startDateDay &&
-								errors.startDateDay.type === "max" && (
-									<span role="alert" className={styles.Alert}>
-										Day must be between 1 and 31 (inclusive)
+										Work type is required
 									</span>
 								)}
 						</div>
-						<div className={styles.DateInput__Section}>
-							<label
-								className={styles.Label}
-								htmlFor="startDateMonth">
-								Month
-							</label>
-							<select
-								className={styles.Select}
-								{...register("startDateMonth")}>
-								{Object.values(MonthsEnum).map((month) => (
-									<option key={month} value={month}>
-										{month}
-									</option>
-								))}
-							</select>
-						</div>
-						<div className={styles.DateInput__Section}>
-							<label
-								className={styles.Label}
-								htmlFor="startDateYear">
-								Year
-							</label>
-							<input
-								className={`${styles.InputText} ${
-									errors.startDateYear
-										? styles.RedOutline
-										: ""
-								}`}
-								type="number"
-								inputMode="numeric"
-								placeholder={`${new Date().getFullYear()}`}
-								aria-invalid={
-									errors.startDateYear ? "true" : "false"
-								}
-								{...register("startDateYear", {
-									required: true,
-									min: 1950,
-									max: new Date().getFullYear() + 5,
-								})}
-							/>
-							{errors.startDateYear &&
-								errors.startDateYear.type === "required" && (
-									<span role="alert" className={styles.Alert}>
-										Year is required
-									</span>
-								)}
-							{errors.startDateYear &&
-								errors.startDateYear.type === "min" && (
-									<span role="alert" className={styles.Alert}>
-										{`Year must be between 1950 and
-										${new Date().getFullYear() + 5} 
-										(inclusive)`}
-									</span>
-								)}
-							{errors.startDateYear &&
-								errors.startDateYear.type === "max" && (
-									<span role="alert" className={styles.Alert}>
-										{`Year must be between 1950 and
-										${new Date().getFullYear() + 5} 
-										(inclusive)`}
-									</span>
-								)}
-						</div>
-					</div>
-					<label className={styles.Label} htmlFor="finishDate">
-						Finish date
-					</label>
-					<div className={styles.DateInput}>
-						<div className={styles.DateInput__Section}>
-							<label
-								className={styles.Label}
-								htmlFor="finishDateDay">
-								Day
-							</label>
-							<input
-								className={`${styles.InputText} ${
-									errors.finishDateDay
-										? styles.RedOutline
-										: ""
-								}`}
-								type="number"
-								inputMode="numeric"
-								placeholder="23"
-								aria-invalid={
-									errors.finishDateDay ? "true" : "false"
-								}
-								{...register("finishDateDay", {
-									required: true,
-									min: 1,
-									max: 31,
-								})}
-							/>
-							{errors.finishDateDay &&
-								errors.finishDateDay.type === "required" && (
-									<span role="alert" className={styles.Alert}>
-										Day is required
-									</span>
-								)}
-							{errors.finishDateDay &&
-								errors.finishDateDay.type === "min" && (
-									<span role="alert" className={styles.Alert}>
-										Day must be between 1 and 31 (inclusive)
-									</span>
-								)}
-							{errors.finishDateDay &&
-								errors.finishDateDay.type === "max" && (
-									<span role="alert" className={styles.Alert}>
-										Day must be between 1 and 31 (inclusive)
-									</span>
-								)}
-						</div>
-						<div className={styles.DateInput__Section}>
-							<label
-								className={styles.Label}
-								htmlFor="finishDateMonth">
-								Month
-							</label>
-							<select
-								className={styles.Select}
-								{...register("finishDateMonth")}>
-								{Object.values(MonthsEnum).map((month) => (
-									<option key={month} value={month}>
-										{month.valueOf()}
-									</option>
-								))}
-							</select>
-						</div>
-						<div className={styles.DateInput__Section}>
-							<label
-								className={styles.Label}
-								htmlFor="finishDateYear">
-								Year
-							</label>
-							<input
-								className={`${styles.InputText} ${
-									errors.finishDateYear
-										? styles.RedOutline
-										: ""
-								}`}
-								type="number"
-								inputMode="numeric"
-								placeholder={`${new Date().getFullYear()}`}
-								aria-invalid={
-									errors.finishDateYear ? "true" : "false"
-								}
-								{...register("finishDateYear", {
-									required: true,
-									min: 1950,
-									max: new Date().getFullYear() + 5,
-									maxLength: 4,
-								})}
-							/>
-							{errors.finishDateYear &&
-								errors.finishDateYear.type === "required" && (
-									<span role="alert" className={styles.Alert}>
-										Year is required
-									</span>
-								)}
-							{errors.finishDateYear &&
-								errors.finishDateYear.type === "min" && (
-									<span role="alert" className={styles.Alert}>
-										{`Year must be between 1950 and
-										${new Date().getFullYear() + 5} 
-										(inclusive)`}
-									</span>
-								)}
-							{errors.finishDateYear &&
-								errors.finishDateYear.type === "max" && (
-									<span role="alert" className={styles.Alert}>
-										{`Year must be between 1950 and
-										${new Date().getFullYear() + 5} 
-										(inclusive)`}
-									</span>
-								)}
-						</div>
-					</div>
-					<div className={styles.CheckboxInput}>
-						<span className={styles.Checkbox}>
-							<label className={styles.CheckboxLabel}>
-								<input
-									className={styles.CheckboxButton}
-									type="checkbox"
-									{...register("isOngoing")}
-								/>
-								On going
-							</label>
-						</span>
-					</div>
-					<div className={styles.RadioGroup}>
-						<label className={styles.Label} htmlFor="workType">
-							Is this on a full-time or part-time basis?
+						<label className={styles.Label} htmlFor="hoursPerWeek">
+							Hours per week
 						</label>
-						{Object.values(WorkTypesEnum).map((workType) => (
-							<label key={workType} className={styles.RadioLabel}>
-								<input
-									className={styles.RadioButton}
-									type="radio"
-									aria-invalid={
-										errors.workType ? "true" : "false"
-									}
-									{...register("workType", {
-										required: true,
-									})}
-									value={workType}
-								/>
-								{workType}
-							</label>
-						))}
-						{errors.workType &&
-							errors.workType.type === "required" && (
+						<input
+							className={`${styles.InputText} ${
+								errors.hoursPerWeek ? styles.RedOutline : ""
+							}`}
+							type="number"
+							inputMode="numeric"
+							placeholder="38"
+							aria-invalid={
+								errors.hoursPerWeek ? "true" : "false"
+							}
+							{...register("hoursPerWeek", {
+								required: true,
+								min: 0,
+								max: 40,
+							})}
+						/>
+						{errors.hoursPerWeek &&
+							errors.hoursPerWeek.type === "required" && (
 								<span role="alert" className={styles.Alert}>
-									Work type is required
+									Hours per week is required
 								</span>
 							)}
+						{errors.hoursPerWeek &&
+							errors.hoursPerWeek.type === "min" && (
+								<span role="alert" className={styles.Alert}>
+									Hours per week must be between 0 and 40
+									(inclusive)
+								</span>
+							)}
+						{errors.hoursPerWeek &&
+							errors.hoursPerWeek.type === "max" && (
+								<span role="alert" className={styles.Alert}>
+									Hours per week must be between 0 and 40
+									(inclusive)
+								</span>
+							)}
+					</fieldset>
+					{addMutation.isLoading && (
+						<Message type="loading">Saving employee...</Message>
+					)}
+					{addMutation.isSuccess && (
+						<Message type="success">
+							{`${addMutation.data.firstName} ${addMutation.data.lastName} was saved to Employee Id ${addMutation.data.id}`}
+						</Message>
+					)}
+					{addMutation.isError && addMutation.error.response && (
+						<Message type="error">
+							{
+								(addMutation.error.response.data as ErrorData)
+									.message
+							}
+						</Message>
+					)}
+					{addMutation.isError && (
+						<Message type="error">{`Unable to add employee. ${addMutation.error.message}`}</Message>
+					)}
+					{updateMutation.isLoading && (
+						<Message type="loading">Updating employee...</Message>
+					)}
+					{updateMutation.isSuccess && (
+						<Message type="success">
+							{`Updated Employee Id ${updateMutation.data.id} - ${updateMutation.data.firstName} ${updateMutation.data.lastName}`}
+						</Message>
+					)}
+					{updateMutation.isError &&
+						updateMutation.error.response && (
+							<Message type="error">
+								{`${
+									(
+										updateMutation.error.response
+											.data as ErrorData
+									).message
+								}`}
+							</Message>
+						)}
+					{updateMutation.isError && (
+						<Message type="error">
+							{`Unable to update employee. ${updateMutation.error.message}`}
+						</Message>
+					)}
+					<div className={styles.FormButtons}>
+						<Button label={employeeId ? "Update" : "Save"} />
+						<Link
+							className={styles.FormButtons__Link}
+							to={"/employeeCreator/employees"}>
+							<Button secondary label={`Cancel`} />
+						</Link>
 					</div>
-					<label className={styles.Label} htmlFor="hoursPerWeek">
-						Hours per week
-					</label>
-					<input
-						className={`${styles.InputText} ${
-							errors.hoursPerWeek ? styles.RedOutline : ""
-						}`}
-						type="number"
-						inputMode="numeric"
-						placeholder="38"
-						aria-invalid={errors.hoursPerWeek ? "true" : "false"}
-						{...register("hoursPerWeek", {
-							required: true,
-							min: 0,
-							max: 40,
-						})}
-					/>
-					{errors.hoursPerWeek &&
-						errors.hoursPerWeek.type === "required" && (
-							<span role="alert" className={styles.Alert}>
-								Hours per week is required
-							</span>
-						)}
-					{errors.hoursPerWeek &&
-						errors.hoursPerWeek.type === "min" && (
-							<span role="alert" className={styles.Alert}>
-								Hours per week must be between 0 and 40
-								(inclusive)
-							</span>
-						)}
-					{errors.hoursPerWeek &&
-						errors.hoursPerWeek.type === "max" && (
-							<span role="alert" className={styles.Alert}>
-								Hours per week must be between 0 and 40
-								(inclusive)
-							</span>
-						)}
-				</fieldset>
-				{addMutation.isLoading && (
-					<Message type="loading">Saving employee...</Message>
-				)}
-				{addMutation.isSuccess && (
-					<Message type="success">
-						{`${addMutation.data.firstName} ${addMutation.data.lastName} was saved to Employee Id ${addMutation.data.id}`}
-					</Message>
-				)}
-				{addMutation.isError && addMutation.error.response && (
-					<Message type="error">
-						{(addMutation.error.response.data as ErrorData).message}
-					</Message>
-				)}
-				{addMutation.isError && (
-					<Message type="error">{`Unable to add employee. ${addMutation.error.message}`}</Message>
-				)}
-				{updateMutation.isLoading && (
-					<Message type="loading">Updating employee...</Message>
-				)}
-				{updateMutation.isSuccess && (
-					<Message type="success">
-						{`Updated Employee Id ${updateMutation.data.id} - ${updateMutation.data.firstName} ${updateMutation.data.lastName}`}
-					</Message>
-				)}
-				{updateMutation.isError && updateMutation.error.response && (
-					<Message type="error">
-						{`${
-							(updateMutation.error.response.data as ErrorData)
-								.message
-						}`}
-					</Message>
-				)}
-				{updateMutation.isError && (
-					<Message type="error">
-						{`Unable to update employee. ${updateMutation.error.message}`}
-					</Message>
-				)}
-				<div className={styles.FormButtons}>
-					<Button label={employeeId ? "Update" : "Save"} />
-					<Link
-						className={styles.FormButtons__Link}
-						to={"/employeeCreator/employees"}>
-						<Button secondary label={`Cancel`} />
-					</Link>
-				</div>
-			</form>
+				</form>
+			)}
 		</div>
 	);
 };

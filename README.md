@@ -100,9 +100,11 @@ I used React Query to reduce the need for using React's useEffect hook and it co
 
 I created a message component to ensure styling consistency and reduce the number of styles passed in. The component contains two props, the children and an optional prop `type` = `"loading"`, `"success"`, `"error"` and `"warning"`. The children prop is a string passed from the parent component.
 
+I used Vitest with React Testing Library to check if text is rendered to the screen, the element contains specific classNames.
+
 ### Backend
 
-During my training program I was shown to use Eclipse for Java projects but I switched to VS Code because it provided me with a more productive development environment. What makes VS Code better for me was the ability to zooming in/out and support for extensions such as Prettier.
+During my training program I was shown to use Eclipse for Java projects but I switched to VS Code because it provided me with a more productive development environment. The ability to stay with the same IDE for front end and back end, zooming in/out and support for extensions such as Prettier were key factors.
 
 I created an employee domain which consists of:
 
@@ -113,7 +115,7 @@ I created an employee domain which consists of:
 -   Repository - communicates between the service and the database
 
 Enums were created for the work types and contract types to ensure quality data in the database.
-Manual testing was conducted with Postman to see different payloads and HTTP methods return the right response and any errors.
+Manual testing was conducted with Postman to see different payloads and HTTP methods return the right response and errors.
 
 ---
 
@@ -126,12 +128,11 @@ Manual testing was conducted with Postman to see different payloads and HTTP met
 
 ---
 
-<!-- ## Known issues
+## Known issues
 
--
--
+-   Unable to hide form if user types in URL with a string e.g. `/employees/oneTwoThree`
 
---- -->
+---
 
 ## Future Goals
 
@@ -192,6 +193,7 @@ Manual testing was conducted with Postman to see different payloads and HTTP met
 -   Start front end testing
 -   Add Message component and display warning if there are no employees in EmployeeList
 -   Remove console.logs
+-   Hide form when unable to fetch employee Id with numbers
 
 ---
 
