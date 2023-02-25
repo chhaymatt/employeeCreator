@@ -133,27 +133,3 @@
 	border: 1px solid red;
 	background-color: palette.$error-light;
 }
-
-.Message {
-	animation: fade 2s linear;
-	padding: 1rem 2rem;
-	background-color: palette.$light-colour;
-
-	&__Success {
-		background-color: palette.$message-success;
-	}
-
-	&__Error {
-		background-color: palette.$error-light;
-		color: red;
-	}
-}
-
-@keyframes fade {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}

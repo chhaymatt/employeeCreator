@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { getEmployeeList } from "../../services/EmployeeAPI";
 import { useQuery } from "react-query";
 import { AxiosError } from "axios";
+import Message from "../../components/Message/Message";
 
 export type EmployeeType = {
 	id?: number;
@@ -24,16 +25,6 @@ export type EmployeeType = {
 };
 
 const EmployeeList = () => {
-	//const employees = createEmployees(5);
-	//const employees: EmployeeType[] = [];
-	// const [employees, setEmployees] = useState([]);
-
-	// useEffect(() => {
-	// 	getEmployeeList()
-	// 		.then((employee) => setEmployees(employee))
-	// 		.catch((err) => console.log(err));
-	// }, []);
-
 	const query = useQuery("employees", getEmployeeList);
 	const employees: EmployeeType[] = query.data;
 	const error = query.error as AxiosError;
@@ -53,17 +44,16 @@ const EmployeeList = () => {
 				</Link>
 			</section>
 			{query.isLoading && (
-				<div className={styles.Alert}>Loading employees...</div>
+				<Message type="loading">Loading employees...</Message>
 			)}
 			{query.isError && (
-				<div
-					className={`${styles.Alert} ${styles.Alert__Error}`}>{`${error.message}. Please try again later.`}</div>
+				<Message type="error">{`${error.message}. Please try again later.`}</Message>
 			)}
 			{employees && employees.length === 0 && (
-				<div className={`${styles.Alert}`}>
+				<Message type="warning">
 					There are no employees. Get started by clicking on 'Add
 					employee' above.
-				</div>
+				</Message>
 			)}
 			{employees &&
 				employees.map((employee, index) => (

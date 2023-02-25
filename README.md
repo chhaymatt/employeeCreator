@@ -98,6 +98,8 @@ I used Axios over the fetch() for its ease of use and to learn a new technology,
 
 I used React Query to reduce the need for using React's useEffect hook and it comes with a useQuery/useMutation to appropriately handle the request `isLoading`, `isSuccess`, `isError` states with messages and returns the response `data` or an `error`.
 
+I created a message component to ensure styling consistency and reduce the number of styles passed in. The component contains two props, the children and an optional prop `type` = `"loading"`, `"success"`, `"error"` and `"warning"`. The children prop is a string passed from the parent component.
+
 ### Backend
 
 During my training program I was shown to use Eclipse for Java projects but I switched to VS Code because it provided me with a more productive development environment. What makes VS Code better for me was the ability to zooming in/out and support for extensions such as Prettier.
@@ -119,18 +121,17 @@ Manual testing was conducted with Postman to see different payloads and HTTP met
 
 -   Fetch list of employees
 -   Fetch a specific employee and load employee details into the form
--   Add an employee and validate user inputs and save to the database
+-   Add or update an employee and validate user inputs and save to the database
+-   Delete an employee
 
 ---
 
-## Known issues
+<!-- ## Known issues
 
--   Non-descriptive errors from backend to display to the user front end (e.g. startDate is later than finishDate)
--   Unable to delete employee from front end
--   Unable to update employee from front end
--   Unable to load employee details using React Query, workaround: useEffect
+-
+-
 
----
+--- -->
 
 ## Future Goals
 
@@ -165,7 +166,7 @@ Manual testing was conducted with Postman to see different payloads and HTTP met
 -   Add inline validation messages and accessibility by leveraging ARIA
 -   Add error styling whenever user enters invalid input (e.g. missing input or wrong pattern)
 
-### 23/02/2023
+### 23/02/2023 - Axios set up
 
 -   Fix CORS issue appearing on front end by adding @CrossOrigin to the backend Controller
 -   Create Axios file `EmployeeAPI.ts` in services with methods `addEmployee`, `getEmployeeList`, `getEmployee`, `updateEmployee`, and `deleteEmployee`
@@ -174,7 +175,7 @@ Manual testing was conducted with Postman to see different payloads and HTTP met
 -   Fetch employee by Id from API using Axios and useEffect when clicking 'Edit' and loading employee details into the React Hook Form with `reset()`
 -   Save new employee to API using Axios and React Query, useMutation and returned confirmation to the user at the bottom of the form
 
-### 24/02/2023
+### 24/02/2023 - React query set up
 
 -   Updated README
 -   Add delete employee by Id using React Query and Axios with error handling appearing on the EmployeeCard
@@ -184,6 +185,13 @@ Manual testing was conducted with Postman to see different payloads and HTTP met
 -   Remove useState messages and errors from EmployeeList and replace with `useMutation.isLoading` or `useMutation.isSuccess` or `useMutation.isError`
 -   Fix loading month dropdowns when fetching employee
 -   Loading employee details will only run if `employee/:id` is a number and not zero, this removed
+
+### 25/02/2023 - React query
+
+-   Fix display of error messages in EmployeeDetails when loading, saving and updating
+-   Start front end testing
+-   Add Message component and display warning if there are no employees in EmployeeList
+-   Remove console.logs
 
 ---
 
@@ -227,6 +235,30 @@ Using Console.Table for Inputs and for the payload
 Adding employee that returns an error has an unclear error message because it is buried within an optional response data.
 The unclear message is: `Request failed with status code 400`
 Do I create a new data type?
+Solved by adopting AxiosError type in EmployeeList
+and in EmployeeCard where the backend errors need more details:
+
+How I solved it?
+
+```tsx
+// 1. Specify the type of mutation.error.response.data
+type ErrorData = {
+	error: string;
+	message: string;
+	path: string;
+	timestamp: string;
+	status: number;
+};
+
+// 2. Specify multiple && conditions as the response may be optional
+{
+	updateMutation.isError && updateMutation.error.response && (
+		<Message type="error">
+			{`${(updateMutation.error.response.data as ErrorData).message}`}
+		</Message>
+	);
+}
+```
 
 ### Struggle 5 - React Query Mutations
 
@@ -266,6 +298,17 @@ Examples I found online are like:
 Do I need to use useState?, I want to avoid prop drilling because the Edit button is buried in this:
 `App -> EmployeeList -> EmployeeCard -> InlineButtons -> Edit`
 Could I useContext instead?
+
+### Struggle 6 - Front end testing
+
+Getting className for certain styling
+Used toHaveClass
+e.g.
+class="Button"
+Received:
+class="\_Button_f8f296 undefined"
+
+Then switched to .getAttribute("class")
 
 ---
 

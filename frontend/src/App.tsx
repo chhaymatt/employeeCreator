@@ -5,7 +5,6 @@ import { Route, Routes } from "react-router-dom";
 import NotFound from "./containers/NotFound/NotFound";
 import Footer from "./components/Footer/Footer";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { createEmployee } from "./services/EmployeeFactory";
 
 const queryClient = new QueryClient();
 

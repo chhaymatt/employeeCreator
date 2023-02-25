@@ -13,15 +13,10 @@ const InlineButtons = ({ id, setError }: InlineButtonProps) => {
 	const queryClient = useQueryClient();
 	const deleteMutation = useMutation((id: number) => deleteEmployee(id), {
 		onSuccess: (response: boolean) => {
-			console.log(
-				"Employee was successfully deleted, response:",
-				response
-			);
 			// Invalidate and refetch
 			queryClient.invalidateQueries("employees");
 		},
 		onError: (error: AxiosError) => {
-			console.log(error.message);
 			setError(error.message);
 		},
 	});

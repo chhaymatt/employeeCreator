@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { EmployeeType } from "../../containers/EmployeeList/EmployeeList";
 import InlineButtons from "../InlineButtons/InlineButtons";
+import Message from "../Message/Message";
 import styles from "./EmployeeCard.module.scss";
 
 type EmployeeCardProps = {
@@ -25,25 +26,27 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
 
 	return (
 		<div className={styles.EmployeeCard}>
-			<section className={styles.Details}>
-				<h3>
-					{employee.firstName} {employee.lastName}
-				</h3>
-				<p>{`Employee Id: ${employee.id}`}</p>
-				<p>
-					{`${
-						employee.contractType.charAt(0).toUpperCase() +
-						employee.contractType.slice(1).toLowerCase()
-					} -
+			<div className={styles.EmployeeSection}>
+				<section className={styles.Details}>
+					<h3>
+						{employee.firstName} {employee.lastName}
+					</h3>
+					<p>{`Employee Id: ${employee.id}`}</p>
+					<p>
+						{`${
+							employee.contractType.charAt(0).toUpperCase() +
+							employee.contractType.slice(1).toLowerCase()
+						} -
 					${duration} ${duration > 1 ? `${durationUnit}s` : durationUnit}`}
-				</p>
-				<p>{employee.email}</p>
-			</section>
-			<InlineButtons id={employee.id as number} setError={setError} />
+					</p>
+					<p>{employee.email}</p>
+				</section>
+				<InlineButtons id={employee.id as number} setError={setError} />
+			</div>
 			{error && (
-				<div className={`${styles.Alert} ${styles.Alert__Error}`}>
+				<Message type="error">
 					{`${error}. Please try again later.`}
-				</div>
+				</Message>
 			)}
 		</div>
 	);

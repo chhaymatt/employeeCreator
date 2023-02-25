@@ -1,10 +1,10 @@
 import { AxiosError } from "axios";
-import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import Header from "../../components/Header/Header";
+import Message from "../../components/Message/Message";
 import {
 	addEmployee,
 	getEmployee,
@@ -56,6 +56,14 @@ type Inputs = {
 	hoursPerWeek: number;
 };
 
+type ErrorData = {
+	error: string;
+	message: string;
+	path: string;
+	timestamp: string;
+	status: number;
+};
+
 const formatMonth = (monthName: MonthsEnum) => {
 	const monthIndex = Object.values(MonthsEnum).indexOf(monthName) + 1;
 	return monthIndex < 10 ? `0${monthIndex}` : monthIndex;
@@ -65,7 +73,7 @@ const formatDay = (day: number) => {
 	return day < 10 ? `0${day}` : day;
 };
 
-function getMonthFromValue(value: number): MonthsEnum | undefined {
+const getMonthFromValue = (value: number) => {
 	const monthNames = Object.keys(MonthsEnum);
 	const index = value - 1;
 	if (index < 0 || index >= monthNames.length) {
@@ -73,29 +81,45 @@ function getMonthFromValue(value: number): MonthsEnum | undefined {
 	}
 	const monthName = monthNames[index];
 	return MonthsEnum[monthName as keyof typeof MonthsEnum];
-}
+};
 
 const EmployeeDetails = () => {
-	const [employee, setEmployee] = useState<EmployeeType>();
+	let query;
 	const { id } = useParams();
 	const employeeId = id ? +id : 0;
 	const queryClient = useQueryClient();
 
 	if (employeeId) {
-		const query = useQuery(
+		query = useQuery(
 			["employee", employeeId],
 			() => getEmployee(employeeId),
 			{
 				onSuccess: (employee: EmployeeType) => {
-					setEmployee(employee);
 					loadDetails(employee);
 				},
-				onError: (error) => {
-					// console.log(error);
-				},
+				onError: (error: AxiosError) => {},
 			}
 		);
 	}
+
+	// Mutations
+	const addMutation = useMutation(addEmployee, {
+		onSuccess: (response: EmployeeType) => {
+			reset();
+		},
+		onError: (error: AxiosError) => {},
+	});
+
+	const updateMutation = useMutation(
+		(payload: EmployeeType) => updateEmployee(employeeId, payload),
+		{
+			onSuccess: (response: EmployeeType) => {
+				queryClient.invalidateQueries("employee");
+			},
+			onError: (error: AxiosError) => {},
+		}
+	);
+
 	const {
 		register,
 		handleSubmit,
@@ -104,31 +128,6 @@ const EmployeeDetails = () => {
 		formState: { errors },
 	} = useForm<Inputs>();
 
-	// Mutations
-	const addMutation = useMutation(addEmployee, {
-		onSuccess: (response: EmployeeType) => {
-			console.log(response);
-			reset();
-		},
-		onError: (error: AxiosError) => {
-			console.log(error);
-		},
-	});
-
-	const updateMutation = useMutation(
-		(payload: EmployeeType) => updateEmployee(employeeId, payload),
-		{
-			onSuccess: (response: EmployeeType) => {
-				console.log(response);
-				queryClient.invalidateQueries("employee");
-			},
-			onError: (error: AxiosError) => {
-				console.log(error);
-			},
-		}
-	);
-
-	// If employee exists, run this
 	const loadDetails = (employee: EmployeeType) => {
 		const [startYear, startMonth, startDay] = employee.startDate.split("-");
 		const [finishYear, finishMonth, finishDay] =
@@ -157,7 +156,7 @@ const EmployeeDetails = () => {
 		});
 	};
 
-	const onSubmit: SubmitHandler<Inputs> = (data) => {
+	const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => {
 		const payload: EmployeeType = {
 			firstName: data.firstName,
 			middleName: data.middleName,
@@ -177,9 +176,9 @@ const EmployeeDetails = () => {
 			hoursPerWeek: +data.hoursPerWeek,
 		};
 
-		if (!employee) {
+		if (!employeeId) {
 			addMutation.mutate(payload);
-		} else if (employee && employee.id) {
+		} else if (employeeId) {
 			updateMutation.mutate(payload);
 		}
 	};
@@ -187,7 +186,17 @@ const EmployeeDetails = () => {
 	return (
 		<div className={styles.EmployeeDetails}>
 			<Header title={`Employee details`} headerButton={`Back`} />
-			{employee && <div>Employee Id: {employee.id}</div>}
+			{query?.isLoading && (
+				<Message type="loading">{`Loading employee Id ${employeeId}`}</Message>
+			)}
+			{query?.isSuccess && (
+				<Message>{`Employee Id ${query.data.id}`}</Message>
+			)}
+			{query?.isError && (
+				<Message type="error">
+					{`Unable to load employee ${query.error.message}. Please try again later.`}
+				</Message>
+			)}
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<fieldset className={styles.Fieldset}>
 					<legend className={styles.Legend}>
@@ -665,47 +674,44 @@ const EmployeeDetails = () => {
 						)}
 				</fieldset>
 				{addMutation.isLoading && (
-					<div className={`${styles.Message}`}>
-						Saving employee...
-					</div>
+					<Message type="loading">Saving employee...</Message>
 				)}
 				{addMutation.isSuccess && (
-					<div
-						className={`${styles.Message} ${styles.Message__Success}`}>
+					<Message type="success">
 						{`${addMutation.data.firstName} ${addMutation.data.lastName} was saved to Employee Id ${addMutation.data.id}`}
-					</div>
+					</Message>
+				)}
+				{addMutation.isError && addMutation.error.response && (
+					<Message type="error">
+						{(addMutation.error.response.data as ErrorData).message}
+					</Message>
 				)}
 				{addMutation.isError && (
-					<div
-						className={`${styles.Message} ${styles.Message__Error}`}>
-						{addMutation.error.message}
-					</div>
+					<Message type="error">{`Unable to add employee. ${addMutation.error.message}`}</Message>
 				)}
 				{updateMutation.isLoading && (
-					<div className={`${styles.Message}`}>
-						Updating employee...
-					</div>
+					<Message type="loading">Updating employee...</Message>
 				)}
 				{updateMutation.isSuccess && (
-					<div
-						className={`${styles.Message} ${styles.Message__Success}`}>
+					<Message type="success">
 						{`Updated Employee Id ${updateMutation.data.id} - ${updateMutation.data.firstName} ${updateMutation.data.lastName}`}
-					</div>
+					</Message>
+				)}
+				{updateMutation.isError && updateMutation.error.response && (
+					<Message type="error">
+						{`${
+							(updateMutation.error.response.data as ErrorData)
+								.message
+						}`}
+					</Message>
 				)}
 				{updateMutation.isError && (
-					<div
-						className={`${styles.Message} ${styles.Message__Error}`}>
-						{updateMutation.error.message}
-					</div>
+					<Message type="error">
+						{`Unable to update employee. ${updateMutation.error.message}`}
+					</Message>
 				)}
-				{/* {updateMutation.isError && updateMutation.error.response && (
-					<div
-						className={`${styles.Message} ${styles.Message__Error}`}>
-						{`${updateMutation.error.response.data.message}`}
-					</div>
-				)} */}
 				<div className={styles.FormButtons}>
-					<Button label={employee ? "Update" : "Save"} />
+					<Button label={employeeId ? "Update" : "Save"} />
 					<Link
 						className={styles.FormButtons__Link}
 						to={"/employeeCreator/employees"}>
