@@ -35,6 +35,7 @@ public class EmployeeDTO {
     @NotNull(message = "Start date required")
     LocalDate startDate;
 
+    @NotNull(message = "Finish date required")
     LocalDate finishDate;
 
     @NotNull(message = "Is Ongoing must be true or false")

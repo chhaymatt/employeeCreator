@@ -39,23 +39,25 @@ To learn and apply new technology and demonstrate my competency as a full stack 
 -   React Hook Form - store, validate form inputs
 -   React Axios - ease of use and increases readability compared to fetch()
 -   React Query - reduce the need to use the useEffect hook and provides helpful messages whenever a request isLoading, returns the data or any errors
-<!-- -   Vitest for testing components -->
+-   Vitest and React Testing Library (jest-dom, react, user-event) for testing components
 
 ### Backend
 
 -   Java 17 and Spring Boot
 -   Spring Web
 -   Validation I/O
--   Spring Starter Test
 -   Spring Data JPA
 -   MySQL Driver
 -   Spring Devtools
+-   Java Faker
+-   Spring Starter Test
+-   JUnit, AssertJ, Mockito
 
 ### Tools Used
 
 -   Vite - creating a starting React app
 -   VS Code - IDE
--   Prettier - to tidy up code in spacing and structure
+-   Prettier - tidy up code in spacing and structure
 -   Spring Initializr - create a starting Spring app
 -   Postman - manual testing endpoints
 -   Meta Tags - generate metadata for sharing front end on the web
@@ -80,7 +82,19 @@ To learn and apply new technology and demonstrate my competency as a full stack 
 2. If necessary, change the properties (url, user and password) in `src/main/resources/application.properties`
 3. Open mySQL Workbench and run `CREATE DATABASE employeeCreator;`
 4. If the database already exists, run `DROP DATABASE employeeCreator;` and then rerun `CREATE DATABASE employeeCreator;`
-5. Run `./mvnw spring-boot:run`
+5. Run back end `./mvnw spring-boot:run` or run the `src/main/java/com/matthewchhay/employeeCreator/EmployeeCreatorApplication.java`
+
+---
+
+## Test Steps
+
+### Front end
+
+1. Run `npm test`
+
+### Back end
+
+1. Run `./mvnw test`
 
 ---
 
@@ -100,7 +114,7 @@ I used React Query to reduce the need for using React's useEffect hook and it co
 
 I created a message component to ensure styling consistency and reduce the number of styles passed in. The component contains two props, the children and an optional prop `type` = `"loading"`, `"success"`, `"error"` and `"warning"`. The children prop is a string passed from the parent component.
 
-I used Vitest with React Testing Library to check if text is rendered to the screen, the element contains specific classNames.
+I used Vitest with React Testing Library to check if text is rendered to the screen and see if the element contains specific classNames.
 
 ### Backend
 
@@ -109,20 +123,21 @@ During my training program I was shown to use Eclipse for Java projects but I sw
 I created an employee domain which consists of:
 
 -   Entity - stores the fields for a record
--   Controller - takes in requests from the front end or through postman and returns the response or any errors, communicates to and from the service
--   DTO - checks the types of the incoming payload, a single DTO to reduce repetition because creating or updating an employee take the same payload
+-   Controller - receives requests from the front end or through Postman, and returns the response or any errors, communicates to and from the service
+-   DTO - checks the types of the incoming payload, using a single DTO reduces repetition because creating or updating an employee requires the same payload
 -   Service - performs methods based on the repository and data cleaning
 -   Repository - communicates between the service and the database
 
-Enums were created for the work types and contract types to ensure quality data in the database.
-Manual testing was conducted with Postman to see different payloads and HTTP methods return the right response and errors.
+Enums were created for the work types and contract types to ensure that high-quality data is stored in the database. Manual testing was conducted using Postman to verify that different payloads and HTTP methods returned the expected responses and errors.
+
+JUnit and AssertJ were used to check the expected output with `assertThat` and compare two variables with `isEqualTo`. Mockito was used to mock the interaction between the EmployeeRepository and the EmployeeService, and to check that the methods in the service were actually called.
 
 ---
 
 ## Features
 
 -   Fetch list of employees
--   Fetch a specific employee and load employee details into the form
+-   Fetch employee by id in the URL and load employee details into the form
 -   Add or update an employee and validate user inputs and save to the database
 -   Delete an employee
 
@@ -130,7 +145,7 @@ Manual testing was conducted with Postman to see different payloads and HTTP met
 
 ## Known issues
 
--   Unable to hide form if user types in URL with a string e.g. `/employees/oneTwoThree`
+-   Unable to hide form if user types in URL with a string e.g. `/employees/"randomString"` while also keeping `employees/add-employee`
 
 ---
 
@@ -178,7 +193,7 @@ Manual testing was conducted with Postman to see different payloads and HTTP met
 
 ### 24/02/2023 - React query set up
 
--   Updated README
+-   Update README
 -   Add delete employee by Id using React Query and Axios with error handling appearing on the EmployeeCard
 -   Remove useEffect for fetching employee by Id
 -   Add updating employee by Id using React Query and Axios with confirmation and error handling
@@ -194,6 +209,14 @@ Manual testing was conducted with Postman to see different payloads and HTTP met
 -   Add Message component and display warning if there are no employees in EmployeeList
 -   Remove console.logs
 -   Hide form when unable to fetch employee Id with numbers
+
+### 26/02/2023 - Testing and documentation
+
+-   Move ContractTypesEnum and WorkTypesEnum into their own files
+-   Add Java Faker to create fake employees for testing
+-   Add unit tests in EmployeeService
+-   Show only warnings in console
+-   Update README
 
 ---
 
@@ -312,6 +335,8 @@ class="\_Button_f8f296 undefined"
 
 Then switched to .getAttribute("class")
 
+### Struggle 7 - Back end testing
+
 ---
 
 <!-- ## Licensing Details
@@ -327,6 +352,26 @@ Then switched to .getAttribute("class")
 
 ## Resources that helped me along the way
 
--   Treat any numbers with leading zeros as strings: https://stackoverflow.com/questions/27361565/why-is-json-invalid-if-an-integer-begins-with-a-leading-zero#:~:text=A%20leading%200%20indicates%20an,would%20not%20contain%20an%208.
--   How to find what faker outputs are there: https://fakerjs.dev/api/
--   How to create an array of n faker objects: https://stackoverflow.com/questions/42861732/generate-an-array-with-random-data-without-using-a-for-loop
+### Front end
+
+-   [Treat numbers with leading zeros as strings (e.g. mobile numbers)](https://stackoverflow.com/questions/27361565/why-is-json-invalid-if-an-integer-begins-with-a-leading-zero#:~:text=A%20leading%200%20indicates%20an,would%20not%20contain%20an%208)
+-   [Fake Data: Faker.js API outputs](https://fakerjs.dev/api/)
+-   [Fake Data: How to create an array of n faker objects](https://stackoverflow.com/questions/42861732/generate-an-array-with-random-data-without-using-a-for-loop)
+-   [React Hook Form: React Hook Form Docs - Getting Started](https://react-hook-form.com/get-started)
+-   [React Hook Form: Builder](https://react-hook-form.com/form-builder)
+-   [React Hook Form: Accessibility and error handling](https://react-hook-form.com/advanced-usage)
+-   [React Hook Form: Reset form state](https://react-hook-form.com/api/useform/reset/)
+-   [React Query: React Query Docs - Quick Start for useQuery/useQueryClient, useMutation](https://react-query-v3.tanstack.com/quick-start)
+-   [React Query/Axios: Fetch employees example](https://www.frontendmag.com/insights/react-query-vs-axios-comparison/#:~:text=Together%2C%20React%20Query%20and%20Axios,the%20requests%20to%20the%20server)
+-   [React Query/Axios: Delete Mutation example](https://www.positronx.io/react-query-handle-delete-request-with-usemutation-tutorial/)
+-   [Testing: React Testing Library](https://testing-library.com/docs/react-testing-library/example-intro/)
+-   [Testing: Vitest example](https://waresix.engineering/vitest-unit-testing-to-test-react-application-177ade1e6c1b)
+
+### Back end
+
+-   [Console: Set Spring.jpa.open-in-view to false](https://stackoverflow.com/questions/30549489/what-is-this-spring-jpa-open-in-view-true-property-in-spring-boot)
+-   [Fake Data: Java faker list of outputs](https://github.com/DiUS/java-faker)
+-   [Testing: Spring Docs - Testing the Web Layer](https://spring.io/guides/gs/testing-web/)
+-   [Testing: "Given, When, Then", using Mockito/AssertJ for getAll and Add methods in the service](https://youtu.be/Geq60OVyBPg?t=2553)
+-   [Testing: Mock Optional<Employee> for finding EmployeeById](https://stackoverflow.com/questions/56693039/mockito-how-to-test-findbyid-returning-an-optional)
+-

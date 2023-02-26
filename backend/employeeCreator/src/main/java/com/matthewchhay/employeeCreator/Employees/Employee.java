@@ -8,14 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-enum ContractTypes {
-    PERMANENT, CONTRACT
-}
-
-enum WorkTypes {
-    FULL_TIME, PART_TIME
-}
-
 @Entity
 public class Employee {
     @Id

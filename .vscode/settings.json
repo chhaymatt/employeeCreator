@@ -1,4 +1,4 @@
 {
 	"java.compile.nullAnalysis.mode": "automatic",
-	"cSpell.words": ["datatype", "Initializr", "mvnw"]
+	"cSpell.words": ["assertj", "datatype", "Initializr", "mvnw"]
 }
