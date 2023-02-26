@@ -14,11 +14,11 @@ import {
 import { EmployeeType } from "../EmployeeList/EmployeeList";
 import styles from "./EmployeeDetails.module.scss";
 
-enum ContractTypesEnum {
+export enum ContractTypesEnum {
 	PERMANENT = "Permanent",
 	CONTRACT = "Contract",
 }
-enum WorkTypesEnum {
+export enum WorkTypesEnum {
 	FULL_TIME = "Full-time",
 	PART_TIME = "Part-time",
 }

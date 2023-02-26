@@ -13,7 +13,7 @@ export const getEmployeeList = async () => {
 	return response.data;
 };
 
-export const getEmployee = async (id: number) => {
+export const getEmployee = async (id?: number) => {
 	const response = await axios.get(`${BASE_URL}/employees/${id}`);
 	return response.data;
 };

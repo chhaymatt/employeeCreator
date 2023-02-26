@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-export const createEmployee = () => {
+export const createEmployee = (id?: number) => {
 	const firstName = faker.name.firstName();
 	const lastName = faker.name.lastName();
 	const startDateRaw = faker.date.between(
@@ -9,7 +9,7 @@ export const createEmployee = () => {
 	);
 	const finishDateRaw = faker.date.future(10, startDateRaw);
 	return {
-		id: faker.datatype.uuid(),
+		id: id,
 		firstName: firstName,
 		middleName: faker.name.middleName(),
 		lastName: lastName,
@@ -31,5 +31,9 @@ export const createEmployee = () => {
 };
 
 export const createEmployees = (numEmployees = 5) => {
-	return Array.from({ length: numEmployees }, createEmployee);
+	const employees = [];
+	for (let i = 1; i <= numEmployees; i++) {
+		employees.push(createEmployee(i));
+	}
+	return employees;
 };

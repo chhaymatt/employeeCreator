@@ -6,7 +6,7 @@
 
 ### Demo
 
-This demo does not interact with the backend.
+This demo does not interact with the back end.
 [Open Demo](https://chhaymatt.github.io/employeeCreator/)
 
 ### Screenshots
@@ -22,7 +22,7 @@ This demo does not interact with the backend.
 
 ### Requirements
 
-An employee tracking system where managers can view, add, edit and remove employee details. Front end uses React and the backend is a RESTful API of any choice.
+An employee tracking system where managers can view, add, edit and remove employee details. Front end uses React and the back end is a RESTful API of any choice.
 
 ### Purpose
 
@@ -30,7 +30,7 @@ To learn and apply new technology and demonstrate my competency as a full stack 
 
 ### Stack
 
-#### Frontend
+#### Front end
 
 -   React - framework
 -   SASS/SCSS - for more features than CSS
@@ -41,7 +41,7 @@ To learn and apply new technology and demonstrate my competency as a full stack 
 -   React Query - reduce the need to use the useEffect hook and provides helpful messages whenever a request isLoading, returns the data or any errors
 -   Vitest and React Testing Library (jest-dom, react, user-event) for testing components
 
-### Backend
+### Back end
 
 -   Java 17 and Spring Boot
 -   Spring Web
@@ -100,7 +100,7 @@ To learn and apply new technology and demonstrate my competency as a full stack 
 
 ## Design Goals / Approach
 
-### Frontend
+### Front end
 
 I created several key components which include the EmployeeCard to be mapped in the EmployeeList and a form inside EmployeeDetails. After that, I created an array of employees with faker.js to simulate an employee details and check EmployeeCard was displaying the correct information. I styled the components using SASS/SCSS because it allowed me to adopt mixins for responsive design and partials for sharing global variables such as colour.
 
@@ -114,9 +114,9 @@ I used React Query to reduce the need for using React's useEffect hook and it co
 
 I created a message component to ensure styling consistency and reduce the number of styles passed in. The component contains two props, the children and an optional prop `type` = `"loading"`, `"success"`, `"error"` and `"warning"`. The children prop is a string passed from the parent component.
 
-I used Vitest with React Testing Library to check if text is rendered to the screen and see if the element contains specific classNames.
+I used Vitest to mock Axios API calls and React Testing library to check if text is rendered to the screen and see if the element contains specific classNames.
 
-### Backend
+### Back end
 
 During my training program I was shown to use Eclipse for Java projects but I switched to VS Code because it provided me with a more productive development environment. The ability to stay with the same IDE for front end and back end, zooming in/out and support for extensions such as Prettier were key factors.
 
@@ -147,12 +147,14 @@ JUnit and AssertJ were used to check the expected output with `assertThat` and c
 
 -   Unable to hide form if user types in URL with a string e.g. `/employees/"randomString"` while also keeping `employees/add-employee`
 
----
+---q
 
 ## Future Goals
 
--   Create tests for front end and back end
--   Implementing an API logging strategy
+-   Create front end tests for EmployeeList, EmployeeDetails and their query / mutations
+-   Create back end tests for EmployeeController and check response status and body
+-   Implement an API logging strategy
+-   Deploy Spring Boot API to AWS
 
 ---
 
@@ -171,20 +173,20 @@ JUnit and AssertJ were used to check the expected output with `assertThat` and c
 -   Create array of fake employees using faker.js
 -   Add react router dom to navigate between the two pages on the Add Employee button in EmployeeList and Back or Cancel buttons in EmployeeDetails
 -   Add favicon and meta tags
--   Create backend Spring Boot project with Employee domain and `findOnEmployee`, `addEmployee`, and `updateEmployee` methods
+-   Create back end Spring Boot project with Employee domain and `findOnEmployee`, `addEmployee`, and `updateEmployee` methods
 -   Manually test endpoints using Postman
 -   Add footer
 
 ### 22/02/2023 - Form validation
 
--   Add delete employee by Id to backend
+-   Add delete employee by Id to back end
 -   Add React Hook Form
 -   Add inline validation messages and accessibility by leveraging ARIA
 -   Add error styling whenever user enters invalid input (e.g. missing input or wrong pattern)
 
 ### 23/02/2023 - Axios set up
 
--   Fix CORS issue appearing on front end by adding @CrossOrigin to the backend Controller
+-   Fix CORS issue appearing on front end by adding @CrossOrigin to the back end Controller
 -   Create Axios file `EmployeeAPI.ts` in services with methods `addEmployee`, `getEmployeeList`, `getEmployee`, `updateEmployee`, and `deleteEmployee`
 -   Fetch list of employees from API using Axios and React Query with appropriate error handling
 -   Manually test EmployeeList when the server is offline or when there are no employees
@@ -197,7 +199,7 @@ JUnit and AssertJ were used to check the expected output with `assertThat` and c
 -   Add delete employee by Id using React Query and Axios with error handling appearing on the EmployeeCard
 -   Remove useEffect for fetching employee by Id
 -   Add updating employee by Id using React Query and Axios with confirmation and error handling
--   Add trim/capitalise first letter of firstName, middleName, lastName and address on the backend
+-   Add trim/capitalise first letter of firstName, middleName, lastName and address on the back end
 -   Remove useState messages and errors from EmployeeList and replace with `useMutation.isLoading` or `useMutation.isSuccess` or `useMutation.isError`
 -   Fix loading month dropdowns when fetching employee
 -   Loading employee details will only run if `employee/:id` is a number and not zero, this removed
@@ -212,11 +214,12 @@ JUnit and AssertJ were used to check the expected output with `assertThat` and c
 
 ### 26/02/2023 - Testing and documentation
 
+-   Update README
 -   Move ContractTypesEnum and WorkTypesEnum into their own files
 -   Add Java Faker to create fake employees for testing
--   Add unit tests in EmployeeService
--   Show only warnings in console
--   Update README
+-   Add unit tests in EmployeeService class
+-   Show only warnings in back
+-   Add unit tests in EmployeeAPI, InlineButtons, NotFound components
 
 ---
 
@@ -248,7 +251,7 @@ Missing value from enum would map both the property word and property index (e.g
 
 ### Struggle 3 - Form Inputs from the front end are slightly different to the EmployeeDTO in the back end
 
-Radio buttons and dropdown menus changing back from value to the Enum property by UpperCase or replacing `-` to `_` otherwise backend will reject
+Radio buttons and dropdown menus changing back from value to the Enum property by UpperCase or replacing `-` to `_` otherwise back end will reject
 Discovering `id` is an optional field in the EmployeeType because loading employees requires id but creating an employee does not
 startDate contains three different fields for the FormInputs, `startDateDay`, `startDateMonth`, `startDateYear` and translating it back to `YYYY-MM-DD`
 Finding `MM` based on Enum index from value
@@ -261,7 +264,7 @@ Adding employee that returns an error has an unclear error message because it is
 The unclear message is: `Request failed with status code 400`
 Do I create a new data type?
 Solved by adopting AxiosError type in EmployeeList
-and in EmployeeCard where the backend errors need more details:
+and in EmployeeCard where the back end errors need more details:
 
 How I solved it?
 
@@ -366,6 +369,7 @@ Then switched to .getAttribute("class")
 -   [React Query/Axios: Delete Mutation example](https://www.positronx.io/react-query-handle-delete-request-with-usemutation-tutorial/)
 -   [Testing: React Testing Library](https://testing-library.com/docs/react-testing-library/example-intro/)
 -   [Testing: Vitest example](https://waresix.engineering/vitest-unit-testing-to-test-react-application-177ade1e6c1b)
+-   [Testing: Axios test](https://stackoverflow.com/questions/45016033/how-do-i-test-axios-in-jest)
 
 ### Back end
 

@@ -26,12 +26,15 @@ const InlineButtons = ({ id, setError }: InlineButtonProps) => {
 			<Link
 				className={styles.InlineButtons__Link}
 				to={`/employeeCreator/employees/${id}`}>
-				<button className={styles.InlineButtons__Button}>Edit</button>
+				<button className={styles.InlineButtons__Button} name="Edit">
+					Edit
+				</button>
 			</Link>
 			<span className={styles.InlineButtons__Divider}>|</span>
 			<button
 				onClick={() => deleteMutation.mutate(id)}
-				className={styles.InlineButtons__Button}>
+				className={styles.InlineButtons__Button}
+				name="Remove">
 				Remove
 			</button>
 		</section>

@@ -21,9 +21,6 @@ const App = () => {
 							path="/employeeCreator/employees"
 							element={<EmployeeList />}></Route>
 						<Route
-							path="/employeeCreator/employees"
-							element={<EmployeeDetails />}></Route>
-						<Route
 							path="/employeeCreator/employees/:id"
 							element={<EmployeeDetails />}></Route>
 						<Route
