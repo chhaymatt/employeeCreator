@@ -130,7 +130,7 @@ I created an employee domain which consists of:
 
 Enums were created for the work types and contract types to ensure that high-quality data is stored in the database. Manual testing was conducted using Postman to verify that different payloads and HTTP methods returned the expected responses and errors.
 
-JUnit and AssertJ were used to check the expected output with `assertThat` and compare two variables with `isEqualTo`. Mockito was used to mock the interaction between the EmployeeRepository and the EmployeeService, and to check that the methods in the service were actually called.
+JUnit and AssertJ were used to check the expected output with `assertThat` and compare two variables with `isEqualTo`. Initially, I created unit tests for the EmployeeService. I used Mockito was used to mock the interaction between the EmployeeRepository and the EmployeeService, and to check that the methods in the service were actually called. After testing the EmployeeService, I moved on to the EmployeeController, where I mocked the EmployeeService's return and compared the response body and status codes.
 
 ---
 
@@ -147,12 +147,13 @@ JUnit and AssertJ were used to check the expected output with `assertThat` and c
 
 -   Unable to hide form if user types in URL with a string e.g. `/employees/"randomString"` while also keeping `employees/add-employee`
 
----q
+---
 
 ## Future Goals
 
 -   Create front end tests for EmployeeList, EmployeeDetails and their query / mutations
--   Create back end tests for EmployeeController and check response status and body
+-   Create unit tests checking the DTO
+-   Create unit tests checking the startDate must be before finishDate
 -   Implement an API logging strategy
 -   Deploy Spring Boot API to AWS
 
@@ -221,24 +222,26 @@ JUnit and AssertJ were used to check the expected output with `assertThat` and c
 -   Show only warnings in back
 -   Add unit tests in EmployeeAPI, InlineButtons, NotFound components
 
+### 27/02/2023 - Further testing
+
+-   Update README
+-   Add unit tests in EmployeeController class
+-   Change warning message background colour
+
 ---
 
 ## What did you struggle with?
 
 ### Struggle 1 - Radio buttons and checkboxes labels could not be clicked
 
-I discovered this problem when I adopted React Hook Form and the labels broke. I thought the labels were connected the input with its `name` attribute in the input and `htmlFor` in the label attribute because they were working before adopting React Hook Form. To fix this, I realised I needed to surround the input with the label.
-
-Wrong way:
+I discovered this problem when I adopted React Hook Form and the labels broke. I thought the labels were connected the input with its `name` attribute in the input and `htmlFor` in the label attribute because they were working before adopting React Hook Form. To fix this, I realised I needed to surround the input with the label as shown in my current implementation.
 
 ```html
+<!-- Initial implementation -->
 <input name="isOngoing" id="isOngoing" />
-<label htmlFor="isOngoing"> On going </label>
-```
+<label htmlFor="isOngoing">On going</label>
 
-The correct way:
-
-```html
+<!-- Current implementation -->
 <label>
 	<input />
 </label>
@@ -246,33 +249,87 @@ The correct way:
 
 ### Struggle 2 - Mapping radio buttons and drop down menus
 
-Treating enums like arrays to use .map
-Missing value from enum would map both the property word and property index (e.g. January-February AND 1 to 12)
+I struggled with mapping the drop down menu for the Months fields and radio buttons for the WorkType and ContractType fields. I discovered to map different options by adopting the following:
 
-### Struggle 3 - Form Inputs from the front end are slightly different to the EmployeeDTO in the back end
+```tsx
+// Mapping
+{
+	Object.values(MonthsEnum).map((month) => (
+		<option key={month} value={month}>
+			{month}
+		</option>
+	));
+}
+```
 
-Radio buttons and dropdown menus changing back from value to the Enum property by UpperCase or replacing `-` to `_` otherwise back end will reject
-Discovering `id` is an optional field in the EmployeeType because loading employees requires id but creating an employee does not
-startDate contains three different fields for the FormInputs, `startDateDay`, `startDateMonth`, `startDateYear` and translating it back to `YYYY-MM-DD`
-Finding `MM` based on Enum index from value
-`MM` and `DD` requires a leading zero if number is less than 10 otherwise EmployeeDTO won't accept it
-Using Console.Table for Inputs and for the payload
+Initially, my MonthsEnum had no initialisers and I discovered that the `Object.values(MonthsEnum).map` mapped both the key and the value. I did not want this to happen because it could mislead users into thinking a month is missing, or accidentally choose "5" for May when it should be "4" since the index starts at zero. To resolve this, I added initialisers as shown in the current implementation below.
 
-### Struggle 4 - Axios errors
+```tsx
+// Initial implementation
+enum MonthsEnum {
+	JANUARY,
+	FEBRUARY,
+	MARCH,
+	APRIL,
+	MAY,
+	JUNE,
+	JULY,
+	AUGUST,
+	SEPTEMBER,
+	OCTOBER,
+	NOVEMBER,
+	DECEMBER,
+}
+// Mapping:
+// - JANUARY
+// - FEBRUARY
+// - ...
+// - DECEMBER
+// - 0
+// - ...
+// - 11
 
-Adding employee that returns an error has an unclear error message because it is buried within an optional response data.
-The unclear message is: `Request failed with status code 400`
-Do I create a new data type?
-Solved by adopting AxiosError type in EmployeeList
-and in EmployeeCard where the back end errors need more details:
+// Current implementation
+enum MonthsEnum {
+	JANUARY = "January",
+	FEBRUARY = "February",
+	MARCH = "March",
+	APRIL = "April",
+	MAY = "May",
+	JUNE = "June",
+	JULY = "July",
+	AUGUST = "August",
+	SEPTEMBER = "September",
+	OCTOBER = "October",
+	NOVEMBER = "November",
+	DECEMBER = "December",
+}
+// Mapping:
+// - January
+// - February
+// - ...
+// - December
+```
 
-How I solved it?
+### Struggle 3 - Getting ready for the DTO
+
+When making the front end form and the backend, I noticed it was necessary to process the form inputs because the form contains separate fields for the date. e.g. `startDateDay`, `startDateMonth`, `startDateYear`. The date fields needed to be in a format of `YYYY-MM-DD`. I created some functions which converts the month name to month value and vice versa and also adds a leading zero when a date or month value is less than 10.
+
+For the radio buttons, the selected value in contractType and workType needed to be capitalised and the `-` symbol be replaced with `_` otherwise the back end would reject it.
+
+I used console.table on the form inputs and the payload to ensure the back end could accept the incoming payload.
+
+### Struggle 4 - Displaying descriptive error messages
+
+I aimed to improve the user experience by handling error messages and displaying them to the user instead of just logging them to the console. I tested this by shutting down my back end and attempting to saving the form with a `startDate` greater than the `finishDate`.
+However, when adding or updating an employee and encountering an error, the error message was unclear.
+Originally, I had `addMutation.error.message` but it had an non-descriptive message of: `Request failed with status code 400`. When checking the console, I noticed there was a `response.data.message` and I was able to display the message to the user using `addMutation.error.response.data.message` at the cost of ignoring type safety due to the type being unknown or optional. I solved this problem by creating my own error type to match the fields in the response data.
 
 ```tsx
 // 1. Specify the type of mutation.error.response.data
 type ErrorData = {
 	error: string;
-	message: string;
+	message: string; // e.g.  "Start date must be before finish date"
 	path: string;
 	timestamp: string;
 	status: number;
@@ -280,32 +337,23 @@ type ErrorData = {
 
 // 2. Specify multiple && conditions as the response may be optional
 {
-	updateMutation.isError && updateMutation.error.response && (
+	addMutation.isError && addMutation.error.response && (
 		<Message type="error">
-			{`${(updateMutation.error.response.data as ErrorData).message}`}
+			{`${(addMutation.error.response.data as ErrorData).message}`}
 		</Message>
 	);
 }
 ```
 
-### Struggle 5 - React Query Mutations
+### Struggle 5 - React Query and Mutations
 
-I want to use React Query over useEffect/useState
-How do I useQuery or useMutations?
-I was successful with EmployeeList because it fetches all employees and doesn't take any parameters
-I was also successful with adding employee because it only takes in a payload
-But the other methods take in `employeeId` and a payload
-
-Currently loading an employee to the EmployeeDetails component uses the id from the URL and stores the employee in a useState and then fills the details in the form.
-
-Original Fetch
+I decided to make the switch from using `useEffect` to React Query because it would reduce my reliance on `useState`. However, I faced some difficulty in learning the syntax of `useQuery` and `useMutation` with Axios, particularly when methods take in multiple parameters. To overcome this difficulty, I reviewed multiple resources and sample projects that helped me gain a better understanding of React Query. It was beneficial to check `isLoading`, `isError`, and `isSuccess` states when calling a query or a mutation. These React Query states were very useful because I was able to implement specific messages to indicate what state Axios request was is in, since feedback to the user is important.
 
 ```tsx
-const { id } = useParams();
-
+// Originally I fetched an employee by Id with useEffect and Axios
 useEffect(() => {
-	if (id) {
-		getEmployee(+id)
+	if (employeeId) {
+		getEmployee(employeeId)
 			.then((employee) => {
 				setEmployee(employee);
 				console.log("Loaded employee");
@@ -315,30 +363,39 @@ useEffect(() => {
 			.catch((err) => console.log(err));
 	}
 }, []);
+
+// Fetch employee by Id with React Query and Axios
+if (employeeId) {
+	query = useQuery(["employee", employeeId], () => getEmployee(employeeId), {
+		onSuccess: (employee: EmployeeType) => {
+			setDisplayForm(true);
+			loadDetails(employee);
+		},
+		onError: (error: AxiosError) => {
+			setDisplayForm(false);
+		},
+	});
+}
+
+// Example using the additional properties with React Query
+{
+	query?.isLoading && (
+		<Message type="loading">{`Loading employee Id ${employeeId}`}</Message>
+	);
+}
+{
+	query?.isSuccess && <div>{`Employee Id ${query.data.id}`}</div>;
+}
 ```
 
-Examples I found online are like:
+Another problem I had was with the InlineButtons, the component takes in the employee id as a prop so that when clicking on `Edit` button, the user will be directed to the EmployeeDetails page and the form loads with with that employee's details based on the `id` in the URL due to use `useParams()`. However, I encountered a bit of difficulty with the `Remove` button because when removing an employee, it should remove the specific EmployeeCard in EmployeeList. I discovered that I could use a mutation inside my InlineButtons component to send a DELETE request to my API and then invalidate and refetch my list of employees with `queryClient.invalidateQueries("employees`. I was faced with another issue where I wanted to display an error message to the user when the remove button did not work (e.g. the employee was already deleted from the database). To address this, I used a useState prop to pass the error message from my InlineButtons component to the EmployeeCard.
 
-```jsx
-//
-```
+### Struggle 6 - Back end testing
 
-Do I need to use useState?, I want to avoid prop drilling because the Edit button is buried in this:
-`App -> EmployeeList -> EmployeeCard -> InlineButtons -> Edit`
-Could I useContext instead?
-
-### Struggle 6 - Front end testing
-
-Getting className for certain styling
-Used toHaveClass
-e.g.
-class="Button"
-Received:
-class="\_Button_f8f296 undefined"
-
-Then switched to .getAttribute("class")
-
-### Struggle 7 - Back end testing
+I discovered developers break their tests into AAA - Act, Arrange and Assert or GWT - Given, When, Then.
+Many resources online had different annotations and I struggled what was Mockito and what annotations to put at the top of my tests. I found [this article](https://thepracticaldeveloper.com/guide-spring-boot-controller-tests/) and it helped me understand the different types of tests with illustrations. I now know Mockito is used to mock the return when calling a method in a class without the need to setup a database.
+In the EmployeeService class, I mocked the Repository and verifying the service methods were called and comparing the returned employee fields.
+In the EmployeeController class, I mocked the Service and verifying its methods and checking the ResponseEntity's status code/body for successful cases and ResponseStatusException's status code/detail for bad requests.
 
 ---
 
@@ -378,4 +435,4 @@ Then switched to .getAttribute("class")
 -   [Testing: Spring Docs - Testing the Web Layer](https://spring.io/guides/gs/testing-web/)
 -   [Testing: "Given, When, Then", using Mockito/AssertJ for getAll and Add methods in the service](https://youtu.be/Geq60OVyBPg?t=2553)
 -   [Testing: Mock Optional<Employee> for finding EmployeeById](https://stackoverflow.com/questions/56693039/mockito-how-to-test-findbyid-returning-an-optional)
--
+-   [Testing: Exception Testing for bad requests](https://stackoverflow.com/questions/61087747/testing-response-after-expected-exception-is-thrown)

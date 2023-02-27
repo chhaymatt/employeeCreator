@@ -70,6 +70,24 @@ public class Employee {
         this.hoursPerWeek = hoursPerWeek;
     }
 
+    public Employee(Long id, String firstName, String middleName, String lastName, String email, String mobile,
+            String address, ContractTypes contractType, LocalDate startDate, LocalDate finishDate, boolean isOngoing,
+            WorkTypes workType, int hoursPerWeek) {
+        this.id = id;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.email = email;
+        this.mobile = mobile;
+        this.address = address;
+        this.contractType = contractType;
+        this.startDate = startDate;
+        this.finishDate = finishDate;
+        this.isOngoing = isOngoing;
+        this.workType = workType;
+        this.hoursPerWeek = hoursPerWeek;
+    }
+
     public Long getId() {
         return this.id;
     }

@@ -1,8 +1,8 @@
 package com.matthewchhay.employeeCreator.Employees;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.util.Locale;
@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -135,8 +134,9 @@ public class EmployeeServiceTest {
                 WorkTypes.values()[faker.number().numberBetween(0, WorkTypes.values().length)],
                 faker.number().numberBetween(0, 40));
 
-        // When
         when(employeeRepository.findById(id)).thenReturn(Optional.of(employee));
+
+        // When
         Optional<Employee> maybeEmployee = underTest.findOne(id);
 
         // Then
@@ -162,9 +162,9 @@ public class EmployeeServiceTest {
     void cannotFindEmployeeById() {
         // Given
         Long id = 12345678l;
-
-        // When
         when(employeeRepository.findById(id)).thenReturn(Optional.empty());
+
+        // When 
         Optional<Employee> maybeEmployee = underTest.findOne(id);
 
         // Then
