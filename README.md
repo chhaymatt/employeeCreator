@@ -148,6 +148,7 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 ## Known issues
 
 -   Unable to hide form if user types in URL with a string e.g. `/employees/"randomString"` while also keeping `employees/add-employee`
+-   getMonthFromValue function no longer returns undefined if parameter is a number less than 1 or greater than 12.
 
 ---
 
@@ -230,6 +231,8 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Change warning message background colour
 -   Add link on name in EmployeeCard to EmployeeDetails
 -   Add logger.slf4j to back end
+-   Create EmployeeAdd and EmployeeUpdate to reduce EmployeeDetails logic
+-   Move Types, Enums, ErrorData, DateFunctions into a shared folder
 
 ---
 

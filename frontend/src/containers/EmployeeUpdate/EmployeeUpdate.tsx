@@ -1,28 +1,60 @@
 import { AxiosError } from "axios";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Message from "../../components/Message/Message";
 import { getEmployee, updateEmployee } from "../../services/EmployeeAPI";
+import { getMonthFromValue } from "../../shared/DateFunctions";
+import { ContractTypesEnum, WorkTypesEnum } from "../../shared/Enums";
 import { ErrorData } from "../../shared/ErrorData";
+import { Inputs } from "../../shared/Types";
 import EmployeeDetails from "../EmployeeDetails/EmployeeDetails";
 import { EmployeeType } from "../EmployeeList/EmployeeList";
 
 const EmployeeUpdate = () => {
+    const [formObject, setFormObject] = useState<Inputs>();
     const { id } = useParams();
     const employeeId = id ? +id : 0;
     const queryClient = useQueryClient();
-    let query;
-    if (employeeId) {
-        query = useQuery(
-            ["employee", employeeId],
-            () => getEmployee(employeeId),
-            {
-                onSuccess: (employee: EmployeeType) => {},
-                onError: (error: AxiosError) => {},
-            }
-        );
-    }
+    const query = useQuery(
+        ["employee", employeeId],
+        () => getEmployee(employeeId),
+        {
+            onSuccess: (employee: EmployeeType) => {
+                const [startYear, startMonth, startDay] =
+                    employee.startDate.split("-");
+                const [finishYear, finishMonth, finishDay] =
+                    employee.finishDate.split("-");
+                const object = {
+                    firstName: employee.firstName,
+                    middleName: employee.middleName,
+                    lastName: employee.lastName,
+                    email: employee.email,
+                    mobile: employee.mobile,
+                    address: employee.address,
+                    contractType:
+                        ContractTypesEnum[
+                            employee.contractType as keyof typeof ContractTypesEnum
+                        ],
+                    startDateDay: +startDay,
+                    startDateMonth: getMonthFromValue(+startMonth),
+                    startDateYear: +startYear,
+                    finishDateDay: +finishDay,
+                    finishDateMonth: getMonthFromValue(+finishMonth),
+                    finishDateYear: +finishYear,
+                    isOngoing: employee.isOngoing,
+                    workType:
+                        WorkTypesEnum[
+                            employee.workType as keyof typeof WorkTypesEnum
+                        ],
+                    hoursPerWeek: employee.hoursPerWeek,
+                };
+                setFormObject(object);
+            },
+            onError: (error: AxiosError) => {},
+        }
+    );
 
     const updateMutation = useMutation(
         (payload: EmployeeType) => updateEmployee(employeeId, payload),
@@ -52,9 +84,9 @@ const EmployeeUpdate = () => {
                     </Message>
                 )
             )}
-            {query?.data && (
+            {formObject && (
                 <EmployeeDetails
-                    employee={query.data}
+                    employee={formObject}
                     mutation={updateMutation}
                 />
             )}

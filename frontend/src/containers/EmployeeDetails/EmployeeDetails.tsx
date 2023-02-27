@@ -1,56 +1,21 @@
 import { AxiosError } from "axios";
+import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UseMutationResult } from "react-query";
 import { Link } from "react-router-dom";
 import Button from "../../components/Button/Button";
+import { formatDay, formatMonth } from "../../shared/DateFunctions";
 import {
     ContractTypesEnum,
     MonthsEnum,
     WorkTypesEnum,
 } from "../../shared/Enums";
+import { Inputs } from "../../shared/Types";
 import { EmployeeType } from "../EmployeeList/EmployeeList";
 import styles from "./EmployeeDetails.module.scss";
 
-type Inputs = {
-    firstName: string;
-    middleName: string | null;
-    lastName: string;
-    email: string;
-    mobile: string;
-    address: string;
-    contractType: ContractTypesEnum;
-    startDateDay: number;
-    startDateMonth: MonthsEnum;
-    startDateYear: number;
-    finishDateDay: number;
-    finishDateMonth: MonthsEnum;
-    finishDateYear: number;
-    isOngoing: boolean;
-    workType: WorkTypesEnum;
-    hoursPerWeek: number;
-};
-
-const formatMonth = (monthName: MonthsEnum) => {
-    const monthIndex = Object.values(MonthsEnum).indexOf(monthName) + 1;
-    return monthIndex < 10 ? `0${monthIndex}` : monthIndex;
-};
-
-const formatDay = (day: number) => {
-    return day < 10 ? `0${day}` : day;
-};
-
-const getMonthFromValue = (value: number) => {
-    const monthNames = Object.keys(MonthsEnum);
-    const index = value - 1;
-    if (index < 0 || index >= monthNames.length) {
-        return undefined;
-    }
-    const monthName = monthNames[index];
-    return MonthsEnum[monthName as keyof typeof MonthsEnum];
-};
-
 type EmployeeDetailsProp = {
-    employee?: EmployeeType;
+    employee?: Inputs;
     mutation: UseMutationResult<
         EmployeeType,
         AxiosError<unknown, any>,
@@ -67,37 +32,9 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
         formState: { errors },
     } = useForm<Inputs>();
 
-    const loadDetails = (employee: EmployeeType) => {
-        const [startYear, startMonth, startDay] = employee.startDate.split("-");
-        const [finishYear, finishMonth, finishDay] =
-            employee.finishDate.split("-");
-        reset({
-            firstName: employee.firstName,
-            middleName: employee.middleName,
-            lastName: employee.lastName,
-            email: employee.email,
-            mobile: employee.mobile,
-            address: employee.address,
-            contractType:
-                ContractTypesEnum[
-                    employee.contractType as keyof typeof ContractTypesEnum
-                ],
-            startDateDay: +startDay,
-            startDateMonth: getMonthFromValue(+startMonth),
-            startDateYear: +startYear,
-            finishDateDay: +finishDay,
-            finishDateMonth: getMonthFromValue(+finishMonth),
-            finishDateYear: +finishYear,
-            isOngoing: employee.isOngoing,
-            workType:
-                WorkTypesEnum[employee.workType as keyof typeof WorkTypesEnum],
-            hoursPerWeek: employee.hoursPerWeek,
-        });
-    };
-
-    if (employee) {
-        loadDetails(employee);
-    }
+    useEffect(() => {
+        reset(employee);
+    }, [employee]);
 
     const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => {
         const payload: EmployeeType = {
