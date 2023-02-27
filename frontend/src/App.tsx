@@ -1,10 +1,11 @@
 import styles from "./App.module.scss";
 import EmployeeList from "./containers/EmployeeList/EmployeeList";
-import EmployeeDetails from "./containers/EmployeeDetails/EmployeeDetails";
 import { Route, Routes } from "react-router-dom";
 import NotFound from "./containers/NotFound/NotFound";
 import Footer from "./components/Footer/Footer";
 import { QueryClient, QueryClientProvider } from "react-query";
+import EmployeeAdd from "./containers/EmployeeAdd/EmployeeAdd";
+import EmployeeUpdate from "./containers/EmployeeUpdate/EmployeeUpdate";
 
 const queryClient = new QueryClient();
 
@@ -24,11 +25,11 @@ const App = () => {
                         />
                         <Route
                             path="/employeeCreator/employees/:id"
-                            element={<EmployeeDetails />}
+                            element={<EmployeeUpdate />}
                         />
                         <Route
                             path="/employeeCreator/employees/add-employee"
-                            element={<EmployeeDetails />}
+                            element={<EmployeeAdd />}
                         />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
