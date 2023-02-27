@@ -227,6 +227,7 @@ JUnit and AssertJ were used to check the expected output with `assertThat` and c
 -   Update README
 -   Add unit tests in EmployeeController class
 -   Change warning message background colour
+-   Add link on name in EmployeeCard to EmployeeDetails
 
 ---
 

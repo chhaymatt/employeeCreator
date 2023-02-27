@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { EmployeeType } from "../../containers/EmployeeList/EmployeeList";
 import InlineButtons from "../InlineButtons/InlineButtons";
 import Message from "../Message/Message";
@@ -28,9 +29,13 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
 		<div className={styles.EmployeeCard}>
 			<div className={styles.EmployeeSection}>
 				<section className={styles.Details}>
-					<h3>
-						{employee.firstName} {employee.lastName}
-					</h3>
+					<Link
+						className={styles.Link}
+						to={`/employeeCreator/employees/${employee.id}`}>
+						<h3>
+							{employee.firstName} {employee.lastName}
+						</h3>
+					</Link>
 					<p>{`Employee Id: ${employee.id}`}</p>
 					<p>
 						{`${

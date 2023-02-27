@@ -19,3 +19,12 @@
 	display: flex;
 	flex-direction: column;
 }
+
+.Link {
+	text-decoration: none;
+	color: palette.$primary-colour;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
