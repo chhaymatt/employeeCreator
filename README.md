@@ -132,6 +132,8 @@ Enums were created for the work types and contract types to ensure that high-qua
 
 JUnit and AssertJ were used to check the expected output with `assertThat` and compare two variables with `isEqualTo`. Initially, I created unit tests for the EmployeeService. I used Mockito was used to mock the interaction between the EmployeeRepository and the EmployeeService, and to check that the methods in the service were actually called. After testing the EmployeeService, I moved on to the EmployeeController, where I mocked the EmployeeService's return and compared the response body and status codes.
 
+Logger.slf4j was used to create custom logging messages. Successful requests used `logger.info` and errors used `logger.error`. Try and catches were implemented for calling any service related methods at the EmployeeController in case there are any unexpected server errors.
+
 ---
 
 ## Features
@@ -154,7 +156,6 @@ JUnit and AssertJ were used to check the expected output with `assertThat` and c
 -   Create front end tests for EmployeeList, EmployeeDetails and their query / mutations
 -   Create unit tests checking the DTO
 -   Create unit tests checking the startDate must be before finishDate
--   Implement an API logging strategy
 -   Deploy Spring Boot API to AWS
 
 ---
@@ -228,6 +229,7 @@ JUnit and AssertJ were used to check the expected output with `assertThat` and c
 -   Add unit tests in EmployeeController class
 -   Change warning message background colour
 -   Add link on name in EmployeeCard to EmployeeDetails
+-   Add logger.slf4j to back end
 
 ---
 
@@ -437,3 +439,4 @@ In the EmployeeController class, I mocked the Service and verifying its methods 
 -   [Testing: "Given, When, Then", using Mockito/AssertJ for getAll and Add methods in the service](https://youtu.be/Geq60OVyBPg?t=2553)
 -   [Testing: Mock Optional<Employee> for finding EmployeeById](https://stackoverflow.com/questions/56693039/mockito-how-to-test-findbyid-returning-an-optional)
 -   [Testing: Exception Testing for bad requests](https://stackoverflow.com/questions/61087747/testing-response-after-expected-exception-is-thrown)
+-   [Logging: Setting up org.slf4j.Logger](https://www.appsdeveloperblog.com/spring-boot-logging-with-loggerfactory/)

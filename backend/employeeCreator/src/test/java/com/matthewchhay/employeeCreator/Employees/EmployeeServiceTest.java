@@ -34,6 +34,7 @@ public class EmployeeServiceTest {
     void canGetAllEmployees() {
         // When
         underTest.all();
+        
         // Then
         verify(employeeRepository).findAll();
     }
@@ -164,7 +165,7 @@ public class EmployeeServiceTest {
         Long id = 12345678l;
         when(employeeRepository.findById(id)).thenReturn(Optional.empty());
 
-        // When 
+        // When
         Optional<Employee> maybeEmployee = underTest.findOne(id);
 
         // Then

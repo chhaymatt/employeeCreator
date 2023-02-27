@@ -73,7 +73,6 @@ public class EmployeeControllerTest {
     @Test
     void testGetAll() {
         // Given
-
         List<Employee> employees = new ArrayList<>();
         employees.add(createTestEmployee(1l));
         when(employeeService.all()).thenReturn(employees);
