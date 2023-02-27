@@ -2,23 +2,23 @@
 @use "../../styles/partials/mixin";
 
 .EmployeeList {
-	width: 100%;
+    width: 100%;
 }
 
 .Section {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	border-bottom: 1px solid palette.$light-colour;
-	padding-bottom: 1rem;
-	gap: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid palette.$light-colour;
+    padding-bottom: 1rem;
+    gap: 1rem;
 
-	&__Link {
-		text-decoration: none;
-	}
+    &__Link {
+        text-decoration: none;
+    }
 
-	@include mixin.phone {
-		flex-direction: column;
-		align-items: start;
-	}
+    @include mixin.phone {
+        flex-direction: column;
+        align-items: start;
+    }
 }

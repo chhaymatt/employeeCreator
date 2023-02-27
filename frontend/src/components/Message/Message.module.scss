@@ -1,34 +1,34 @@
 @use "../../styles/partials/palette";
 
 .Message {
-	display: flex;
-	animation: fade 2s linear;
-	padding: 1rem 2rem;
-	margin-top: 1rem;
+    display: flex;
+    animation: fade 2s linear;
+    padding: 1rem 2rem;
+    margin-top: 1rem;
 
-	&__Loading {
-		background-color: palette.$light-colour;
-	}
+    &__Loading {
+        background-color: palette.$light-colour;
+    }
 
-	&__Success {
-		background-color: palette.$message-success;
-	}
+    &__Success {
+        background-color: palette.$message-success;
+    }
 
-	&__Error {
-		background-color: palette.$error-light;
-		color: red;
-	}
+    &__Error {
+        background-color: palette.$error-light;
+        color: red;
+    }
 
-	&__Warning {
-		background-color: palette.$message-warning;
-	}
+    &__Warning {
+        background-color: palette.$message-warning;
+    }
 }
 
 @keyframes fade {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }

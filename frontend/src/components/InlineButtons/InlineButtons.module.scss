@@ -2,23 +2,23 @@
 @use "../../styles/partials/mixin";
 
 .InlineButtons {
-	&__Button {
-		all: unset;
-		padding: 1rem;
-		font-weight: bold;
-		color: palette.$primary-colour;
+    &__Button {
+        all: unset;
+        padding: 1rem;
+        font-weight: bold;
+        color: palette.$primary-colour;
 
-		&:hover {
-			cursor: pointer;
-			text-decoration: underline;
-		}
-	}
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
 
-	&__Link {
-		text-decoration: none;
-	}
+    &__Link {
+        text-decoration: none;
+    }
 
-	&__Divider {
-		color: palette.$dark-colour;
-	}
+    &__Divider {
+        color: palette.$dark-colour;
+    }
 }

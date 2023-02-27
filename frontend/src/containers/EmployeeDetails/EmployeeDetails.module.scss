@@ -2,134 +2,134 @@
 @use "../../styles/partials/mixin";
 
 .EmployeeDetails {
-	width: 100%;
+    width: 100%;
 }
 
 .Alert {
-	color: red;
-	margin-bottom: 1rem;
+    color: red;
+    margin-bottom: 1rem;
 }
 
 .Fieldset {
-	margin-top: 1rem;
-	display: flex;
-	flex-direction: column;
-	border: none;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    border: none;
 }
 
 .Legend {
-	font-weight: bold;
-	font-size: 1.5rem;
-	margin-bottom: 0.5rem;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .Label {
-	font-weight: bold;
-	margin-top: 0.5rem;
-	margin-bottom: 0.5rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .InputText {
-	padding: 1rem;
-	font-size: 1rem;
-	margin-bottom: 0.5rem;
-	border-radius: 0.5rem;
-	border: 1px solid;
+    padding: 1rem;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid;
 }
 
 .Select {
-	padding: 1rem;
-	font-size: 1rem;
-	margin-bottom: 1rem;
-	border-radius: 0.5rem;
-	border: 1px solid;
-	cursor: pointer;
+    padding: 1rem;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid;
+    cursor: pointer;
 }
 
 .DateInput {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 
-	@include mixin.phone {
-		display: block;
-	}
+    @include mixin.phone {
+        display: block;
+    }
 
-	&__Section {
-		width: 150px;
+    &__Section {
+        width: 150px;
 
-		@include mixin.phone {
-			width: 100%;
-		}
-		display: flex;
-		flex-direction: column;
-	}
+        @include mixin.phone {
+            width: 100%;
+        }
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .CheckboxInput {
-	margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .CheckboxLabel {
-	display: flex;
-	align-items: center;
-	cursor: pointer;
-	width: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
 }
 
 .Checkbox {
-	display: flex;
-	align-items: center;
-	margin: 0.5rem 0rem;
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0rem;
 }
 
 .CheckboxButton {
-	height: 2rem;
-	width: 2rem;
-	margin-right: 1rem;
+    height: 2rem;
+    width: 2rem;
+    margin-right: 1rem;
 }
 
 .RadioGroup {
-	margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .RadioLabel {
-	display: flex;
-	align-items: center;
-	cursor: pointer;
-	width: 100%;
-	margin: 0.5rem 0rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+    margin: 0.5rem 0rem;
 }
 
 .RadioButton {
-	cursor: pointer;
-	height: 2rem;
-	width: 2rem;
-	margin-right: 1rem;
+    cursor: pointer;
+    height: 2rem;
+    width: 2rem;
+    margin-right: 1rem;
 }
 
 .Tip {
-	font-weight: 400;
-	color: palette.$dark-colour;
+    font-weight: 400;
+    color: palette.$dark-colour;
 }
 
 .FormButtons {
-	display: flex;
-	justify-content: space-between;
-	margin: 1rem 0rem;
-	gap: 1rem;
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0rem;
+    gap: 1rem;
 
-	@include mixin.phone {
-		flex-direction: column;
-	}
+    @include mixin.phone {
+        flex-direction: column;
+    }
 
-	&__Link {
-		width: 100%;
-		text-decoration: none;
-	}
+    &__Link {
+        width: 100%;
+        text-decoration: none;
+    }
 }
 
 .RedOutline {
-	border: 1px solid red;
-	background-color: palette.$error-light;
+    border: 1px solid red;
+    background-color: palette.$error-light;
 }

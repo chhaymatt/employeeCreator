@@ -2,29 +2,29 @@
 @use "../../styles/partials/mixin";
 
 .EmployeeCard {
-	border-bottom: 1px solid palette.$light-colour;
-	padding: 1rem 0rem;
+    border-bottom: 1px solid palette.$light-colour;
+    padding: 1rem 0rem;
 }
 
 .EmployeeSection {
-	display: flex;
-	justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 
-	@include mixin.phone {
-		flex-direction: column;
-	}
+    @include mixin.phone {
+        flex-direction: column;
+    }
 }
 
 .Details {
-	display: flex;
-	flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .Link {
-	text-decoration: none;
-	color: palette.$primary-colour;
+    text-decoration: none;
+    color: palette.$primary-colour;
 
-	&:hover {
-		text-decoration: underline;
-	}
+    &:hover {
+        text-decoration: underline;
+    }
 }

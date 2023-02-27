@@ -9,30 +9,34 @@ import { QueryClient, QueryClientProvider } from "react-query";
 const queryClient = new QueryClient();
 
 const App = () => {
-	return (
-		<QueryClientProvider client={queryClient}>
-			<div className={styles.App}>
-				<div className={styles.Container}>
-					<Routes>
-						<Route
-							path="/employeeCreator/"
-							element={<EmployeeList />}></Route>
-						<Route
-							path="/employeeCreator/employees"
-							element={<EmployeeList />}></Route>
-						<Route
-							path="/employeeCreator/employees/:id"
-							element={<EmployeeDetails />}></Route>
-						<Route
-							path="/employeeCreator/employees/add-employee"
-							element={<EmployeeDetails />}></Route>
-						<Route path="*" element={<NotFound />} />
-					</Routes>
-				</div>
-				<Footer />
-			</div>
-		</QueryClientProvider>
-	);
+    return (
+        <QueryClientProvider client={queryClient}>
+            <div className={styles.App}>
+                <div className={styles.Container}>
+                    <Routes>
+                        <Route
+                            path="/employeeCreator/"
+                            element={<EmployeeList />}
+                        />
+                        <Route
+                            path="/employeeCreator/employees"
+                            element={<EmployeeList />}
+                        />
+                        <Route
+                            path="/employeeCreator/employees/:id"
+                            element={<EmployeeDetails />}
+                        />
+                        <Route
+                            path="/employeeCreator/employees/add-employee"
+                            element={<EmployeeDetails />}
+                        />
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </div>
+                <Footer />
+            </div>
+        </QueryClientProvider>
+    );
 };
 
 export default App;
