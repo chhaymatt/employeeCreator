@@ -149,6 +149,9 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 
 -   getMonthFromValue function no longer returns undefined if parameter is a number less than 1 or greater than 12
 -   Adding a new employee may not always reset the form
+-   Unable to validate startDate or finishDate is a valid date (e.g. 2023-02-30)
+-   Unable to accept inputs with leading zeros from the user for the startDay and finishDay
+-   Start date must be before finish date should be validated in the front end before sending the payload to the back end
 
 ---
 
@@ -157,6 +160,7 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Create front end tests for EmployeeList, EmployeeDetails and their query / mutations
 -   Create unit tests checking the DTO
 -   Create unit tests checking the startDate must be before finishDate
+-   Create unit tests checking the DateFunctions
 
 ---
 
@@ -238,10 +242,11 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Change backend endpoint to start with `/api` to not confuse with the front end when hosting on AWS
 -   Remove `/employeeCreator` prefix from router links and base
 -   Deploy to AWS Beanstalk
--   Display back end error messages with 
+-   Display back end error messages with
 -   Add scroll to top when adding an employee successfully because the form gets reset
 -   Add scroll to bottom if there are any errors when adding or updating an employee
 -   Rearrange order of Messages
+-   Update README to include documentation on setting up an AWS Elastic Beanstalk and how to create a .war file
 
 ---
 
@@ -425,6 +430,8 @@ In the EmployeeController class, I mocked the Service and verifying its methods 
 -   Is this project a reimplementation for something you've done in the past? if so explain it and link it here.
 -   If it's an API, is there a client app that works with this project? link it -->
 
+-
+
 ## Resources that helped me along the way
 
 ### Front end
@@ -452,3 +459,71 @@ In the EmployeeController class, I mocked the Service and verifying its methods 
 -   [Testing: Mock Optional<Employee> for finding EmployeeById](https://stackoverflow.com/questions/56693039/mockito-how-to-test-findbyid-returning-an-optional)
 -   [Testing: Exception Testing for bad requests](https://stackoverflow.com/questions/61087747/testing-response-after-expected-exception-is-thrown)
 -   [Logging: Setting up org.slf4j.Logger](https://www.appsdeveloperblog.com/spring-boot-logging-with-loggerfactory/)
+
+### How to deploy on AWS Elastic Beanstalk?
+
+The following steps are documented so that for future projects, I can reference this section or to create a Github Action that automatically deploys to AWS Elastic Beanstalk.
+
+#### Prerequisites
+
+##### Development Environment
+
+1. Front end: Add the following to the `vite.config.ts` file and change the `outDir` to your backend's `/src/main/resources/static` folder.
+    ```
+    build: {
+    		outDir: "../backend/employeeCreator/src/main/resources/static",
+    		emptyOutDir: true,
+    	},
+    	server: {
+    		proxy: {
+    			"/api": {
+    				target: "http://localhost:8080/",
+    				changeOrigin: true,
+    				secure: false,
+    			},
+    		},
+    	},
+    ```
+2. Front end: Ensure your EmployeeAPI's `BASE_URL` is the same as the proxy of `/api` in the `vite.config.ts` file. This will prevent confusion with your back end request mapping and visiting any links
+3. Back end: Update your EmployeeController's RequestMapping with `@RequestMapping("/api/employees")`
+4. Back end: Update the `pom.xml` file to include `<packaging>war</packaging>` below the description
+5. Run the front end and the back end and test everything is working as before
+6. Create AWS account and set up an account
+
+#### How to build the .war file
+
+1. Front end: Run `npm run build`
+2. Back end: Run maven build in Eclipse by clicking on the arrow next to the Play button. Or, run `./mvnw clean install` (wasn't working for me)
+3. If using Eclipse, make sure goals includes `clean install`
+4. Find the `.war` file in `/backend/employeeCreator/target/`
+5. Now you're ready to upload to AWS Elastic Beanstalk
+
+##### AWS Elastic Beanstalk Environment
+
+1. Open AWS > Elastic Beanstalk
+2. Click Create a new environment
+3. Select Web server environment
+4. Set application name
+5. Set environment name (This cannot be changed later!)
+6. Set Domain (This cannot be changed later!)
+7. Set Platform to Java
+8. Upload your code > choose the `.war` file (Don't press Create environment yet!)
+9. Configure more options
+10. Go to Software > Edit
+11. Add the following additional environment properties, ensure the values are consistent with your `application.properties` file, and save
+    | **Name** | **Value** |
+    |-------------------------------|------------------------------------|
+    | SERVER_PORT | 5000 |
+    | SPRING_DATASOURCE_PASSWORD | MyPass |
+    | SPRING_DATASOURCE_USERNAME | root |
+    | SPRING_JPA_DATABASE_PLATFORM | org.hibernate.dialect.MySQLDialect |
+    | SPRING_JPA_HIBERNATE_DDL_AUTO | update |
+12. Create environment (this will take a while)
+13. Copy the database endpoint URL
+14. Go to Configurations > Software > Edit
+15. Add the following environment property, replace **YOURDOMAIN** with your database endpoint and save
+    | **Name** | **Value** |
+    |-----------------------|------------------------------------|
+    | SPRING_DATASOURCE_URL | jdbc:mysql://**YOURDOMAIN**/ebdb |
+16. Wait for the environment to be ready
+17. Visit your domain link and it should be good to go!
