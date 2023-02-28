@@ -7,6 +7,7 @@ import { getEmployeeList } from "../../services/EmployeeAPI";
 import { useQuery } from "react-query";
 import { AxiosError } from "axios";
 import Message from "../../components/Message/Message";
+import { useRef } from "react";
 
 export type EmployeeType = {
     id?: number;
@@ -28,7 +29,6 @@ const EmployeeList = () => {
     const query = useQuery("employees", getEmployeeList);
     const employees: EmployeeType[] = query.data;
     const error = query.error as AxiosError;
-
     return (
         <div className={styles.EmployeeList}>
             <Header title={`Employees' list`} />
@@ -39,7 +39,7 @@ const EmployeeList = () => {
                 </p>
                 <Link
                     className={styles.Section__Link}
-                    to={`/employeeCreator/employees/add-employee`}
+                    to={`/employees/add-employee`}
                 >
                     <Button label={`Add employee`} />
                 </Link>
@@ -57,8 +57,8 @@ const EmployeeList = () => {
                 </Message>
             )}
             {employees &&
-                employees.map((employee, index) => (
-                    <EmployeeCard key={index} employee={employee} />
+                employees.map((employee) => (
+                    <EmployeeCard key={employee.id} employee={employee} />
                 ))}
         </div>
     );

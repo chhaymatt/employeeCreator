@@ -1,7 +1,7 @@
 import axios from "axios";
 import { EmployeeType } from "../containers/EmployeeList/EmployeeList";
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "/api";
 
 export const addEmployee = async (body: EmployeeType) => {
     const response = await axios.post(`${BASE_URL}/employees`, body);
@@ -13,7 +13,7 @@ export const getEmployeeList = async () => {
     return response.data;
 };
 
-export const getEmployee = async (id?: number) => {
+export const getEmployee = async (id: number) => {
     const response = await axios.get(`${BASE_URL}/employees/${id}`);
     return response.data;
 };

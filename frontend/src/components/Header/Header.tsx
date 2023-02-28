@@ -10,7 +10,7 @@ const Header = ({ title, headerButton }: HeaderProps) => {
     return (
         <div className={styles.Header}>
             {headerButton && (
-                <Link className={styles.Link} to="/employeeCreator/employees">
+                <Link className={styles.Link} to="/employees">
                     <HeaderButton label={headerButton} />
                 </Link>
             )}

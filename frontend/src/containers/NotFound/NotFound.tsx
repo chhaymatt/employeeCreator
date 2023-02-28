@@ -14,17 +14,14 @@ const NotFound = () => {
                 </p>
                 <ul className={styles.Section__List}>
                     <li>
-                        <Link
-                            className={styles.Section__Link}
-                            to="/employeeCreator/employees"
-                        >
+                        <Link className={styles.Section__Link} to="/employees">
                             View list of employees
                         </Link>
                     </li>
                     <li>
                         <Link
                             className={styles.Section__Link}
-                            to="/employeeCreator/employees/add-employee"
+                            to="/employees/add-employee"
                         >
                             Add a new employee
                         </Link>

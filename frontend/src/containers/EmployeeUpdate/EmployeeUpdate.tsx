@@ -15,7 +15,7 @@ import { EmployeeType } from "../EmployeeList/EmployeeList";
 const EmployeeUpdate = () => {
     const [formObject, setFormObject] = useState<Inputs>();
     const { id } = useParams();
-    const employeeId = id ? +id : 0;
+    const employeeId = parseInt(id ?? "0", 10) ? parseInt(id ?? "0", 10) : 0;
     const queryClient = useQueryClient();
     const query = useQuery(
         ["employee", employeeId],
@@ -62,7 +62,9 @@ const EmployeeUpdate = () => {
             onSuccess: (response: EmployeeType) => {
                 queryClient.invalidateQueries("employee");
             },
-            onError: (error: AxiosError) => {},
+            onError: (error: AxiosError) => {
+                window.scrollTo(0, document.body.scrollHeight);
+            },
         }
     );
 
@@ -70,19 +72,22 @@ const EmployeeUpdate = () => {
         <>
             <Header title={`Employee details`} headerButton={`Back`} />
             {query?.isLoading && (
-                <Message type="loading">{`Loading employee Id ${employeeId}`}</Message>
+                <Message type="loading">{`Loading employee Id ${id}`}</Message>
             )}
-            {query?.isSuccess && <div>{`Employee Id ${query.data.id}`}</div>}
-            {query?.isError && query.error.response ? (
-                <Message type="error">
-                    {`${(query.error.response.data as ErrorData).message}`}
-                </Message>
-            ) : (
-                query?.isError && (
+            {query?.isSuccess && (
+                <div>{`Employee Id ${query.data.id}: ${query.data.firstName} ${query.data.lastName}`}</div>
+            )}
+            {query?.isError &&
+                query.error.response &&
+                (query.error.response.data as ErrorData).message && (
                     <Message type="error">
-                        {`${query.error.message}. Please try again later.`}
+                        {`${(query.error.response.data as ErrorData).message}`}
                     </Message>
-                )
+                )}
+            {query?.isError && (
+                <Message type="error">
+                    {`Unable to load employee. ${query.error.message}. Please try again later.`}
+                </Message>
             )}
             {formObject && (
                 <EmployeeDetails
@@ -95,17 +100,19 @@ const EmployeeUpdate = () => {
             )}
             {updateMutation.isSuccess && (
                 <Message type="success">
-                    {`Updated Employee Id ${updateMutation.data.id} - ${updateMutation.data.firstName} ${updateMutation.data.lastName}`}
+                    {`Updated employee Id ${updateMutation.data.id} - ${updateMutation.data.firstName} ${updateMutation.data.lastName}`}
                 </Message>
             )}
-            {updateMutation.isError && updateMutation.error.response && (
-                <Message type="error">
-                    {`${
-                        (updateMutation.error.response.data as ErrorData)
-                            .message
-                    }`}
-                </Message>
-            )}
+            {updateMutation.isError &&
+                updateMutation.error.response &&
+                (updateMutation.error.response.data as ErrorData).message && (
+                    <Message type="error">
+                        {`${
+                            (updateMutation.error.response.data as ErrorData)
+                                .message
+                        }`}
+                    </Message>
+                )}
             {updateMutation.isError && (
                 <Message type="error">
                     {`Unable to update employee. ${updateMutation.error.message}`}

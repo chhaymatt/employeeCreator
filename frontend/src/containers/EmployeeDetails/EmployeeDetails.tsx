@@ -1,5 +1,4 @@
 import { AxiosError } from "axios";
-import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UseMutationResult } from "react-query";
 import { Link } from "react-router-dom";
@@ -30,11 +29,9 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
         handleSubmit,
         reset,
         formState: { errors },
-    } = useForm<Inputs>();
-
-    useEffect(() => {
-        reset(employee);
-    }, [employee]);
+    } = useForm<Inputs>({
+        defaultValues: employee,
+    });
 
     const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => {
         const payload: EmployeeType = {
@@ -57,7 +54,7 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
         };
         mutation.mutate(payload); // Save or update
         if (!employee) {
-            reset(); // Clear form if on add employee
+            mutation.isSuccess && reset(); // Clear form after saving employee
         }
     };
 
@@ -552,7 +549,7 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                     <Button label={employee ? "Update" : "Save"} />
                     <Link
                         className={styles.FormButtons__Link}
-                        to={"/employeeCreator/employees"}
+                        to={"/employees"}
                     >
                         <Button secondary label={`Cancel`} />
                     </Link>

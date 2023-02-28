@@ -147,8 +147,8 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 
 ## Known issues
 
--   Unable to hide form if user types in URL with a string e.g. `/employees/"randomString"` while also keeping `employees/add-employee`
--   getMonthFromValue function no longer returns undefined if parameter is a number less than 1 or greater than 12.
+-   getMonthFromValue function no longer returns undefined if parameter is a number less than 1 or greater than 12
+-   Adding a new employee may not always reset the form
 
 ---
 
@@ -157,7 +157,6 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Create front end tests for EmployeeList, EmployeeDetails and their query / mutations
 -   Create unit tests checking the DTO
 -   Create unit tests checking the startDate must be before finishDate
--   Deploy Spring Boot API to AWS
 
 ---
 
@@ -221,7 +220,7 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Move ContractTypesEnum and WorkTypesEnum into their own files
 -   Add Java Faker to create fake employees for testing
 -   Add unit tests in EmployeeService class
--   Show only warnings in back
+-   Show only warnings in back end
 -   Add unit tests in EmployeeAPI, InlineButtons, NotFound components
 
 ### 27/02/2023 - Further testing
@@ -233,6 +232,16 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Add logger.slf4j to back end
 -   Create EmployeeAdd and EmployeeUpdate to reduce EmployeeDetails logic
 -   Move Types, Enums, ErrorData, DateFunctions into a shared folder
+
+### 28/02/2023 - Deploy on AWS
+
+-   Change backend endpoint to start with `/api` to not confuse with the front end when hosting on AWS
+-   Remove `/employeeCreator` prefix from router links and base
+-   Deploy to AWS Beanstalk
+-   Display back end error messages with 
+-   Add scroll to top when adding an employee successfully because the form gets reset
+-   Add scroll to bottom if there are any errors when adding or updating an employee
+-   Rearrange order of Messages
 
 ---
 

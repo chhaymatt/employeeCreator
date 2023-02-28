@@ -31,7 +31,7 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
                 <section className={styles.Details}>
                     <Link
                         className={styles.Link}
-                        to={`/employeeCreator/employees/${employee.id}`}
+                        to={`/employees/${employee.id}`}
                     >
                         <h3>
                             {employee.firstName} {employee.lastName}

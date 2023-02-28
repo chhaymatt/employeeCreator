@@ -25,7 +25,7 @@ const InlineButtons = ({ id, setError }: InlineButtonProps) => {
         <section className={styles.InlineButtons}>
             <Link
                 className={styles.InlineButtons__Link}
-                to={`/employeeCreator/employees/${id}`}
+                to={`/employees/${id}`}
             >
                 <button className={styles.InlineButtons__Button} name="Edit">
                     Edit

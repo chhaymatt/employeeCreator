@@ -15,20 +15,14 @@ const App = () => {
             <div className={styles.App}>
                 <div className={styles.Container}>
                     <Routes>
+                        <Route path="/" element={<EmployeeList />} />
+                        <Route path="/employees" element={<EmployeeList />} />
                         <Route
-                            path="/employeeCreator/"
-                            element={<EmployeeList />}
-                        />
-                        <Route
-                            path="/employeeCreator/employees"
-                            element={<EmployeeList />}
-                        />
-                        <Route
-                            path="/employeeCreator/employees/:id"
+                            path="/employees/:id"
                             element={<EmployeeUpdate />}
                         />
                         <Route
-                            path="/employeeCreator/employees/add-employee"
+                            path="/employees/add-employee"
                             element={<EmployeeAdd />}
                         />
                         <Route path="*" element={<NotFound />} />

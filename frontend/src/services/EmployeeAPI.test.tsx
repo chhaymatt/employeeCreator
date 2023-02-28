@@ -24,7 +24,7 @@ describe("EmployeeAPI", () => {
 
         // Then
         expect(axios.get).toHaveBeenCalledWith(
-            "http://localhost:8080/employees"
+            "/api/employees"
         );
         expect(employees).toEqual(employeesMock);
     });
@@ -40,7 +40,7 @@ describe("EmployeeAPI", () => {
 
         // Then
         expect(axios.get).toHaveBeenCalledWith(
-            `http://localhost:8080/employees/${id}`
+            `/api/employees/${id}`
         );
         expect(employees[id - 1]).toEqual(employeesMock[id - 1]);
     });
@@ -55,7 +55,7 @@ describe("EmployeeAPI", () => {
 
         // Then
         expect(axios.delete).toHaveBeenCalledWith(
-            `http://localhost:8080/employees/${id}`
+            `/api/employees/${id}`
         );
         expect(response).toBeTruthy();
     });
@@ -70,7 +70,7 @@ describe("EmployeeAPI", () => {
 
         // Then
         expect(axios.post).toHaveBeenCalledWith(
-            "http://localhost:8080/employees",
+            "/api/employees",
             employeeMock
         );
         expect(response).toEqual(employeeMock);
@@ -87,7 +87,7 @@ describe("EmployeeAPI", () => {
 
         // Then
         expect(axios.put).toHaveBeenCalledWith(
-            `http://localhost:8080/employees/${id}`,
+            `/api/employees/${id}`,
             employeeMock
         );
         expect(response).toEqual(employeeMock);
