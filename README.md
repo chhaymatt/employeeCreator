@@ -11,7 +11,7 @@ This demo does not interact with the back end.
 
 ### Screenshots
 
-![List of employees](https://i.imgur.com/xvmdlzL.png)
+![List of employees](https://i.imgur.com/5aU8Djd.png)
 ![Employee details](https://i.imgur.com/7i0JQ9F.png)
 ![Employee details with inline validation](https://i.imgur.com/OYSI9lK.png)
 ![Responsive design](https://i.imgur.com/yzJo1uN.png)
@@ -22,7 +22,7 @@ This demo does not interact with the back end.
 
 ### Requirements
 
-An employee tracking system where managers can view, add, edit and remove employee details. Front end uses React and the back end is a RESTful API of any choice.
+An employee tracking system where people can view, add, edit and remove employee details. Front end uses React and the back end is a RESTful API of any choice.
 
 ### Purpose
 
@@ -247,6 +247,11 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Add scroll to bottom if there are any errors when adding or updating an employee
 -   Rearrange order of Messages
 -   Update README to include documentation on setting up an AWS Elastic Beanstalk and how to create a .war file
+
+### 29/02/2023 - Fixing issues
+
+-   Update meta tags to include the AWS Beanstalk link
+-   Fix form reset after adding a new employee by adding a useEffect
 
 ---
 
@@ -519,11 +524,12 @@ The following steps are documented so that for future projects, I can reference 
     | SPRING_JPA_DATABASE_PLATFORM | org.hibernate.dialect.MySQLDialect |
     | SPRING_JPA_HIBERNATE_DDL_AUTO | update |
 12. Create environment (this will take a while)
-13. Copy the database endpoint URL
-14. Go to Configurations > Software > Edit
-15. Add the following environment property, replace **YOURDOMAIN** with your database endpoint and save
+13. Create database and enter the username and password as per the `application.properties` file
+14. Copy the database endpoint URL
+15. Go to Configurations > Software > Edit
+16. Add the following environment property, replace **YOURDOMAIN** with your database endpoint and save
     | **Name** | **Value** |
     |-----------------------|------------------------------------|
     | SPRING_DATASOURCE_URL | jdbc:mysql://**YOURDOMAIN**/ebdb |
-16. Wait for the environment to be ready
-17. Visit your domain link and it should be good to go!
+17. Wait for the environment to be ready
+18. Visit your domain link and it should be good to go!

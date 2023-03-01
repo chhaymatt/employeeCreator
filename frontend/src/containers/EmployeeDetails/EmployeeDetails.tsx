@@ -1,4 +1,5 @@
 import { AxiosError } from "axios";
+import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UseMutationResult } from "react-query";
 import { Link } from "react-router-dom";
@@ -53,10 +54,13 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
             hoursPerWeek: +data.hoursPerWeek,
         };
         mutation.mutate(payload); // Save or update
-        if (!employee) {
-            mutation.isSuccess && reset(); // Clear form after saving employee
-        }
     };
+
+    useEffect(() => {
+        if (employee === undefined && mutation.isSuccess) {
+            reset();
+        }
+    }, [mutation]);
 
     return (
         <div className={styles.EmployeeDetails}>

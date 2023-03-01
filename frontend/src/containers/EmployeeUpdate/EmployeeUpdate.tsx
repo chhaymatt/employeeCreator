@@ -60,6 +60,7 @@ const EmployeeUpdate = () => {
         (payload: EmployeeType) => updateEmployee(employeeId, payload),
         {
             onSuccess: (response: EmployeeType) => {
+                window.scrollTo(0, document.body.scrollHeight);
                 queryClient.invalidateQueries("employee");
             },
             onError: (error: AxiosError) => {
