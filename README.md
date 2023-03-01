@@ -247,7 +247,7 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Rearrange order of Messages
 -   Update README to include documentation on setting up an AWS Elastic Beanstalk and how to create a .war file
 
-### 29/02/2023 - Fixing issues
+### 1/03/2023 - Fixing issues
 
 -   Update meta tags to include the AWS Beanstalk link
 -   Fix form reset after adding a new employee by adding a useEffect
