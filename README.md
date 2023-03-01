@@ -6,8 +6,7 @@
 
 ### Demo
 
-This demo does not interact with the back end.
-[Open Demo](https://chhaymatt.github.io/employeeCreator/)
+[Open Demo hosted on AWS Elastic Beanstalk](http://employeecreator-env.eba-fydfbbrx.ap-southeast-2.elasticbeanstalk.com)
 
 ### Screenshots
 
