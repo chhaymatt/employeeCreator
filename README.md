@@ -6,7 +6,7 @@
 
 ### Demo
 
-[Open Demo hosted on AWS Elastic Beanstalk](http://employeecreator-env.eba-fydfbbrx.ap-southeast-2.elasticbeanstalk.com)
+[Open Demo hosted on AWS Elastic Beanstalk](http://mcemployeecreator.ap-southeast-2.elasticbeanstalk.com/)
 
 ### Screenshots
 
