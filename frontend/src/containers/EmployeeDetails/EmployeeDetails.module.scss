@@ -35,6 +35,13 @@
     margin-bottom: 0.5rem;
     border-radius: 0.5rem;
     border: 1px solid;
+
+    &:disabled {
+        background-color: palette.$light-colour;
+        border-color: palette.$lighter-colour;
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
 }
 
 .Select {
@@ -44,6 +51,20 @@
     border-radius: 0.5rem;
     border: 1px solid;
     cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url(https://i.imgur.com/SUEVDHU.png);
+    background-size: 0.5rem 0.5rem;
+    background-repeat: no-repeat;
+    background-position: 95%;
+
+    &:disabled {
+        background-color: palette.$light-colour;
+        border-color: palette.$lighter-colour;
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
 }
 
 .DateInput {
