@@ -11,19 +11,27 @@ type EmployeeCardProps = {
 
 const EmployeeCard = ({ employee }: EmployeeCardProps) => {
     const [error, setError] = useState("");
-    let duration, durationUnit;
-    const durationInMilliSeconds =
-        Date.parse(employee.finishDate) - Date.parse(employee.startDate);
-    const durationInMonths = Math.ceil(durationInMilliSeconds / 2.628e9);
-    const durationInYears = Math.ceil(durationInMilliSeconds / 3.154e10);
 
-    if (durationInMonths >= 12) {
-        duration = durationInYears; // Duration in years
-        durationUnit = "yr";
-    } else {
-        duration = durationInMonths; // Duration in months
-        durationUnit = "month";
-    }
+    const finishDate = employee.finishDate
+        ? new Date(employee.finishDate)
+        : new Date();
+    const startDate = new Date(employee.startDate);
+
+    const yearDiff = finishDate.getFullYear() - startDate.getFullYear();
+    const monthDiff = finishDate.getMonth() - startDate.getMonth();
+
+    const durationInMonths = yearDiff * 12 + monthDiff;
+    const durationInYears = Math.floor(durationInMonths / 12);
+
+    const duration = durationInYears > 0 ? durationInYears : durationInMonths;
+    const durationUnit =
+        durationInYears > 1
+            ? "yrs"
+            : durationInYears === 1
+            ? "yr"
+            : durationInMonths > 1 || durationInMonths <= 0
+            ? "months"
+            : "month";
 
     return (
         <div className={styles.EmployeeCard}>
@@ -42,8 +50,8 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
                         {`${
                             employee.contractType.charAt(0).toUpperCase() +
                             employee.contractType.slice(1).toLowerCase()
-                        } -
-					${duration} ${duration > 1 ? `${durationUnit}s` : durationUnit}`}
+                        } - ${duration < 0 ? "Future employee starting in" : ""}
+					${duration > 0 ? `${duration} ${durationUnit}` : employee.startDate}`}
                     </p>
                     <p>{employee.email}</p>
                 </section>

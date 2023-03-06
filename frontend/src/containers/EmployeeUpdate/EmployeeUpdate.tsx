@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Message from "../../components/Message/Message";
 import { getEmployee, updateEmployee } from "../../services/EmployeeAPI";
-import { getMonthFromValue } from "../../shared/DateFunctions";
+import { getMonthFromValue } from "../../shared/DateFunctions/DateFunctions";
 import { ContractTypesEnum, WorkTypesEnum } from "../../shared/Enums";
 import { ErrorData } from "../../shared/ErrorData";
 import { Inputs } from "../../shared/Types";
@@ -24,8 +24,9 @@ const EmployeeUpdate = () => {
             onSuccess: (employee: EmployeeType) => {
                 const [startYear, startMonth, startDay] =
                     employee.startDate.split("-");
-                const [finishYear, finishMonth, finishDay] =
-                    employee.finishDate.split("-");
+                const [finishYear, finishMonth, finishDay] = employee.finishDate
+                    ? employee.finishDate.split("-")
+                    : ["", "", ""];
                 const object = {
                     firstName: employee.firstName,
                     middleName: employee.middleName,
@@ -37,12 +38,12 @@ const EmployeeUpdate = () => {
                         ContractTypesEnum[
                             employee.contractType as keyof typeof ContractTypesEnum
                         ],
-                    startDateDay: +startDay,
+                    startDateDay: startDay.replace(/^0+/, ""),
                     startDateMonth: getMonthFromValue(+startMonth),
-                    startDateYear: +startYear,
-                    finishDateDay: +finishDay,
+                    startDateYear: startYear,
+                    finishDateDay: finishDay.replace(/^0+/, ""),
                     finishDateMonth: getMonthFromValue(+finishMonth),
-                    finishDateYear: +finishYear,
+                    finishDateYear: finishYear,
                     isOngoing: employee.isOngoing,
                     workType:
                         WorkTypesEnum[

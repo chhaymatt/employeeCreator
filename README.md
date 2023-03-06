@@ -147,10 +147,7 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 ## Known issues
 
 -   getMonthFromValue function no longer returns undefined if parameter is a number less than 1 or greater than 12
--   Adding a new employee may not always reset the form
--   Unable to validate startDate or finishDate is a valid date (e.g. 2023-02-30)
--   Unable to accept inputs with leading zeros from the user for the startDay and finishDay
--   Start date must be before finish date should be validated in the front end before sending the payload to the back end
+-   Unable to check if startDate or finishDate is a valid date (e.g. 2023-02-30)
 
 ---
 
@@ -159,7 +156,8 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Create front end tests for EmployeeList, EmployeeDetails and their query / mutations
 -   Create unit tests checking the DTO
 -   Create unit tests checking the startDate must be before finishDate
--   Create unit tests checking the DateFunctions
+-   Switch from useEffect to useQuery for EmployeeDetails
+-   Address field should autocomplete using Google Maps API
 
 ---
 
@@ -251,6 +249,19 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 
 -   Update meta tags to include the AWS Beanstalk link
 -   Fix form reset after adding a new employee by adding a useEffect
+
+### 6/03/2023
+
+-   Fix day date inputs to accept leading zeros (e.g. 01-09) and remove leading zero when viewing the EmployeeDetails again
+-   Add start date must be before finish date validation to front end
+-   Disable finish date inputs if On going is checked
+-   Hide placeholder values for finish date if On going is checked
+-   Add today's date as a placeholder for day inputs
+-   Allow back end to accept null for finish date
+-   Add DateFunction unit tests
+-   Fix employee card to not display a duration if employee is Ongoing
+-   Change from calculating duration in milliseconds to the difference in months and years between two dates
+-   Add future employee starting on startDate to EmployeeCard
 
 ---
 

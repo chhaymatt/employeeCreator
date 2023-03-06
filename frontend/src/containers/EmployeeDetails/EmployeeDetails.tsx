@@ -4,7 +4,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { UseMutationResult } from "react-query";
 import { Link } from "react-router-dom";
 import Button from "../../components/Button/Button";
-import { formatDay, formatMonth } from "../../shared/DateFunctions";
+import {
+    formatDay,
+    formatMonth,
+} from "../../shared/DateFunctions/DateFunctions";
 import {
     ContractTypesEnum,
     MonthsEnum,
@@ -29,15 +32,36 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
         register,
         handleSubmit,
         reset,
+        watch,
         formState: { errors },
     } = useForm<Inputs>({
         defaultValues: employee,
     });
 
+    const checkDates = (): boolean => {
+        if (watch("isOngoing")) {
+            return true;
+        }
+        const startDate = new Date(
+            `${watch("startDateYear")}-${formatMonth(
+                watch("startDateMonth")
+            )}-${formatDay(watch("startDateDay"))}`
+        );
+
+        const finishDate = new Date(
+            `${watch("finishDateYear")}-${formatMonth(
+                watch("finishDateMonth")
+            )}-${formatDay(watch("finishDateDay"))}`
+        );
+
+        return startDate <= finishDate;
+    };
+
     const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => {
         const payload: EmployeeType = {
             firstName: data.firstName,
-            middleName: data.middleName,
+            middleName:
+                String(data.middleName).length === 0 ? null : data.middleName,
             lastName: data.lastName,
             email: data.email,
             mobile: data.mobile,
@@ -46,9 +70,11 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
             startDate: `${data.startDateYear}-${formatMonth(
                 data.startDateMonth
             )}-${formatDay(data.startDateDay)}`,
-            finishDate: `${data.finishDateYear}-${formatMonth(
-                data.finishDateMonth
-            )}-${formatDay(data.finishDateDay)}`,
+            finishDate: watch("isOngoing")
+                ? null
+                : `${data.finishDateYear}-${formatMonth(
+                      data.finishDateMonth
+                  )}-${formatDay(data.finishDateDay)}`,
             isOngoing: data.isOngoing,
             workType: data.workType.toUpperCase().replace("-", "_"),
             hoursPerWeek: +data.hoursPerWeek,
@@ -60,7 +86,11 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
         if (employee === undefined && mutation.isSuccess) {
             reset();
         }
-    }, [mutation]);
+
+        if (employee && mutation.isSuccess) {
+            reset(employee);
+        }
+    }, [mutation, employee]);
 
     return (
         <div className={styles.EmployeeDetails}>
@@ -260,7 +290,7 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                 }`}
                                 type="number"
                                 inputMode="numeric"
-                                placeholder="20"
+                                placeholder={`${new Date().getDate()}`}
                                 aria-invalid={
                                     errors.startDateDay ? "true" : "false"
                                 }
@@ -268,6 +298,7 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                     required: true,
                                     min: 1,
                                     max: 31,
+                                    validate: checkDates,
                                 })}
                             />
                             {errors.startDateDay &&
@@ -297,8 +328,17 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                 Month
                             </label>
                             <select
-                                className={styles.Select}
-                                {...register("startDateMonth")}
+                                className={`${styles.Select} ${
+                                    errors.startDateMonth
+                                        ? styles.RedOutline
+                                        : ""
+                                }`}
+                                aria-invalid={
+                                    errors.startDateMonth ? "true" : "false"
+                                }
+                                {...register("startDateMonth", {
+                                    validate: checkDates,
+                                })}
                             >
                                 {Object.values(MonthsEnum).map((month) => (
                                     <option key={month} value={month}>
@@ -330,6 +370,7 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                     required: true,
                                     min: 1950,
                                     max: new Date().getFullYear() + 5,
+                                    validate: checkDates,
                                 })}
                             />
                             {errors.startDateYear &&
@@ -375,14 +416,20 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                 }`}
                                 type="number"
                                 inputMode="numeric"
-                                placeholder="23"
+                                placeholder={
+                                    !watch("isOngoing")
+                                        ? `${new Date().getDate()}`
+                                        : ""
+                                }
+                                disabled={watch("isOngoing")}
                                 aria-invalid={
                                     errors.finishDateDay ? "true" : "false"
                                 }
                                 {...register("finishDateDay", {
-                                    required: true,
+                                    required: !watch("isOngoing"),
                                     min: 1,
                                     max: 31,
+                                    validate: checkDates,
                                 })}
                             />
                             {errors.finishDateDay &&
@@ -412,14 +459,26 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                 Month
                             </label>
                             <select
-                                className={styles.Select}
-                                {...register("finishDateMonth")}
+                                className={`${styles.Select} ${
+                                    errors.finishDateMonth
+                                        ? styles.RedOutline
+                                        : ""
+                                }`}
+                                disabled={watch("isOngoing")}
+                                aria-invalid={
+                                    errors.finishDateMonth ? "true" : "false"
+                                }
+                                {...register("finishDateMonth", {
+                                    required: !watch("isOngoing"),
+                                    validate: checkDates,
+                                })}
                             >
-                                {Object.values(MonthsEnum).map((month) => (
-                                    <option key={month} value={month}>
-                                        {month.valueOf()}
-                                    </option>
-                                ))}
+                                {!watch("isOngoing") &&
+                                    Object.values(MonthsEnum).map((month) => (
+                                        <option key={month} value={month}>
+                                            {month.valueOf()}
+                                        </option>
+                                    ))}
                             </select>
                         </div>
                         <div className={styles.DateInput__Section}>
@@ -435,17 +494,23 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                         ? styles.RedOutline
                                         : ""
                                 }`}
+                                disabled={watch("isOngoing")}
                                 type="number"
                                 inputMode="numeric"
-                                placeholder={`${new Date().getFullYear()}`}
+                                placeholder={
+                                    watch("isOngoing")
+                                        ? ""
+                                        : `${new Date().getFullYear()}`
+                                }
                                 aria-invalid={
                                     errors.finishDateYear ? "true" : "false"
                                 }
                                 {...register("finishDateYear", {
-                                    required: true,
+                                    required: !watch("isOngoing"),
                                     min: 1950,
                                     max: new Date().getFullYear() + 5,
                                     maxLength: 4,
+                                    validate: checkDates,
                                 })}
                             />
                             {errors.finishDateYear &&
@@ -472,6 +537,12 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                 )}
                         </div>
                     </div>
+                    {errors.finishDateYear &&
+                        errors.finishDateYear.type === "validate" && (
+                            <span role="alert" className={styles.Alert}>
+                                {`Start date must be before finish date`}
+                            </span>
+                        )}
                     <div className={styles.CheckboxInput}>
                         <span className={styles.Checkbox}>
                             <label className={styles.CheckboxLabel}>
