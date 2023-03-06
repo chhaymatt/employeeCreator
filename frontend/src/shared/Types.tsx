@@ -8,12 +8,12 @@ export type Inputs = {
     mobile: string;
     address: string;
     contractType: ContractTypesEnum;
-    startDateDay: number;
+    startDateDay: string;
     startDateMonth: MonthsEnum;
-    startDateYear: number;
-    finishDateDay: number;
+    startDateYear: string;
+    finishDateDay: string;
     finishDateMonth: MonthsEnum;
-    finishDateYear: number;
+    finishDateYear: string;
     isOngoing: boolean;
     workType: WorkTypesEnum;
     hoursPerWeek: number;

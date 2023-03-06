@@ -7,7 +7,6 @@ import { getEmployeeList } from "../../services/EmployeeAPI";
 import { useQuery } from "react-query";
 import { AxiosError } from "axios";
 import Message from "../../components/Message/Message";
-import { useRef } from "react";
 
 export type EmployeeType = {
     id?: number;
@@ -19,7 +18,7 @@ export type EmployeeType = {
     address: string;
     contractType: string;
     startDate: string;
-    finishDate: string;
+    finishDate: string | null;
     isOngoing: boolean;
     workType: string;
     hoursPerWeek: number;
