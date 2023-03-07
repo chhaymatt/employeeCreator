@@ -10,6 +10,7 @@ import Message from "../../components/Message/Message";
 import { Search } from "../../components/Search/Search";
 import { useState } from "react";
 import { Filter } from "../../components/Filter/Filter";
+import { AnimatePresence } from "framer-motion";
 
 export type EmployeeType = {
     id?: number;
@@ -108,34 +109,39 @@ const EmployeeList = () => {
                     employee' above.
                 </Message>
             )}
-            {query?.data &&
-                query.data
-                    .filter(
-                        (employee: EmployeeType) =>
-                            employee.firstName
-                                .toLowerCase()
-                                .includes(inputValue.toLowerCase()) ||
-                            employee.lastName
-                                .toLowerCase()
-                                .includes(inputValue.toLowerCase()) ||
-                            employee.email
-                                .toLowerCase()
-                                .includes(inputValue.toLowerCase()) ||
-                            employee.mobile
-                                .toLowerCase()
-                                .includes(inputValue.toLowerCase())
-                    )
-                    .filter((employee: EmployeeType) =>
-                        employee.contractType.includes(
-                            contractFilter.toUpperCase()
+            <AnimatePresence>
+                {query?.data &&
+                    query.data
+                        .filter(
+                            (employee: EmployeeType) =>
+                                employee.firstName
+                                    .toLowerCase()
+                                    .includes(inputValue.toLowerCase()) ||
+                                employee.lastName
+                                    .toLowerCase()
+                                    .includes(inputValue.toLowerCase()) ||
+                                employee.email
+                                    .toLowerCase()
+                                    .includes(inputValue.toLowerCase()) ||
+                                employee.mobile
+                                    .toLowerCase()
+                                    .includes(inputValue.toLowerCase())
                         )
-                    )
-                    .filter((employee: EmployeeType) =>
-                        employee.workType.includes(workFilter.toUpperCase())
-                    )
-                    .map((employee: EmployeeType) => (
-                        <EmployeeCard key={employee.id} employee={employee} />
-                    ))}
+                        .filter((employee: EmployeeType) =>
+                            employee.contractType.includes(
+                                contractFilter.toUpperCase()
+                            )
+                        )
+                        .filter((employee: EmployeeType) =>
+                            employee.workType.includes(workFilter.toUpperCase())
+                        )
+                        .map((employee: EmployeeType) => (
+                            <EmployeeCard
+                                key={employee.id}
+                                employee={employee}
+                            />
+                        ))}
+            </AnimatePresence>
         </div>
     );
 };

@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { EmployeeType } from "../../containers/EmployeeList/EmployeeList";
@@ -34,7 +35,12 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
             : "month";
 
     return (
-        <div className={styles.EmployeeCard}>
+        <motion.div
+            className={styles.EmployeeCard}
+            animate={{ opacity: 1 }}
+            initial={{ opacity: 0 }}
+            exit={{ opacity: 0 }}
+        >
             <div className={styles.EmployeeSection}>
                 <section className={styles.Details}>
                     <Link
@@ -64,7 +70,7 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
                     {`${error}. Please try again later.`}
                 </Message>
             )}
-        </div>
+        </motion.div>
     );
 };
 

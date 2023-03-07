@@ -11,6 +11,14 @@
     border: 1px solid palette.$lighter-colour;
     user-select: none;
 
+    @include mixin.phone {
+        font-size: 0.8rem;
+    }
+
+    @include mixin.tablet {
+        font-size: 0.8rem;
+    }
+
     &:hover {
         cursor: pointer;
     }

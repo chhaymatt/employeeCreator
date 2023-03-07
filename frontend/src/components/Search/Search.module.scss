@@ -1,10 +1,16 @@
 @use "../../styles/partials/palette";
+@use "../../styles/partials/mixin";
 
 .Search {
     width: 100%;
-    font-size: 20px;
-    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    padding: 1rem 2rem;
     box-sizing: border-box;
     border-radius: 0.5rem;
     border: 1px solid palette.$dark-colour;
+
+    @include mixin.phone {
+        padding: 1rem;
+        font-size: 0.8rem;
+    }
 }

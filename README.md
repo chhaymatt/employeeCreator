@@ -269,6 +269,8 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Add search bar to filter employees by firstName, lastName, email
 -   Add contractType and workType filters
 -   Process emails to be lowercase on the back end
+-   Add animation to Messages and EmployeeCard
+-   Update styling
 
 --
 

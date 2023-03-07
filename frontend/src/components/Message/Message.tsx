@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import styles from "./Message.module.scss";
 
 type MessageProps = {
@@ -16,7 +17,16 @@ const Message = ({ type, children }: MessageProps) => {
     } else if (type === "warning") {
         className += ` ${styles.Message__Warning}`;
     }
-    return <div className={className}>{children}</div>;
+    return (
+        <motion.div
+            className={className}
+            animate={{ opacity: 1 }}
+            initial={{ opacity: 0 }}
+            exit={{ opacity: 0 }}
+        >
+            {children}
+        </motion.div>
+    );
 };
 
 export default Message;
