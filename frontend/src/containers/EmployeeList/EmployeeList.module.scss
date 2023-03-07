@@ -11,6 +11,7 @@
     justify-content: space-between;
     border-bottom: 1px solid palette.$light-colour;
     padding-bottom: 1rem;
+    margin-bottom: 1rem;
     gap: 1rem;
 
     &__Link {
@@ -27,7 +28,9 @@
     margin: 1rem 0rem;
     display: flex;
     justify-content: space-between;
-    
+    padding-bottom: 1rem;
+    border-bottom: 1px solid palette.$light-colour;
+
     &__Group {
         display: flex;
         background-color: palette.$lighter-colour;

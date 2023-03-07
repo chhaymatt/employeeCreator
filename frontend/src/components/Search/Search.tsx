@@ -9,7 +9,7 @@ export const Search = ({ onChange }: SearchProps) => {
             className={styles.Search}
             type="search"
             onChange={onChange}
-            placeholder="Search by first name, last name, email or mobile number..."
+            placeholder="Search by first, last name, email, or mobile..."
         />
     );
 };
