@@ -146,8 +146,7 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 
 ## Known issues
 
--   getMonthFromValue function no longer returns undefined if parameter is a number less than 1 or greater than 12
--   Unable to check if startDate or finishDate is a valid date (e.g. 2023-02-30)
+-   All date inputs become red if there is an error with `checkDates` e.g. missing inputs, valid start or finish date, start date must be before finish date
 
 ---
 
@@ -250,7 +249,7 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Update meta tags to include the AWS Beanstalk link
 -   Fix form reset after adding a new employee by adding a useEffect
 
-### 6/03/2023
+### 6/03/2023 - Fixing dates
 
 -   Fix day date inputs to accept leading zeros (e.g. 01-09) and remove leading zero when viewing the EmployeeDetails again
 -   Add start date must be before finish date validation to front end
@@ -259,11 +258,16 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Add today's date as a placeholder for day inputs
 -   Allow back end to accept null for finish date
 -   Add DateFunction unit tests
--   Fix employee card to not display a duration if employee is Ongoing
+-   Fix employee card to not display a duration if employee duration is in the future
 -   Change from calculating duration in milliseconds to the difference in months and years between two dates
 -   Add future employee starting on startDate to EmployeeCard
 
----
+### 7/03/2023
+
+-   Add validate date checks with error messages
+-   Add isValidate function with unit tests
+
+--
 
 ## What did you struggle with?
 

@@ -7,6 +7,7 @@ import Button from "../../components/Button/Button";
 import {
     formatDay,
     formatMonth,
+    isValidDate,
 } from "../../shared/DateFunctions/DateFunctions";
 import {
     ContractTypesEnum,
@@ -38,23 +39,48 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
         defaultValues: employee,
     });
 
-    const checkDates = (): boolean => {
-        if (watch("isOngoing")) {
-            return true;
+    const checkStartDate = () => {
+        return (
+            isValidDate(
+                formatDay(watch("startDateDay")),
+                formatMonth(watch("startDateMonth")),
+                watch("startDateYear")
+            ) || "Start date must be valid"
+        );
+    };
+
+    const checkFinishDate = () => {
+        const startDay = watch("startDateDay");
+        const startMonth = watch("startDateMonth");
+        const startYear = watch("startDateYear");
+        const finishDay = formatDay(watch("finishDateDay"));
+        const finishMonth = formatMonth(watch("finishDateMonth"));
+        const finishYear = watch("finishDateYear");
+        const isOngoing = watch("isOngoing");
+
+        const isValidFinishDate = isValidDate(
+            finishDay,
+            finishMonth,
+            finishYear
+        );
+
+        if (!isOngoing && !isValidFinishDate) {
+            return "Finish date must be valid";
         }
-        const startDate = new Date(
-            `${watch("startDateYear")}-${formatMonth(
-                watch("startDateMonth")
-            )}-${formatDay(watch("startDateDay"))}`
-        );
 
+        const startDate = new Date(`${startYear}-${startMonth}-${startDay}`);
         const finishDate = new Date(
-            `${watch("finishDateYear")}-${formatMonth(
-                watch("finishDateMonth")
-            )}-${formatDay(watch("finishDateDay"))}`
+            `${finishYear}-${finishMonth}-${finishDay}`
         );
 
-        return startDate <= finishDate;
+        if (!isOngoing) {
+            return (
+                startDate <= finishDate ||
+                "Start date must be before finish date"
+            );
+        }
+
+        return true;
     };
 
     const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => {
@@ -298,7 +324,7 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                     required: true,
                                     min: 1,
                                     max: 31,
-                                    validate: checkDates,
+                                    validate: checkStartDate,
                                 })}
                             />
                             {errors.startDateDay &&
@@ -337,7 +363,7 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                     errors.startDateMonth ? "true" : "false"
                                 }
                                 {...register("startDateMonth", {
-                                    validate: checkDates,
+                                    validate: checkStartDate,
                                 })}
                             >
                                 {Object.values(MonthsEnum).map((month) => (
@@ -370,7 +396,7 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                     required: true,
                                     min: 1950,
                                     max: new Date().getFullYear() + 5,
-                                    validate: checkDates,
+                                    validate: checkStartDate,
                                 })}
                             />
                             {errors.startDateYear &&
@@ -397,6 +423,12 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                 )}
                         </div>
                     </div>
+                    {errors.startDateYear &&
+                        errors.startDateYear.type === "validate" && (
+                            <span role="alert" className={styles.Alert}>
+                                {errors.startDateYear.message}
+                            </span>
+                        )}
                     <label className={styles.Label} htmlFor="finishDate">
                         Finish date
                     </label>
@@ -429,7 +461,7 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                     required: !watch("isOngoing"),
                                     min: 1,
                                     max: 31,
-                                    validate: checkDates,
+                                    validate: checkFinishDate,
                                 })}
                             />
                             {errors.finishDateDay &&
@@ -470,7 +502,7 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                 }
                                 {...register("finishDateMonth", {
                                     required: !watch("isOngoing"),
-                                    validate: checkDates,
+                                    validate: checkFinishDate,
                                 })}
                             >
                                 {!watch("isOngoing") &&
@@ -510,7 +542,7 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                                     min: 1950,
                                     max: new Date().getFullYear() + 5,
                                     maxLength: 4,
-                                    validate: checkDates,
+                                    validate: checkFinishDate,
                                 })}
                             />
                             {errors.finishDateYear &&
@@ -540,7 +572,7 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                     {errors.finishDateYear &&
                         errors.finishDateYear.type === "validate" && (
                             <span role="alert" className={styles.Alert}>
-                                {`Start date must be before finish date`}
+                                {errors.finishDateYear.message}
                             </span>
                         )}
                     <div className={styles.CheckboxInput}>

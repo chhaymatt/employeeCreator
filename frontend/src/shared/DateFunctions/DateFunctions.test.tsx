@@ -1,6 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { MonthsEnum } from "../Enums";
-import { formatDay, formatMonth, getMonthFromValue } from "./DateFunctions";
+import {
+    formatDay,
+    formatMonth,
+    getMonthFromValue,
+    isValidDate,
+} from "./DateFunctions";
 
 describe("formatMonth", () => {
     it("Should return the correct value", () => {
@@ -44,5 +49,20 @@ describe("getMonthFromValue", () => {
         expect(getMonthFromValue(10)).toStrictEqual(MonthsEnum.OCTOBER);
         expect(getMonthFromValue(11)).toStrictEqual(MonthsEnum.NOVEMBER);
         expect(getMonthFromValue(12)).toStrictEqual(MonthsEnum.DECEMBER);
+    });
+});
+
+describe("isValidDate", () => {
+    it("Should return the correct value", () => {
+        expect(isValidDate("01", "01", "2023")).toStrictEqual(true);
+        expect(isValidDate("31", "01", "2023")).toStrictEqual(true);
+        expect(isValidDate("32", "01", "2023")).toStrictEqual(false);
+        expect(isValidDate("28", "02", "2023")).toStrictEqual(true);
+        expect(isValidDate("29", "02", "2023")).toStrictEqual(false);
+        expect(isValidDate("30", "02", "2023")).toStrictEqual(false);
+        expect(isValidDate("31", "02", "2023")).toStrictEqual(false);
+        expect(isValidDate("30", "04", "2023")).toStrictEqual(true);
+        expect(isValidDate("31", "04", "2023")).toStrictEqual(false);
+        expect(isValidDate("29", "02", "2024")).toStrictEqual(true);
     });
 });
