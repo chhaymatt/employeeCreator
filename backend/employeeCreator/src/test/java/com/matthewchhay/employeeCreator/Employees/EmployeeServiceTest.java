@@ -34,7 +34,7 @@ public class EmployeeServiceTest {
     void canGetAllEmployees() {
         // When
         underTest.all();
-        
+
         // Then
         verify(employeeRepository).findAll();
     }
@@ -49,7 +49,7 @@ public class EmployeeServiceTest {
                 firstName,
                 faker.name().firstName(),
                 lastName,
-                faker.internet().emailAddress(firstName + "." + lastName),
+                faker.internet().emailAddress(firstName + "." + lastName).toLowerCase(),
                 faker.phoneNumber().cellPhone(),
                 faker.address().fullAddress(),
                 ContractTypes.values()[faker.number().numberBetween(0, ContractTypes.values().length)],
@@ -97,7 +97,7 @@ public class EmployeeServiceTest {
                 firstName,
                 faker.name().firstName(),
                 lastName,
-                faker.internet().emailAddress(firstName + "." + lastName),
+                faker.internet().emailAddress(firstName + "." + lastName).toLowerCase(),
                 faker.phoneNumber().cellPhone(),
                 faker.address().fullAddress(),
                 ContractTypes.values()[faker.number().numberBetween(0, ContractTypes.values().length)],
@@ -125,7 +125,7 @@ public class EmployeeServiceTest {
                 firstName,
                 faker.name().firstName(),
                 lastName,
-                faker.internet().emailAddress(firstName + "." + lastName),
+                faker.internet().emailAddress(firstName + "." + lastName).toLowerCase(),
                 faker.phoneNumber().cellPhone(),
                 faker.address().fullAddress(),
                 ContractTypes.values()[faker.number().numberBetween(0, ContractTypes.values().length)],
@@ -147,7 +147,7 @@ public class EmployeeServiceTest {
         assertThat(foundEmployee.getFirstName()).isEqualTo(employee.getFirstName());
         assertThat(foundEmployee.getMiddleName()).isEqualTo(employee.getMiddleName());
         assertThat(foundEmployee.getLastName()).isEqualTo(employee.getLastName());
-        assertThat(foundEmployee.getEmail()).isEqualTo(employee.getEmail());
+        assertThat(foundEmployee.getEmail()).isEqualTo(employee.getEmail().toLowerCase());
         assertThat(foundEmployee.getMobile()).isEqualTo(employee.getMobile());
         assertThat(foundEmployee.getAddress()).isEqualTo(employee.getAddress());
         assertThat(foundEmployee.getContractType()).isEqualTo(employee.getContractType());
@@ -183,7 +183,7 @@ public class EmployeeServiceTest {
                 firstName,
                 faker.name().firstName(),
                 lastName,
-                faker.internet().emailAddress(firstName + "." + lastName),
+                faker.internet().emailAddress(firstName + "." + lastName).toLowerCase(),
                 faker.phoneNumber().cellPhone(),
                 faker.address().fullAddress(),
                 ContractTypes.values()[faker.number().numberBetween(0, ContractTypes.values().length)],
@@ -202,7 +202,7 @@ public class EmployeeServiceTest {
                 firstName2,
                 faker2.name().firstName(),
                 lastName2,
-                faker2.internet().emailAddress(firstName2 + "." + lastName2),
+                faker2.internet().emailAddress(firstName2 + "." + lastName2).toLowerCase(),
                 faker2.phoneNumber().cellPhone(),
                 faker2.address().fullAddress(),
                 ContractTypes.values()[faker2.number().numberBetween(0, ContractTypes.values().length)],
@@ -227,7 +227,7 @@ public class EmployeeServiceTest {
         assertThat(capturedEmployee.getFirstName()).isEqualTo(employeeDTO.firstName);
         assertThat(capturedEmployee.getMiddleName()).isEqualTo(employeeDTO.middleName);
         assertThat(capturedEmployee.getLastName()).isEqualTo(employeeDTO.lastName);
-        assertThat(capturedEmployee.getEmail()).isEqualTo(employeeDTO.email);
+        assertThat(capturedEmployee.getEmail()).isEqualTo(employeeDTO.email.toLowerCase());
         assertThat(capturedEmployee.getMobile()).isEqualTo(employeeDTO.mobile);
         assertThat(capturedEmployee.getAddress()).isEqualTo(employeeDTO.address);
         assertThat(capturedEmployee.getContractType()).isEqualTo(employeeDTO.contractType);
