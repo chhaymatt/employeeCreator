@@ -1,0 +1,10 @@
+@use "../../styles/partials/palette";
+
+.Search {
+    width: 100%;
+    font-size: 20px;
+    padding: 0.5rem 1rem;
+    box-sizing: border-box;
+    border-radius: 0.5rem;
+    border: 1px solid palette.$dark-colour;
+}

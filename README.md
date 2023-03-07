@@ -244,7 +244,7 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Rearrange order of Messages
 -   Update README to include documentation on setting up an AWS Elastic Beanstalk and how to create a .war file
 
-### 1/03/2023 - Fixing issues
+### 1/03/2023 - Fix issues
 
 -   Update meta tags to include the AWS Beanstalk link
 -   Fix form reset after adding a new employee by adding a useEffect
@@ -262,10 +262,13 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Change from calculating duration in milliseconds to the difference in months and years between two dates
 -   Add future employee starting on startDate to EmployeeCard
 
-### 7/03/2023
+### 7/03/2023 - Fixing dates and add search and filter
 
 -   Add validate date checks with error messages
 -   Add isValidate function with unit tests
+-   Add search bar to filter employees by firstName, lastName, email
+-   Add contractType and workType filters
+-   Process emails to be lowercase on the back end
 
 --
 
@@ -468,6 +471,7 @@ In the EmployeeController class, I mocked the Service and verifying its methods 
 -   [Testing: React Testing Library](https://testing-library.com/docs/react-testing-library/example-intro/)
 -   [Testing: Vitest example](https://waresix.engineering/vitest-unit-testing-to-test-react-application-177ade1e6c1b)
 -   [Testing: Axios test](https://stackoverflow.com/questions/45016033/how-do-i-test-axios-in-jest)
+-   [Search and filtering](https://refine.dev/blog/react-search-bar-and-filtering/)
 
 ### Back end
 

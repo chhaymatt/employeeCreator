@@ -50,7 +50,9 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
                         {`${
                             employee.contractType.charAt(0).toUpperCase() +
                             employee.contractType.slice(1).toLowerCase()
-                        } - ${duration < 0 ? "Future employee starting in" : ""}
+                        } - ${
+                            duration <= 0 ? "Future employee starting in" : ""
+                        }
 					${duration > 0 ? `${duration} ${durationUnit}` : employee.startDate}`}
                     </p>
                     <p>{employee.email}</p>

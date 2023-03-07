@@ -38,7 +38,7 @@ public class EmployeeService {
                 capitaliseFirstLetter(data.firstName),
                 middleName,
                 capitaliseFirstLetter(data.lastName),
-                data.email.trim(),
+                data.email.trim().toLowerCase(),
                 data.mobile.trim(),
                 capitaliseFirstLetter(data.address),
                 data.contractType,
@@ -59,7 +59,7 @@ public class EmployeeService {
         employee.setFirstName(capitaliseFirstLetter(data.firstName));
         employee.setMiddleName(middleName);
         employee.setLastName(capitaliseFirstLetter(data.lastName));
-        employee.setEmail(data.email.trim());
+        employee.setEmail(data.email.trim().toLowerCase());
         employee.setMobile(data.mobile.trim());
         employee.setAddress(capitaliseFirstLetter(data.address));
         employee.setContractType(data.contractType);

@@ -1,0 +1,22 @@
+@use "../../styles/partials/palette";
+@use "../../styles/partials/mixin";
+
+.Wrapper {
+    display: flex;
+    padding: 0.5rem 2rem;
+    align-items: center;
+    transition: transform 0.2s;
+    box-sizing: border-box;
+    border-radius: 0.5rem;
+    border: 1px solid palette.$lighter-colour;
+    user-select: none;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &__Active {
+        background-color: palette.$light-colour;
+        border: 1px solid palette.$lighter-colour;
+    }
+}

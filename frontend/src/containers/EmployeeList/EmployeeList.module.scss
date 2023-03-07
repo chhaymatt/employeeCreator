@@ -22,3 +22,21 @@
         align-items: start;
     }
 }
+
+.Filters {
+    margin: 1rem 0rem;
+    display: flex;
+    justify-content: space-between;
+    
+    &__Group {
+        display: flex;
+        background-color: palette.$lighter-colour;
+        border-radius: 0.5rem;
+        border: 1px solid palette.$dark-colour;
+        justify-content: space-between;
+
+        @include mixin.phone {
+            flex-direction: column;
+        }
+    }
+}
