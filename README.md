@@ -6,14 +6,14 @@
 
 ### Demo
 
-[Open Demo hosted on AWS Elastic Beanstalk](http://mcemployeecreator.ap-southeast-2.elasticbeanstalk.com/)
+[Open Demo hosted on AWS Elastic Beanstalk](https://ec.matthewchhay.com/)
 
 ### Screenshots
 
-![List of employees](https://i.imgur.com/5aU8Djd.png)
-![Employee details](https://i.imgur.com/7i0JQ9F.png)
-![Employee details with inline validation](https://i.imgur.com/OYSI9lK.png)
-![Responsive design](https://i.imgur.com/yzJo1uN.png)
+![List of employees](https://i.imgur.com/Ifmo9zj.png)
+![Add employee](https://i.imgur.com/Z0H7lLm.png)
+![Employee details with inline validation](https://i.imgur.com/8xPjbe5.png)
+![Responsive design](https://i.imgur.com/ebgFMm5.png)
 
 ---
 
@@ -157,6 +157,7 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Create unit tests checking the startDate must be before finishDate
 -   Switch from useEffect to useQuery for EmployeeDetails
 -   Address field should autocomplete using Google Maps API
+-   Create GitHub Action CI to build front end, package back end, upload and deploy to AWS
 
 ---
 
@@ -272,7 +273,14 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Add animation to Messages and EmployeeCard
 -   Update styling
 
---
+### 13/03/2023 - Adding SSL to my AWS Elastic Beanstalk
+
+-   Add SSL to my AWS environment
+-   Update preview images and meta tags
+-   Remove my email address as a placeholder
+-   Change from BrowserRouter to HashRouter so that links can be shared
+
+---
 
 ## What did you struggle with?
 
@@ -441,6 +449,16 @@ Many resources online had different annotations and I struggled what was Mockito
 In the EmployeeService class, I mocked the Repository and verifying the service methods were called and comparing the returned employee fields.
 In the EmployeeController class, I mocked the Service and verifying its methods and checking the ResponseEntity's status code/body for successful cases and ResponseStatusException's status code/detail for bad requests.
 
+### Struggle 7 - Adding SSL to my AWS Elastic Beanstalk
+
+I had a discussion with someone experienced in Cloud and Digital, who encouraged me to add SSL to my deployed application. I attempted to follow the steps outlined in this support article: [How can I configure HTTPS for my Elastic Beanstalk environment?](https://aws.amazon.com/premiumsupport/knowledge-center/elastic-beanstalk-https-configuration/). However, I was stumped as I wanted to use my existing domain `matthewchhay.com` and have this app deployed on `ec.matthewchhay.com` instead of the generated AWS link.
+
+Initially, I thought I needed to use Amazon Route 53 to add my existing domain as it was registered on Cloudflare. However, I discovered that Cloudflare is also a DNS provider and I could route my `ec` subdomain to my AWS Elastic Beanstalk. I realised that I already had an existing setup where my root domain contains a CNAME record directed towards my GitHub Pages portfolio. Then, I knew I had to create a new CNAME record for `ec` and point it towards my AWS Elastic Beanstalk.
+
+On Cloudflare, I created a client certificate as it seemed to match what I wanted, but then I found this [article](https://bejda.medium.com/so-you-want-to-use-cloudflare-ssl-certificate-with-aws-api-gateway-6c4ebe1128ec#:~:text=First%2C%20create%20an%20origin%20certificate,into%20the%20AWS%20Certificate%20Manager.&text=Open%20the%20AWS%20Certificate%20Manager,you%20for%20a%20certificate%20chain.) showing how to create an `origin server certificate`. I added the origin server certificate to `AWS Certificate Manager (ACM)` through the console.
+
+I changed my environment type from a single instance to load balanced with the default settings and added a [Classic Load Balance listener](https://aws.amazon.com/premiumsupport/knowledge-center/elastic-beanstalk-https-configuration/) with my origin server certificate. Once I was able to do that, I could see my `ec.matthewchhay.com` working and secured with SSL.
+
 ---
 
 <!-- ## Licensing Details
@@ -453,8 +471,6 @@ In the EmployeeController class, I mocked the Service and verifying its methods 
 
 -   Is this project a reimplementation for something you've done in the past? if so explain it and link it here.
 -   If it's an API, is there a client app that works with this project? link it -->
-
--
 
 ## Resources that helped me along the way
 

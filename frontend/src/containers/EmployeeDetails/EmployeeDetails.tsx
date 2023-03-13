@@ -188,7 +188,7 @@ const EmployeeDetails = ({ employee, mutation }: EmployeeDetailsProp) => {
                             required: true,
                             pattern: /\S+@\S+\.\S+/,
                         })}
-                        placeholder="chhaymatt@gmail.com"
+                        placeholder="me@example.com"
                     />
                     {errors.email && errors.email.type === "required" && (
                         <span role="alert" className={styles.Alert}>
