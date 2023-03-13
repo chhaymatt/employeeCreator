@@ -1,5 +1,7 @@
 # Employee Creator <!-- omit in toc -->
 
+[![Front end build and test](https://github.com/chhaymatt/employeeCreator/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/chhaymatt/employeeCreator/actions/workflows/node.js.yml)
+
 <!-- {add test badges here, all projects you build from here on out will have tests, therefore you should have github workflow badges at the top of your repositories: [Github Workflow Badges](https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/adding-a-workflow-status-badge)} -->
 
 ## Demo / Screenshots
@@ -157,7 +159,7 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Create unit tests checking the startDate must be before finishDate
 -   Switch from useEffect to useQuery for EmployeeDetails
 -   Address field should autocomplete using Google Maps API
--   Create GitHub Action CI to build front end, package back end, upload and deploy to AWS
+-   Create GitHub Action CI to package back end, upload and deploy to AWS
 
 ---
 
@@ -279,6 +281,8 @@ Logger.slf4j was used to create custom logging messages. Successful requests use
 -   Update preview images and meta tags
 -   Remove my email address as a placeholder
 -   Change from BrowserRouter to HashRouter so that links can be shared
+-   Create GitHub Action to build and run tests on every push to main branch
+-   Add GitHub Action status badge to the top of the README
 
 ---
 
