@@ -131,7 +131,7 @@ I created an employee domain which consists of:
 
 Enums were created for the work types and contract types to ensure that high-quality data is stored in the database. Manual testing was conducted using Postman to verify that different payloads and HTTP methods returned the expected responses and errors.
 
-JUnit and AssertJ were used to check the expected output with `assertThat` and compare two variables with `isEqualTo`. Initially, I created unit tests for the EmployeeService. I used Mockito was used to mock the interaction between the EmployeeRepository and the EmployeeService, and to check that the methods in the service were actually called. After testing the EmployeeService, I moved on to the EmployeeController, where I mocked the EmployeeService's return and compared the response body and status codes.
+JUnit and AssertJ were used to check the expected output with `assertThat` and compare two variables with `isEqualTo`. Initially, I created unit tests for the EmployeeService. I used Mockito to mock the interaction between the EmployeeRepository and the EmployeeService, and to check that the methods in the service were actually called. After testing the EmployeeService, I moved on to the EmployeeController, where I mocked the EmployeeService's return and compared the response body and status codes.
 
 Logger.slf4j was used to create custom logging messages. Successful requests used `logger.info` and errors used `logger.error`. Try and catches were implemented for calling any service related methods at the EmployeeController in case there are any unexpected server errors.
 
